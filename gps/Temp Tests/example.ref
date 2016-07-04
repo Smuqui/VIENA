@@ -1,0 +1,55 @@
+
+Header = 28 bytes
+B - 1 - sync 0xAA
+B - 1 - sync 0x44
+B - 1 - sync 0x12
+B - 1 - Header length 0x1C (28)
+H - 2 - MessageID
+B - 1 - MessageType  Binary is  0?
+B - 1 - portID
+H - 2 - length of the message in bytes without header and crc
+H - 2 - Sequence equals to 0?
+B - 1 - Idle Time ignored on input
+B - 1 - Time Status 0
+H - 2 - week 0
+l - 4 - milliseconds 0
+L - 4 - receiver status ignored
+H - 2 - reserved
+H - 2 - SW version
+
+Exemplo manual 2 pagina 21 bestposB
+
+AA44121C 01000240 20000000 1D1D0000 29160000 00004C00
+55525A80
+
+Header = 28 bytes
+B - 1 - sync 0xAA
+B - 1 - sync 0x44
+B - 1 - sync 0x12
+B - 1 - Header length 0x1C (28)
+H - 2 - MessageID - 0100 = 1 Log ID = 1
+B - 1 - MessageType  Binary 0x02????
+B - 1 - portID 0x40 - COM2
+H - 2 - length of the message in bytes without header and crc 2000 = 0x20 - 32bytes
+H - 2 - Sequence equals to 0? 0000 
+B - 1 - Idle Time ignored on input 0x1D
+B - 1 - Time Status 0x1D
+H - 2 - week 0000=0
+l - 4 - milliseconds 29160000 = 0x1629
+L - 4 - receiver status ignored 00004C00 = 0x4C0000
+H - 2 - reserved  5552 = 0x5255
+H - 2 - SW version 5A80 = 0x805A
+
+LOG Command Binary Format 32bytes
+
+20000000 2A000000 02000000 00000000 0000F03F 00000000
+00000000 00000000
+
+L - 4 - port Output 20000000 = 0x20 - COM1?
+H - 2 - message - Message ID of log to output 2A00 = 0x2A
+B - 1 - response - binary response, original message 00
+B - 1 - Reserved 0
+L - 4 - Trigger 02000000 = 0x02 - ontime request
+d - 8 - period 00000000 0000F03F - 0x3FF0000000000000 = 1.0
+d - 8 - offset 00000000 00000000 - 0x00
+H - 4 - Hold 0

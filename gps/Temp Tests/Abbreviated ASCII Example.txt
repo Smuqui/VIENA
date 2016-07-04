@@ -1,0 +1,36 @@
+Abbreviated ASCII Example:
+LOG COM2 BESTPOSB ONTIME 1[CR]
+ASCII Example:
+LOGA,COM2,0,66.0,UNKNOWN,0,15.917,004c0000,5255,32858;COM1,BESTPOSB,
+ONTIME,1.000000,0.000000,NOHOLD*F95592DD[CR]
+
+Binary Example:
+sync        AA
+sync        44
+sync        12
+Header leng 1C 
+Message ID  01 00
+Message typ 02
+Port Addre  40
+Messag leng 20 00
+Sequence    00 00
+Idle Time   1D
+Time status 1D
+Week        00 00
+Millisecond 29 16 00 00
+Recei status00 00 4C 00
+Reserved    55 52
+Rece SW Ver 5A 80
+Data
+------------
+port        20 00 00 00
+Message     2A 00
+message typ 00
+Reserved    00
+trigger     02 00 00 00
+period      00 00 00 00 00 00 F0 3F 
+offset      00 00 00 00 00 00 00 00
+hold        00 00 00 00
+crc
+------------
+2304B3F1
