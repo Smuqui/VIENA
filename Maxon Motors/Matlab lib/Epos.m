@@ -15,7 +15,7 @@ classdef Epos < handle
 	
 	BSD 2-Clause License
 	
-	Copyright (c) [year], [fullname]
+	Copyright (c) 2016, Bruno Tibério
 	All rights reserved.
 	
 	Redistribution and use in source and binary forms, with or without
@@ -121,22 +121,22 @@ classdef Epos < handle
 		function [] = delete(me)
 			me.disconnect();
 		end
-
-        %=======================================================================
-        %> @fn begin(devname, Baud)
-        %> @brief connects to Epos
-        %> 
-        %> Establish the connection to EPOS via RS232 connection
-        %> Sets connected if configuration was sucessfull or not.
-		%> 
-        %> NOTE: it changes format to hex for easier visualization of message
-        %> transaction.
-		%> 
-        %> @param devname Portname for the device (example: '/dev/ttyUSB0')
-        %> @param Baud [optional] baudrate for the communication (default
-        %> 115200)
-        %=======================================================================
-
+		
+		%=======================================================================
+		%> @fn begin(devname, Baud)
+		%> @brief connects to Epos
+		%>
+		%> Establish the connection to EPOS via RS232 connection
+		%> Sets connected if configuration was sucessfull or not.
+		%>
+		%> NOTE: it changes format to hex for easier visualization of message
+		%> transaction.
+		%>
+		%> @param devname Portname for the device (example: '/dev/ttyUSB0')
+		%> @param Baud [optional] baudrate for the communication (default
+		%> 115200)
+		%=======================================================================
+		
 		function begin(me, devname, Baud)
 			% begin(devname, Baud)
 			
@@ -160,12 +160,12 @@ classdef Epos < handle
 			format hex;
 		end
 		
-
-        %=======================================================================
-        %> @fn disconnect()
-        %> @brief closes epos port and sets format to short (default matlab)
-        %=======================================================================
-
+		
+		%=======================================================================
+		%> @fn disconnect()
+		%> @brief closes epos port and sets format to short (default matlab)
+		%=======================================================================
+		
 		function disconnect(me)
 			if(me.connected)
 				fclose(me.portObj);
@@ -174,19 +174,19 @@ classdef Epos < handle
 			format short;
 		end
 		
-        %=======================================================================
-        %    basic I/O functions
-        %=======================================================================
+		%=======================================================================
+		%    basic I/O functions
+		%=======================================================================
 		
-
-        %=======================================================================
-        %> @fn writeBYTE(myByte)
-        %> @brief send a byte to epos
-        %>
-        %> @param myByte byte to be sent to epos
-        %> @retval  OK   a boolean if write was sucessfull or not
-        %=======================================================================
-
+		
+		%=======================================================================
+		%> @fn writeBYTE(myByte)
+		%> @brief send a byte to epos
+		%>
+		%> @param myByte byte to be sent to epos
+		%> @retval  OK   a boolean if write was sucessfull or not
+		%=======================================================================
+		
 		
 		function [OK] = writeBYTE(me, myByte)
 			% write single byte to EPOS
@@ -209,15 +209,15 @@ classdef Epos < handle
 			end
 		end
 		
-
-        %=======================================================================
-        %> @fn writeWORD(myWord)
-        %> @brief send a Word (2 bytes) to epos
-        %>
-        %> @param myWord byte to be sent to epos
-        %> @retval  OK   a boolean if write was sucessfull or not
-        %=======================================================================
-
+		
+		%=======================================================================
+		%> @fn writeWORD(myWord)
+		%> @brief send a Word (2 bytes) to epos
+		%>
+		%> @param myWord byte to be sent to epos
+		%> @retval  OK   a boolean if write was sucessfull or not
+		%=======================================================================
+		
 		function [OK]= writeWORD(me, myWord)
 			%  write a single WORD to EPOS
 			if ~me.connected
@@ -249,15 +249,15 @@ classdef Epos < handle
 			end
 		end
 		
-
-        %=======================================================================
-        %> @fn readBYTE()
-        %> @brief read a byte from epos
-        %>
-        %> @retval myByte byte read from epos
-        %> @retval OK     a boolean if write was sucessfull or not
-        %=======================================================================
-
+		
+		%=======================================================================
+		%> @fn readBYTE()
+		%> @brief read a byte from epos
+		%>
+		%> @retval myByte byte read from epos
+		%> @retval OK     a boolean if write was sucessfull or not
+		%=======================================================================
+		
 		function [myByte, OK] = readBYTE(me)
 			% read single byte to EPOS
 			if ~me.connected
@@ -283,15 +283,15 @@ classdef Epos < handle
 			end
 		end
 		
-
-        %=======================================================================
-        %> @fn readWORD()
-        %> @brief read a word (2 Bytes) from epos
-        %>
-        %> @retval myWord word read from epos
-        %> @retval OK         a boolean if write was sucessfull or not
-        %=======================================================================
-
+		
+		%=======================================================================
+		%> @fn readWORD()
+		%> @brief read a word (2 Bytes) from epos
+		%>
+		%> @retval myWord word read from epos
+		%> @retval OK         a boolean if write was sucessfull or not
+		%=======================================================================
+		
 		function [myWord, OK] = readWORD(me)
 			myWord =[];
 			if ~me.connected
@@ -368,23 +368,23 @@ classdef Epos < handle
 			end
 		end
 		
-
-        %=======================================================================
-        %> @fn CRCcalc(DataArray, CRCnumberOfWords)
-        %> @brief calculate 16 bit CRC checksum
-		%>         
-        %> CRCcalc calculates the CRC of frame message, wich is made of:
-        %> [header][DATA][CRC = 0]
-        %> For correct crc calculation, the last word (CRC field) must be zero.
-		%>         
-        %> @param DataArray frame to be checked
-        %> @param CRCnumberOfWords number of words (word = 2 bytes) present in frame
-        %> @revalt CRC_OK a boolean if crc is match or not
-        %=======================================================================
-
+		
+		%=======================================================================
+		%> @fn CRCcalc(DataArray, CRCnumberOfWords)
+		%> @brief calculate 16 bit CRC checksum
+		%>
+		%> CRCcalc calculates the CRC of frame message, wich is made of:
+		%> [header][DATA][CRC = 0]
+		%> For correct crc calculation, the last word (CRC field) must be zero.
+		%>
+		%> @param DataArray frame to be checked
+		%> @param CRCnumberOfWords number of words (word = 2 bytes) present in frame
+		%> @revalt CRC_OK a boolean if crc is match or not
+		%=======================================================================
+		
 		
 		function [ CRC ] = CRCcalc(~, DataArray, CRCnumberOfWords)
-						
+			
 			CRC = uint16(0);
 			for i=1:CRCnumberOfWords
 				%shifter = uint16(hex2dec('8000'));
@@ -406,19 +406,19 @@ classdef Epos < handle
 			end
 		end
 		
-
-        %=======================================================================
-        %> @fn CRCCheck(DataArray)
-        %> @brief check if crc is correct
-		%>         
-        %> CRCCecheck extracts the CRC received on message (last word of
-        %> array) replaces it to zero and calculates the new crc over all
-        %> array. After it compares value received with the new one
-        %> calculated.
-		%>         
-        %> @param DataArray frame to be checked
-        %> @revalt CRC_OK a boolean if crc is match or not
-        %=======================================================================
+		
+		%=======================================================================
+		%> @fn CRCCheck(DataArray)
+		%> @brief check if crc is correct
+		%>
+		%> CRCCecheck extracts the CRC received on message (last word of
+		%> array) replaces it to zero and calculates the new crc over all
+		%> array. After it compares value received with the new one
+		%> calculated.
+		%>
+		%> @param DataArray frame to be checked
+		%> @revalt CRC_OK a boolean if crc is match or not
+		%=======================================================================
 		function [CRC_OK] = CRCCheck(me, DataArray)
 			numWords = length(DataArray);
 			DataArray = swapbytes(DataArray);
@@ -433,17 +433,17 @@ classdef Epos < handle
 			end
 		end
 		
-        %=======================================================================
-        %> @fn sendCom(DataArray, numWords)
-        %> @brief send command to EPOS
-		%>         
-        %> Send command to EPOS, taking care of all necessary 'ack' and
-        %> checksum tests.
-		%>         
-        %> @param DataArray frame to be sent.
+		%=======================================================================
+		%> @fn sendCom(DataArray, numWords)
+		%> @brief send command to EPOS
+		%>
+		%> Send command to EPOS, taking care of all necessary 'ack' and
+		%> checksum tests.
+		%>
+		%> @param DataArray frame to be sent.
 		%> @param numWords  number of words present in the frame
-        %> @revalt OK       boolean if all went ok or not
-        %=======================================================================
+		%> @revalt OK       boolean if all went ok or not
+		%=======================================================================
 		function [OK] = sendCom(me, DataArray, numWords)
 			% calculate CRC
 			CrcValue = me.CRCcalc(DataArray,numWords);
@@ -503,9 +503,9 @@ classdef Epos < handle
 		%=======================================================================
 		%> @fn readObject(index, subindex)
 		%> @brief reads an object from dictionary
-		%> 
+		%>
 		%> Request a read from dictionary object referenced by index and subindex.
-		%> 
+		%>
 		%> @param index    reference of dictionary object index
 		%> @param subindex reference of dictionary object subindex
 		%>
@@ -541,9 +541,9 @@ classdef Epos < handle
 		%=======================================================================
 		%> @fn writeObject(index, subindex, data)
 		%> @brief write an object from dictionary
-		%> 
+		%>
 		%> Request a write to dictionary object referenced by index and subindex.
-		%> 
+		%>
 		%> @param index    reference of dictionary object index
 		%> @param subindex reference of dictionary object subindex
 		%> @param data     array to be stored in object
@@ -579,11 +579,11 @@ classdef Epos < handle
 		%=======================================================================
 		%> @fn checkError(E_error)
 		%> @brief check if any error occurred in message received
-		%> 
+		%>
 		%> When you send a request to EPOS, the returned response frame, contains a
 		%> data field wich stores information of errors if any. The corresponding
 		%> message of error explaining it is printed.
-		%> 
+		%>
 		%> @param error data field from EPOS
 		%> @retval anyError boolean representing if any error happened.
 		%=======================================================================
@@ -677,13 +677,13 @@ classdef Epos < handle
 		%=======================================================================
 		%> @fn [state, ID, ok]=checkEposState()
 		%> @brief check current state of Epos
-		%> 
+		%>
 		%> Ask the StatusWord of EPOS and parse it to return the current state of
 		%> EPOS.
-		%> 		
+		%>
 		%> |State                 			 | ID  | Statusword [binary] |
-		%> |:------------------------------:|:---:|:-------------------:|
-		%> | Start 	           			 | 0   | x0xx xxx0  x000 0000|
+		%> |:-------------------------------:|:---:|:-------------------:|
+		%> |Start 	           			     | 0   | x0xx xxx0  x000 0000|
 		%> |Not Ready to Switch On			 | 1   | x0xx xxx1  x000 0000|
 		%> |Switch on disabled	   			 | 2   | x0xx xxx1  x100 0000|
 		%> |ready to switch on    			 | 3   | x0xx xxx1  x010 0001|
@@ -692,16 +692,16 @@ classdef Epos < handle
 		%> |measure init          			 | 6   | x1xx xxx1  x011 0011|
 		%> |operation enable      			 | 7   | x0xx xxx1  x011 0111|
 		%> |quick stop active     			 | 8   | x0xx xxx1  x001 0111|
-		%> |fault reaction active (disabled)| 9   | x0xx xxx1  x000 1111|
-		%> |fault reaction active (enabled) | 10  | x0xx xxx1  x001 1111|
+		%> |fault reaction active (disabled) | 9   | x0xx xxx1  x000 1111|
+		%> |fault reaction active (enabled)  | 10  | x0xx xxx1  x001 1111|
 		%> |Fault       					 | 11  | x0xx xxx1  x000 1000|
-		%> 
+		%>
 		%> see section 8.1.1 of firmware manual for more details.
-		%> 
+		%>
 		%> @retval state text with current Epos state.
 		%> @retval ID numeric identification of the state
 		%> @retval OK boolean if corrected received status word or not
-		%> 	
+		%>
 		%=======================================================================
 		function [state, ID, OK] = checkEposState(me)
 			[statusWord, OK] = me.readStatusWord();
@@ -806,7 +806,29 @@ classdef Epos < handle
 				return;
 			end
 		end
-		
+		%=======================================================================
+		%> @fn [OK] = changeEposState(state)
+		%> @brief change Epos state using controlWord object
+		%> 
+		%> To change Epos state, a write to controlWord object is made.
+		%> The bit change in controlWord is made as shown in the following table:
+		%> 
+		%> |State            | LowByte of Controlword [binary]|
+		%> |:---------------:|:------------------------------:|
+		%> |shutdown         | 0xxx x110                      |
+		%> |switch on        | 0xxx x111                      |
+		%> |disable voltage  | 0xxx xx0x                      |
+		%> |quick stop       | 0xxx x01x                      |
+		%> |disable operation| 0xxx 0111                      |
+		%> |enable operation | 0xxx 1111                      |
+		%> |fault reset      | 1xxx xxxx                      |
+		%> 
+		%> see section 8.1.3 of firmware for more information
+		%> 
+		%> @param state string with state witch we want to switch.
+		%>
+		%> @retval OK boolean if all went ok and no error was received.
+		%=======================================================================
 		function [OK] = changeEposState(me, state)
 			data = uint16([0 0]);
 			index = me.objectIndex('Controlword');
@@ -821,8 +843,10 @@ classdef Epos < handle
 					[Answer, OK] = me.writeObject(index, subindex, data);
 					if ~OK
 						%todo
+					else
+						OK = ~me.checkError(Answer(2:3));
+						%check for errors
 					end
-					
 				case 'switch on'
 					% switch on, controlword: 0xxx x111
 					% set bits
@@ -830,6 +854,9 @@ classdef Epos < handle
 					[Answer, OK] = me.writeObject(index, subindex, data);
 					if ~OK
 						% todo
+					else
+						OK = ~me.checkError(Answer(2:3));
+						%check for errors
 					end
 				case 'disable voltage'
 					% disable voltage, controlword 0xxx xx0x
@@ -837,6 +864,9 @@ classdef Epos < handle
 					[Answer, OK] = me.writeObject(index, subindex, data);
 					if ~OK
 						% todo
+					else
+						OK = ~ me.checkError(Answer(2:3));
+						%check for errors
 					end
 				case 'quick stop'
 					% quick stop, controllword: 0xxx x01x
@@ -845,6 +875,9 @@ classdef Epos < handle
 					[Answer, OK] = me.writeObject(index, subindex, data);
 					if ~OK
 						% todo
+					else
+						OK = ~me.checkError(Answer(2:3));
+						%check for errors
 					end
 				case 'enable operation'
 					% enable operation, controlword: 0xxx 1111
@@ -853,6 +886,9 @@ classdef Epos < handle
 					[Answer, OK] = me.writeObject(index, subindex, data);
 					if ~OK
 						% todo
+					else
+						OK = ~me.checkError(Answer(2:3));
+						%check for errors
 					end
 				case 'disable operation'
 					% disable operation, controlword: 0xxx 0111
@@ -860,8 +896,10 @@ classdef Epos < handle
 					[Answer, OK] = me.writeObject(index, subindex, data);
 					if ~OK
 						% todo
+					else
+						OK = ~me.checkError(Answer(2:3));
+						%check for errors
 					end
-					
 				case 'fault reset'
 					% fault reset, controlword: 1xxx xxxx
 					% set bits
@@ -871,12 +909,11 @@ classdef Epos < handle
 					if ~OK
 						% todo
 					else
-						E_error = me.checkError(Answer(2:3));
+						OK = ~me.checkError(Answer(2:3));
 						%check for errors
-						% current position
 					end
 				otherwise
-					fprintf('ERROR: demanded state %d is UNKNOWN!\n', state);
+					fprintf('[Epos ChangeState] ERROR: demanded state %s is UNKNOWN!\n', state);
 					OK = false;
 			end
 		end
