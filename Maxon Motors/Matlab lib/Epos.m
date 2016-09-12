@@ -1,44 +1,44 @@
 classdef Epos < handle
     %% Class for Maxton EPOS 70/10 motor control
-    %{
-    Class to control Epos device is based on libepos library found here:
-        https://sourceforge.net/projects/libepos/
-    originally developed by Marcus Hauser.
-    
-    
-    Class is not yet fully tested and is a work in progress.
-    
-     Title:  Epos.m
-     Author: Bruno Tibério
-     Date:   September 2016
-     email:  bruno.tiberio@tecnico.ulisboa.pt
-    
-    BSD 2-Clause License
-    
-    Copyright (c) 2016, Bruno Tibério
-    All rights reserved.
-    
-    Redistribution and use in source and binary forms, with or without
-    modification, are permitted provided that the following conditions are met:
-    
-    * Redistributions of source code must retain the above copyright notice, this
-    list of conditions and the following disclaimer.
-    
-    * Redistributions in binary form must reproduce the above copyright notice,
-    this list of conditions and the following disclaimer in the documentation
-    and/or other materials provided with the distribution.
-    
-    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-    FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-    DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-    SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-    OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    %}
+    %
+    % Class to control Epos device is based on libepos library originally 
+    % developed by Marcus Hauser, found here:
+    % https://sourceforge.net/projects/libepos/
+    % 
+    %     
+    % Class is not yet fully tested and is a work in progress.
+    %     
+    % Title:  Epos.m
+    % Author: Bruno Tibério
+    % Date:   September 2016
+    % email:  bruno.tiberio@tecnico.ulisboa.pt
+    %     
+    % BSD 2-Clause License
+    %     
+    % Copyright (c) 2016, Bruno Tibério
+    % All rights reserved.
+    %     
+    % Redistribution and use in source and binary forms, with or without
+    % modification, are permitted provided that the following conditions are met:
+    %     
+    % * Redistributions of source code must retain the above copyright notice, this
+    % list of conditions and the following disclaimer.
+    %     
+    % * Redistributions in binary form must reproduce the above copyright notice,
+    % this list of conditions and the following disclaimer in the documentation
+    % and/or other materials provided with the distribution.
+    %        
+    % THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    % AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    % IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    % DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+    % FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+    % DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+    % SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+    % CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+    % OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    % OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    %
     
     properties
         portObj;
@@ -1069,41 +1069,205 @@ classdef Epos < handle
         end
         
         %=======================================================================
-        %> @fn [devname, OK] = readDeviceName()
-        %> @brief reads Software version object
+        %> @fn [position, OK] = readPositionModeSetting()
+        %> @brief reads the setted desired Position 
         %>
-        %> Ask Epos device for device name object. If a correct 
-        %> request is made, the device name is placed in Answer. If 
+        %> Ask Epos device for demand position object. If a correct 
+        %> request is made, the position is placed in Answer. If 
         %> not, an Answer will be empty
         %>
-        %> @retval Answer Corresponding device name, 'error' if request was
+        %> @retval position Corresponding device name, 'error' if request was
         %>                sucessful but an error was returned or empty if request
         %>                was not sucessfull.
         %> @retval OK     A boolean if all went ok or not.
         %=======================================================================
-        function [devname,OK] = readDeviceName(me)
+        function [position,OK] = readPositionModeSetting(me)
             if(~me.connected)
-                devname = 'none';
+                position = [];
                 OK = false;
                 return;
             else
-                [devname, OK] = me.readObject(me.objectIndex('ManufacturerDeviceName'),0);
+                [position, OK] = me.readObject(me.objectIndex('PositionModeSettingValue'),0);
                 if(OK)
-                    OK = ~me.checkError(devname(2:3));
+                    OK = ~me.checkError(position(2:3));
                     if OK 
-                        devname = typecast(devname(4:5), 'uint8');
-                        devname = char(devname);
+                        position = typecast(position(4:5), 'int32');
                     else
-                        devname = 'error'
+                        position = 'error';
                         OK = false;
                     end
                 else
-                    devname = 'none';
+                    position = [];
+                    OK = false;
+                end
+            end
+		end
+        %=======================================================================
+        %> @fn [OK] = setPositionModeSetting()
+        %> @brief sets the desired Position 
+        %>
+        %> Ask Epos device to set position mode setting object. 
+        %>
+        %> @retval OK     A boolean if all went ok or not.
+        %=======================================================================
+		function [OK] = setPositionModeSetting(me, position)
+            if(position < -2^31 || position > 2^31)
+                fprintf('[Epos setPositionModeSetting] Postion out of range\n');
+                OK = false;
+                return;
+            else
+                index = me.objectIndex('PositionModeSettingValue');
+                subindex = uint8(0);
+                data = typecast(int32(position), 'uint16');
+                [Answer, OK] = me.writeObject(index, subindex, data);
+                if ~OK
+                    %todo
+                else
+                    OK = ~me.checkError(Answer(2:3));
+                    %check for errors
+                end
+            end
+        end
+        %=======================================================================
+        %> @fn [velocity, OK] = readVelocityModeSetting()
+        %> @brief reads the setted desired velocity 
+        %>
+        %> Ask Epos device for demand velocity object. If a correct 
+        %> request is made, the velocity is placed in Answer. If 
+        %> not, an Answer will be empty
+        %>
+        %> @retval velocity Corresponding device name, 'error' if request was
+        %>                sucessful but an error was returned or empty if request
+        %>                was not sucessfull.
+        %> @retval OK     A boolean if all went ok or not.
+        %=======================================================================
+        function [velocity,OK] = readVelocityModeSetting(me)
+            if(~me.connected)
+                velocity = [];
+                OK = false;
+                return;
+            else
+                [velocity, OK] = me.readObject(me.objectIndex('VelocityModeSettingValue'),0);
+                if(OK)
+                    OK = ~me.checkError(velocity(2:3));
+                    if OK 
+                        velocity = typecast(velocity(4:5), 'int32');
+                    else
+                        velocity = 'error';
+                        OK = false;
+                    end
+                else
+                    velocity = [];
                     OK = false;
                 end
             end
         end
-        
+        %=======================================================================
+        %> @fn [OK] = setVelocityModeSetting()
+        %> @brief sets the desired velocity  
+        %>
+        %> Ask Epos device to set velocity mode setting object. 
+        %>
+        %> @retval OK     A boolean if all went ok or not.
+        %=======================================================================
+        function [OK] = setVelocityModeSetting(me, velocity)
+            if(velocity < -2^31 || velocity > 2^31)
+                fprintf('[Epos setVelocityModeSetting] Velocity out of range\n');
+                OK = false;
+                return;
+            else
+                index = me.objectIndex('VelocityModeSettingValue');
+                subindex = uint8(0);
+                data = typecast(int32(velocity), 'uint16');
+                [Answer, OK] = me.writeObject(index, subindex, data);
+                if ~OK
+                    %todo
+                else
+                    OK = ~me.checkError(Answer(2:3));
+                    %check for errors
+                end
+            end
+        end
+        %=======================================================================
+        %> @fn [current, OK] = readCurrentModeSetting()
+        %> @brief reads the setted desired current 
+        %>
+        %> Ask Epos device for demand current object. If a correct 
+        %> request is made, the current is placed in Answer. If 
+        %> not, an Answer will be empty
+        %>
+        %> @retval current Corresponding device name, 'error' if request was
+        %>                sucessful but an error was returned or empty if request
+        %>                was not sucessfull.
+        %> @retval OK     A boolean if all went ok or not.
+        %=======================================================================
+        function [current,OK] = readCurrentModeSetting(me)
+            if(~me.connected)
+                current = [];
+                OK = false;
+                return;
+            else
+                [current, OK] = me.readObject(me.objectIndex('CurrentModeSettingValue'),0);
+                if(OK)
+                    OK = ~me.checkError(current(2:3));
+                    if OK 
+                        current = typecast(current(4), 'int16');
+                    else
+                        current = 'error';
+                        OK = false;
+                    end
+                else
+                    current = [];
+                    OK = false;
+                end
+            end
+        end
+        %=======================================================================
+        %> @fn [OK] = setCurrentModeSetting()
+        %> @brief sets the desired current 
+        %>
+        %> Ask Epos device to set current mode setting object. 
+        %>
+        %> @retval OK     A boolean if all went ok or not.
+        %=======================================================================
+        function [OK] = setCurrentModeSetting(me, current)
+            if(current < -2^15 || current > 2^15)
+                fprintf('[Epos setCurrentModeSetting] Postion out of range\n');
+                OK = false;
+                return;
+            else
+                index = me.objectIndex('CurrentModeSettingValue');
+                subindex = uint8(0);
+                data = typecast(int16(current), 'uint16');
+                [Answer, OK] = me.writeObject(index, subindex, [data 0]);
+                if ~OK
+                    %todo
+                else
+                    OK = ~me.checkError(Answer(2:3));
+                    %check for errors
+                end
+            end
+        end
+        %=======================================================================
+        %> @fn [OK] = setOpMode(opMode)
+        %> @brief sets the operation mode
+        %>
+        %> Sets the operation mode of Epos. OpMode is described as:
+        %>
+        %> | OpMode | Description           |
+        %> |:------:|:----------------------|
+        %> | 6      | Homing Mode           |
+        %> | 3      | Profile Velocity Mode |
+        %> | 1      | Profile Position Mode |
+        %> | -1     | Position Mode         |
+        %> | -2     | Velocity Mode         |
+        %> | -3     | Current Mode          |
+        %> | -4     | Diagnostic Mode       |
+        %> | -5     | MasterEncoder Mode    |
+        %> | -6     | Step/Direction Mode   |
+        %>
+        %> @retval OK     A boolean if all went ok or not.
+        %=======================================================================
         function [OK] = setOpMode(me, opMode)
             if(~any(opMode == [6 3 1 -1 -2 -3 -4 -5 -6]))
                 fprintf('[Epos setOpMode] Invalid mode of operation: %d\n', opMode);
@@ -1122,7 +1286,14 @@ classdef Epos < handle
                 %check for errors
             end
         end
-
+        %=======================================================================
+        %> @fn [opMode, OK] = readOpMode()
+        %> @brief reads the operation mode
+        %>
+        %>  
+        %> @retval opMode current opMode of EPOS.
+        %> @retval OK     A boolean if all went ok or not.
+        %=======================================================================
         function [opMode, OK] = readOpMode(me)
             index = me.objectIndex('ModesOperationDisplay');
             subindex = uint8(0);
@@ -1142,7 +1313,10 @@ classdef Epos < handle
                 OK = false;
             end
         end
-
+        %=======================================================================
+        %> @fn printOpMode()
+        %> @brief prints the current operation mode.
+        %=======================================================================
 		function printOpMode(me)
 			[opMode, OK] = me.readOpMode();
 			if (OK)
@@ -1308,6 +1482,37 @@ classdef Epos < handle
                 OK = ~me.checkError(Answer(2:3));
                 %check for errors
             end
+        end
+        function [motorConfig, OK] = readMotorConfig(me)
+
+            % get MotorType object
+            index = me.objectIndex('MotorType');
+            subindex = uint8(0);
+            [motorType, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(motorType(2:3));
+                if OK 
+                    motorType = motorType(4);
+                    switch motorType
+                    case 1
+                        motorConfig.motorType = 'DC motor';
+                    case 10
+                        motorConfig.motorType = 'Sinusoidal PM BL motor';
+                    case 11
+                        motorConfig.motorType = 'Trapezoidal PM BL motor';
+                    otherwise
+                        motorConfig.motorType = 'Error';
+                        OK = false;
+                    end
+                else
+                    motorConfig.motorType = 'Error';
+                    OK = false;
+                end
+            else
+                motorConfig.motorType = [];
+                OK = false;
+            end
+            %% TODO CURRENT working point
         end
         
         %=======================================================================
