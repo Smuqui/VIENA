@@ -1018,7 +1018,7 @@ classdef Epos < handle
         %=======================================================================
         function [] = printControlWord(me, controlWord)
             controlWord = uint16(controlWord);
-            fprintf('Epos printControlWord] meaning of controlWord: 0x%04X\n', controlWord);
+            fprintf('[Epos printControlWord] meaning of controlWord: 0x%04X\n', controlWord);
             % bit 15..11 not in use
             % bit 10, 9 reserved
             controlWord = dec2bin(controlWord,16);
@@ -1274,6 +1274,7 @@ classdef Epos < handle
                 OK = false;
                 return;
             end
+            %
             opMode = typecast([int8(opMode) 0], 'uint16');
             data = uint16([opMode 0]);
             index = me.objectIndex('ModesOperation');
@@ -1283,7 +1284,6 @@ classdef Epos < handle
                 %todo
             else
                 OK = ~me.checkError(Answer(2:3));
-                %check for errors
             end
         end
         %=======================================================================
@@ -1385,8 +1385,8 @@ classdef Epos < handle
         function [OK] = setMotorConfig(me, motorType, currentLimit, maximumSpeed, polePairNumber)
             
             %change to disable state;
-            % reset first?
-            if(me.changeEposState('disable operation'))
+            % reset first? 
+            if(~me.changeEposState('disable operation'))
                 fprintf('[Epos setSensorConfig] Failed to change EPOS to disable\n');
                 OK = false;
                 return;
@@ -1428,7 +1428,9 @@ classdef Epos < handle
                 return;
             else
                 OK = ~me.checkError(Answer(2:3));
-                %check for errors
+                if ~OK
+                    return;
+                end
             end
             % set output current limit
             % It is recommended to set the output current limit to a value doubles of continuous current limit [mA].
@@ -1440,7 +1442,9 @@ classdef Epos < handle
                 return
             else
                 OK = ~me.checkError(Answer(2:3));
-                %check for errors
+                if ~OK
+                    return;
+                end
             end
             % Number of magnetic pole pairs (number of poles / 2) from rotor of a brushless DC motor.
             % only needed for brushless DC
@@ -1459,7 +1463,9 @@ classdef Epos < handle
 					return
 				else
 					OK = ~me.checkError(Answer(2:3));
-					%check for errors
+					if ~OK
+                        return;
+                    end
                 end
             end
             % To prevent mechanical destroys in current mode it is possible to limit the velocity [rpm].
@@ -1480,9 +1486,36 @@ classdef Epos < handle
                 return
             else
                 OK = ~me.checkError(Answer(2:3));
-                %check for errors
+                if ~OK
+                    return;
+                end
             end
         end
+        %=======================================================================
+        %> @fn [motorConfig, OK] = readMotorConfig()
+        %> @brief gets the current motor configuration
+        %>
+        %> Requests from EPOS the current motor type and motor data.
+        %> The motorConfig is an struture containing the following information:
+        %>
+        %> [*] motorType - describes the type of motor.
+        %> [*] currentLimit - describes the maximum continuous current limit.
+        %> [*] maxCurrentLimit - describes the maximum allowed current limit. 
+        %> Usually is set as two times the continuous current limit.
+        %> [*] polePairNumber - describes the pole pair number of the rotor of 
+        %> the brushless DC motor.
+        %> [*] maximumSpeed - describes the maximum allowed speed in current mode.
+        %> [*] thermalTimeConstant - describes the thermal time constant of motor 
+        %> winding is used to calculate the time how long the maximal output 
+        %> current is allowed for the connected motor [100 ms].
+        %>
+        %> If unable to request the configuration or unsucessfull, an empty
+        %> structure is returned. Any error inside any field requests are marked
+        %> with 'error'. 
+        %>
+        %> @retval motorConfig A structure with the current configuration of motor
+        %> @retval OK          A boolean if all went as expected or not.         
+        %=======================================================================
         function [motorConfig, OK] = readMotorConfig(me)
 
             % get MotorType object
@@ -1511,10 +1544,111 @@ classdef Epos < handle
             else
                 motorConfig.motorType = [];
                 OK = false;
+                return;
             end
-            %% TODO CURRENT working point
+            % This object represents the maximal permissible continuous current of the motor [mA]
+            index = me.objectIndex('MotorData');
+            subindex = uint8(1);
+            [motorData, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(motorData(2:3));
+                if OK 
+                    motorConfig.currentLimit = motorData(4);
+                else
+                    motorConfig.currentLimit = 'Error';
+                    OK = false;
+                end
+            else
+                motorConfig.currentLimit = [];
+                OK = false;
+                return;
+            end
+            % This object represents the maximal current of the motor [mA]
+            % is set at 2 * (continuous current limit)
+            index = me.objectIndex('MotorData');
+            subindex = uint8(2);
+            [motorData, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(motorData(2:3));
+                if OK 
+                    motorConfig.maxCurrentLimit = motorData(4);
+                else
+                    motorConfig.maxCurrentLimit = 'Error';
+                    OK = false;
+                end
+            else
+                motorConfig.maxCurrentLimit = [];
+                OK = false;
+                return;
+            end
+            % This object represents pole pair number
+            index = me.objectIndex('MotorData');
+            subindex = uint8(3);
+            [motorData, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(motorData(2:3));
+                if OK 
+                    motorConfig.polePairNumber = uint8(motorData(4));
+                else
+                    motorConfig.polePairNumber = 'Error';
+                    OK = false;
+                end
+            else
+                motorConfig.polePairNumber = [];
+                OK = false;
+                return;
+            end
+            % This object represents the maximal permissible speed in current mode
+            index = me.objectIndex('MotorData');
+            subindex = uint8(4);
+            [motorData, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(motorData(2:3));
+                if OK 
+                    motorConfig.maximumSpeed = motorData(4);
+                else
+                    motorConfig.maximumSpeed = 'Error';
+                    OK = false;
+                end
+            else
+                motorConfig.maximumSpeed = [];
+                OK = false;
+                return;
+            end
+            % The thermal time constant of motor winding is used to calculate 
+            % the time how long the maximal output current is allowed for the 
+            % connected motor [100 ms]
+            subindex = uint8(5);
+            [motorData, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(motorData(2:3));
+                if OK 
+                    motorConfig.thermalTimeConstant = motorData(4);
+                else
+                    motorConfig.thermalTimeConstant = 'Error';
+                    OK = false;
+                end
+            else
+                motorConfig.thermalTimeConstant = [];
+                OK = false;
+                return;
+            end
         end
         
+        function printMotorConfig(me)
+            [motorConfig, OK] = me.readMotorConfig;
+            if (OK)
+                fprintf('[Epos printMotorConfig] Current motor configuration is:\n');
+                fprintf('Motor Type: %s\n', motorConfig.motorType);
+                fprintf('Continuous current limit [mA]: %d\n', motorConfig.currentLimit);
+                fprintf('Maximum allowed current limit [mA]: %d\n', motorConfig.maxCurrentLimit);
+                fprintf('Pole pair number: %d\n', motorConfig.polePairNumber);
+                fprintf('Maximum allowed speed [rpm]: %d\n', motorConfig.maximumSpeed);
+                fprintf('Thermal time constant [s*0.1]: %d\n', motorConfig.thermalTimeConstant);
+            else
+                fprintf('[Epos printMotorConfig] ERROR - Unable to get the motor configuration\n');
+            end
+        end
         %=======================================================================
         %> @fn [OK] = setSensorConfig(pulseNumber, sensorType, sensorPolatity)
         %> @brief change sensor configuration
@@ -1577,7 +1711,9 @@ classdef Epos < handle
                 return;
             else
                 OK = ~me.checkError(Answer(2:3));
-                %check for errors
+                if ~OK
+                    return;
+                end
             end
             
             % The position sensor type can be changed with this parameter.
@@ -1590,7 +1726,9 @@ classdef Epos < handle
                 return;
             else
                 OK = ~me.checkError(Answer(2:3));
-                %check for errors
+                if ~OK
+                    return;
+                end
             end
             
             % With this parameter the position sensor and the hall sensor polarity can be changed.
@@ -1602,9 +1740,209 @@ classdef Epos < handle
                 return;
             else
                 OK = ~me.checkError(Answer(2:3));
-                %check for errors
+                if ~OK
+                    return;
+                end
+            end  
+        end
+        %=======================================================================
+        %> @fn [Config, OK] = readSensorConfig()
+        %> @brief gets the current sensor configuration
+        %>
+        %> Requests from EPOS the current sensor configuration.
+        %> The sensorConfig is an struture containing the following information:
+        %>
+        %> [*] sensorType - describes the type of sensor.
+        %> [*] pulseNumber - describes the number of pulses per revolution in 
+        %> one channel.
+        %> [*] sensorPolarity - describes the of each sensor. 
+        %>
+        %> If unable to request the configuration or unsucessfull, an empty
+        %> structure is returned. Any error inside any field requests are marked
+        %> with 'error'. 
+        %> 
+        %> @retval sensorConfig A structure with the current configuration of 
+        %>                      the sensor
+        %> @retval OK           A boolean if all went as expected or not.         
+        %=======================================================================
+        function [sensorConfig, OK] = readSensorConfig(me)
+
+            % get pulseNumber
+            index = me.objectIndex('SensorConfiguration');
+            subindex = uint8(1);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    sensorConfig.pulseNumber = answer(4);
+                else
+                    sensorConfig.pulseNumber = 'Error';
+                    OK = false;
+                end
+            else
+                sensorConfig.pulseNumber = [];
+                OK = false;
+                return;
             end
-            
+            % get sensorType
+            index = me.objectIndex('SensorConfiguration');
+            subindex = uint8(2);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    sensorType = answer(4);
+                    switch sensorType
+                    case 1
+                        sensorConfig.sensorType = 'Incremental Encoder with index (3-channel)';
+                    case 2
+                        sensorConfig.sensorType = 'Incremental Encoder without index (2-channel)';
+                    case 3
+                        sensorConfig.sensorType = 'Hall sensors';
+                    otherwise
+                        fprintf('[Epos readSensorConfig] Error unknown sensor type\n');
+                        OK = false;
+                        sensorConfig.sensorType = 'Error';
+                    end
+                else
+                    sensorConfig.sensorType = 'Error';
+                    OK = false;
+                end
+            else
+                sensorConfig.sensorType = [];
+                OK = false;
+                return;
+            end
+            % get sensorPolarity
+            index = me.objectIndex('SensorConfiguration');
+            subindex = uint8(4);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    answer = answer(4);
+                    switch answer
+                    case 0
+                        sensorConfig.sensorPolarity.hallSensor = 'normal';
+                        sensorConfig.sensorPolarity.encoderSensor = 'normal';
+                    case 1 
+                        sensorConfig.sensorPolarity.hallSensor = 'normal';
+                        sensorConfig.sensorPolarity.encoderSensor = 'inverted';
+                    case 2
+                        sensorConfig.sensorPolarity.hallSensor = 'inverted';
+                        sensorConfig.sensorPolarity.encoderSensor = 'normal';
+                    case 3
+                        sensorConfig.sensorPolarity.hallSensor = 'inverted';
+                        sensorConfig.sensorPolarity.encoderSensor = 'inverted';
+                    otherwise
+                        sensorConfig.sensorPolarity = 'Error';
+                        OK = false;
+                        return;
+                    end
+                else
+                    sensorConfig.sensorPolarity = 'Error';
+                    OK = false;
+                    return;
+                end
+            else
+                sensorConfig.sensorPolarity = [];
+                OK = false;
+                return;
+            end
+        end
+        function printSensorConfig(me)
+            [sensorConfig, OK] = me.readSensorConfig;
+            if (OK)
+                fprintf('[Epos printSensorConfig] Current sensor configuration is:\n');
+                fprintf('Sensor Type: %s\n', sensorConfig.sensorType);
+                fprintf('Encoder Pulses per revolution: %d\n', sensorConfig.pulseNumber);
+                fprintf('Encoder polarity: %s\n', sensorConfig.sensorPolarity.encoderSensor);
+                fprintf('Hall sensor polarity: %s\n', sensorConfig.sensorPolarity.hallSensor);
+            else
+                fprintf('[Epos MotorConfig] ERROR - Unable to get the motor configuration\n');
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [currentControlPIgains, OK] = readCurrentControlParam(me)
+
+            %read current regulator P-gain
+            index = me.objectIndex('CurrentControlParameterSet');
+            subindex = uint8(1);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    currentControlPIgains.pGain = int16(answer(4));
+                else
+                    currentControlPIgains.pGain = 'Error';
+                    OK = false;
+                    return;
+                end
+            else
+                currentControlPIgains.pGain = [];
+                OK = false;
+                return;
+            end
+            subindex = uint8(2);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    currentControlPIgains.iGain = int16(answer(4));
+                else
+                    currentControlPIgains.iGain = 'Error';
+                    OK = false;
+                    return;
+                end
+            else
+                currentControlPIgains.iGain = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [OK] = setCurrentControlParam(me, pGain, iGain)
+
+            % validate attributes first
+            if( pGain < 0 || pGain > 2^15-1)
+                fprintf('[Epos setCurrentControlParam] pGain is out of range [0 - 32767]\n');
+                OK = false;
+                return;
+            end
+            if( iGain < 0 || iGain > 2^15-1)
+                fprintf('[Epos setCurrentControlParam] iGain is out of range [0 - 32767]\n');
+                OK = false;
+                return;
+            end
+            % set pGain
+            index = me.objectIndex('CurrentControlParameterSet');
+            subindex = uint8(1);
+            pGain = int16(pGain);
+            [Answer, OK] = me.writeObject(index, subindex, [pGain 0]);
+            if ~OK
+                fprintf('[Epos setCurrentControlParam] Failed to set pGain\n');
+                return;
+            else
+                OK = ~me.checkError(Answer(2:3));
+                if ~OK
+                    return;
+                end
+            end
+            % set iGain
+            subindex = uint8(2);
+            iGain = int16(iGain);
+            [Answer, OK] = me.writeObject(index, subindex, [iGain 0]);
+            if ~OK
+                fprintf('[Epos setCurrentControlParam] Failed to set iGain\n');
+                return;
+            else
+                OK = ~me.checkError(Answer(2:3));
+                if ~OK
+                    return;
+                end
+            end
         end
     end
 end
