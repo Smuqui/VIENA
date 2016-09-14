@@ -333,10 +333,10 @@ classdef Epos < handle
         %=======================================================================
         %}
         
-        function [Answer, NumWords] = readAnswer(me)
+        function [answer, NumWords] = readAnswer(me)
             % Read an answer from a request
             %
-            Answer = [];
+            answer = [];
             NumWords = 0;
             [newByte, OK] = me.readBYTE();
             if OK
@@ -351,13 +351,13 @@ classdef Epos < handle
                     [len_1, OK] = me.readBYTE();
                     if (OK)
                         NumWords = len_1+3;
-                        Answer = uint16(zeros(1,NumWords));
-                        Answer(1) = typecast([newByte len_1], 'uint16');
+                        answer = uint16(zeros(1,NumWords));
+                        answer(1) = typecast([newByte len_1], 'uint16');
                         %read len_1 +1 data words + crc = NumWords-1
                         for index = 1:1:NumWords-1;
-                            [Answer(index+1), ~] = me.readWORD();
+                            [answer(index+1), ~] = me.readWORD();
                         end
-                        crcMatch = me.CRCCheck(Answer);
+                        crcMatch = me.CRCCheck(answer);
                         if crcMatch
                             me.writeBYTE(me.ResponseCodes('E_OK'));
                         else
@@ -509,11 +509,11 @@ classdef Epos < handle
         %> @param index    reference of dictionary object index
         %> @param subindex reference of dictionary object subindex
         %>
-        %> @retval Answer message returned by EPOS or empty if unsucessful
+        %> @retval answer message returned by EPOS or empty if unsucessful
         %> @retval OK     boolean if sucessful communication or not
         %=======================================================================
         
-        function [Answer, OK] = readObject(me, index, subindex)
+        function [answer, OK] = readObject(me, index, subindex)
             validateattributes(index,{'uint16'},{'scalar'});
             subindex = uint8(subindex);
             header = hex2dec('1001'); % Allways fixed OpCode = 10, len-1 = 1
@@ -524,16 +524,16 @@ classdef Epos < handle
             
             OK = me.sendCom(frame,4);
             if OK == true
-                [Answer, ~] = me.readAnswer();
-                if isempty(Answer)
+                [answer, ~] = me.readAnswer();
+                if isempty(answer)
                     OK = false;
                     return;
                 end
                 % do not forget to swapbytes!
-                Answer = swapbytes(Answer);
+                answer = swapbytes(answer);
                 return;
             else
-                Answer = [];
+                answer = [];
                 return;
             end
         end
@@ -548,10 +548,10 @@ classdef Epos < handle
         %> @param subindex reference of dictionary object subindex
         %> @param data     array to be stored in object
         %>
-        %> @retval Answer message returned by EPOS or empty if unsucessful
+        %> @retval answer message returned by EPOS or empty if unsucessful
         %> @retval OK     boolean if sucessful communication or not
         %=======================================================================
-        function [Answer, OK] = writeObject(me, index, subindex,data)
+        function [answer, OK] = writeObject(me, index, subindex,data)
             validateattributes(index,{'uint16'},{'scalar'});
             header = hex2dec('1103'); % allways fixed OpCode = 11, len-1 3
             frame = uint16(zeros(6,1));
@@ -563,15 +563,15 @@ classdef Epos < handle
             
             OK = me.sendCom(frame,6);
             if OK == true
-                [Answer, ~] = me.readAnswer();
-                if isempty(Answer)
+                [answer, ~] = me.readAnswer();
+                if isempty(answer)
                     OK = false;
                     return;
                 end
-                Answer = swapbytes(Answer);
+                answer = swapbytes(answer);
                 return;
             else
-                Answer = [];
+                answer = [];
                 return;
             end
         end
@@ -840,76 +840,76 @@ classdef Epos < handle
                     % shutdown, controlword: 0xxx x110
                     % set bits
                     data(1) = bitor(data(1),bin2dec('00000110'));
-                    [Answer, OK] = me.writeObject(index, subindex, data);
+                    [answer, OK] = me.writeObject(index, subindex, data);
                     if ~OK
                         %todo
                     else
-                        OK = ~me.checkError(Answer(2:3));
+                        OK = ~me.checkError(answer(2:3));
                         %check for errors
                     end
                 case 'switch on'
                     % switch on, controlword: 0xxx x111
                     % set bits
                     data(1) = bitor(data(1), bin2dec('00000111'));
-                    [Answer, OK] = me.writeObject(index, subindex, data);
+                    [answer, OK] = me.writeObject(index, subindex, data);
                     if ~OK
                         % todo
                     else
-                        OK = ~me.checkError(Answer(2:3));
+                        OK = ~me.checkError(answer(2:3));
                         %check for errors
                     end
                 case 'disable voltage'
                     % disable voltage, controlword 0xxx xx0x
                     % already zeros so nothing to change.
-                    [Answer, OK] = me.writeObject(index, subindex, data);
+                    [answer, OK] = me.writeObject(index, subindex, data);
                     if ~OK
                         % todo
                     else
-                        OK = ~ me.checkError(Answer(2:3));
+                        OK = ~ me.checkError(answer(2:3));
                         %check for errors
                     end
                 case 'quick stop'
                     % quick stop, controllword: 0xxx x01x
                     % set bits
                     data(1) = bitor(data(1), bin2dec('00000010'));
-                    [Answer, OK] = me.writeObject(index, subindex, data);
+                    [answer, OK] = me.writeObject(index, subindex, data);
                     if ~OK
                         % todo
                     else
-                        OK = ~me.checkError(Answer(2:3));
+                        OK = ~me.checkError(answer(2:3));
                         %check for errors
                     end
                 case 'enable operation'
                     % enable operation, controlword: 0xxx 1111
                     % set bits
                     data(1) = bitor(data(1), bin2dec('00001111'));
-                    [Answer, OK] = me.writeObject(index, subindex, data);
+                    [answer, OK] = me.writeObject(index, subindex, data);
                     if ~OK
                         % todo
                     else
-                        OK = ~me.checkError(Answer(2:3));
+                        OK = ~me.checkError(answer(2:3));
                         %check for errors
                     end
                 case 'disable operation'
                     % disable operation, controlword: 0xxx 0111
                     % already zeros so nothing to change.
-                    [Answer, OK] = me.writeObject(index, subindex, data);
+                    [answer, OK] = me.writeObject(index, subindex, data);
                     if ~OK
                         % todo
                     else
-                        OK = ~me.checkError(Answer(2:3));
+                        OK = ~me.checkError(answer(2:3));
                         %check for errors
                     end
                 case 'fault reset'
                     % fault reset, controlword: 1xxx xxxx
                     % set bits
                     data(1) = bitor(data(1), bin2dec('10000000'));
-                    [Answer, OK] = me.writeObject(index, subindex, data);
+                    [answer, OK] = me.writeObject(index, subindex, data);
                     
                     if ~OK
                         % todo
                     else
-                        OK = ~me.checkError(Answer(2:3));
+                        OK = ~me.checkError(answer(2:3));
                         %check for errors
                     end
                 otherwise
@@ -919,34 +919,34 @@ classdef Epos < handle
         end
         
         %=======================================================================
-        %> @fn [Answer, OK] = readSatusWord()
+        %> @fn [answer, OK] = readSatusWord()
         %> @brief reads current status word object
         %>
         %> Ask Epos device for the current status word object. If a correct 
-        %> request is made, the status word is placed in Answer. 
+        %> request is made, the status word is placed in answer. 
         %>
-        %> @retval Answer Corresponding status word, 'error' if request was
+        %> @retval answer Corresponding status word, 'error' if request was
         %>                sucessful but an error was returned or empty if request
         %>                was not sucessfull.
         %> @retval OK     A boolean if all went ok or not.
         %=======================================================================
 
-        function [Answer, OK] = readStatusWord(me)
+        function [answer, OK] = readStatusWord(me)
             index = me.objectIndex('Statusword');
             subindex = uint8(0);
-            [Answer, sucess] = me.readObject(index, subindex);
+            [answer, sucess] = me.readObject(index, subindex);
             if (sucess)
-                E_error = me.checkError(Answer(2:3));
+                E_error = me.checkError(answer(2:3));
                 if E_error == 0
-                    Answer = Answer(4);
+                    answer = answer(4);
                     OK = true;
                     return
                 else
-                    Answer = 'error';
+                    answer = 'error';
                     OK = false;
                 end
             else
-                Answer = [];
+                answer = [];
                 OK = false;
             end
         end
@@ -956,8 +956,10 @@ classdef Epos < handle
         %>
         %> @param statusWord The status word to print the meaning.
         %=======================================================================
-        function [] = printStatusWord(me, statusWord)
-            statusWord = uint16(statusWord);
+        function [] = printStatusWord(me)
+			
+            [statusWord, OK] = me.readStatusWord();
+			if OK
             fprintf('[EPOS printStatusWord] meaning of statusWord 0x%04X is\n', statusWord)
             statusWord = dec2bin(statusWord, 16);
             fprintf('Bit 15: position referenced to home position:                  %s\n', statusWord(1));
@@ -976,37 +978,40 @@ classdef Epos < handle
             fprintf('Bit 02: Operation enable:                                      %s\n', statusWord(14));
             fprintf('Bit 01: Switched on:                                           %s\n', statusWord(15));
             fprintf('Bit 00: Ready to switch on:                                    %s\n', statusWord(16));
+			else
+				fprintf('[Epos printfStatusWord] ERROR Unable to read status word\n');
+			end
         end
         
         %=======================================================================
-        %> @fn [Answer, OK] = readControlWord()
+        %> @fn [answer, OK] = readControlWord()
         %> @brief reads current control word object
         %>
         %> Ask Epos device for the current control word object. If a correct 
-        %> request is made, the control word is placed in Answer. If not, an Answer
+        %> request is made, the control word is placed in answer. If not, an answer
         %> will be empty
         %>
-        %> @retval Answer Corresponding control word, 'error' if request was
+        %> @retval answer Corresponding control word, 'error' if request was
         %>                sucessful but an error was returned or empty if request
         %>                was not sucessfull.
         %> @retval OK     A boolean if all went ok or not.
         %=======================================================================
-        function [Answer, OK] = readControlWord(me)
+        function [answer, OK] = readControlWord(me)
             index = me.objectIndex('Controlword');
             subindex = uint8(0);
-            [Answer, sucess] = me.readObject(index, subindex);
+            [answer, sucess] = me.readObject(index, subindex);
             if (sucess)
-                E_error = me.checkError(Answer(2:3));
+                E_error = me.checkError(answer(2:3));
                 if E_error == 0
-                    Answer = Answer(4);
+                    answer = answer(4);
                     OK = true;
                     return
                 else
-                    Answer = 'error';
+                    answer = 'error';
                     OK = false;
                 end
             else
-                Answer = [];
+                answer = [];
                 OK = false;
             end
         end
@@ -1016,32 +1021,36 @@ classdef Epos < handle
         %>
         %> @param controlWord The control word to print the meaning.
         %=======================================================================
-        function [] = printControlWord(me, controlWord)
-            controlWord = uint16(controlWord);
-            fprintf('[Epos printControlWord] meaning of controlWord: 0x%04X\n', controlWord);
-            % bit 15..11 not in use
-            % bit 10, 9 reserved
-            controlWord = dec2bin(controlWord,16);
-            fprintf('Bit 08: Halt:                                                                   %s\n', controlWord(8));
-            fprintf('Bit 07: Fault reset:                                                            %s\n', controlWord(9));
-            fprintf('Bit 06: Operation mode specific:[Abs|rel]                                       %s\n', controlWord(10));
-            fprintf('Bit 05: Operation mode specific:[Change set immediately]                        %s\n', controlWord(11));
-            fprintf('Bit 04: Operation mode specific:[New set-point|reserved|Homing operation start] %s\n', controlWord(12));
-            fprintf('Bit 03: Enable operation:                                                       %s\n', controlWord(13));
-            fprintf('Bit 02: Quick stop:                                                             %s\n', controlWord(14));
-            fprintf('Bit 01: Enable voltage:                                                         %s\n', controlWord(15));
-            fprintf('Bit 00: Switch on:                                                              %s\n', controlWord(16));
-        end
+		function printControlWord(me)
+            [controlWord, OK] = me.readControlWord();
+			if OK
+				fprintf('[Epos printControlWord] meaning of controlWord: 0x%04X\n', controlWord);
+				% bit 15..11 not in use
+				% bit 10, 9 reserved
+				controlWord = dec2bin(controlWord,16);
+				fprintf('Bit 08: Halt:                                                                   %s\n', controlWord(8));
+				fprintf('Bit 07: Fault reset:                                                            %s\n', controlWord(9));
+				fprintf('Bit 06: Operation mode specific:[Abs|rel]                                       %s\n', controlWord(10));
+				fprintf('Bit 05: Operation mode specific:[Change set immediately]                        %s\n', controlWord(11));
+				fprintf('Bit 04: Operation mode specific:[New set-point|reserved|Homing operation start] %s\n', controlWord(12));
+				fprintf('Bit 03: Enable operation:                                                       %s\n', controlWord(13));
+				fprintf('Bit 02: Quick stop:                                                             %s\n', controlWord(14));
+				fprintf('Bit 01: Enable voltage:                                                         %s\n', controlWord(15));
+				fprintf('Bit 00: Switch on:                                                              %s\n', controlWord(16));
+			else
+				fprintf('[Epos printControlWord] ERROR Unable to read control word\n');
+			end
+		end
         
         %=======================================================================
-        %> @fn [Answer, OK] = readSWversion()
+        %> @fn [answer, OK] = readSWversion()
         %> @brief reads Software version object
         %>
         %> Ask Epos device for software version object. If a correct 
-        %> request is made, the software version word is placed in Answer. If 
-        %> not, an Answer will be empty
+        %> request is made, the software version word is placed in answer. If 
+        %> not, an answer will be empty
         %>
-        %> @retval Answer Corresponding software version, 'error' if request was
+        %> @retval answer Corresponding software version, 'error' if request was
         %>                sucessful but an error was returned or empty if request
         %>                was not sucessfull.
         %> @retval OK     A boolean if all went ok or not.
@@ -1073,8 +1082,8 @@ classdef Epos < handle
         %> @brief reads the setted desired Position 
         %>
         %> Ask Epos device for demand position object. If a correct 
-        %> request is made, the position is placed in Answer. If 
-        %> not, an Answer will be empty
+        %> request is made, the position is placed in answer. If 
+        %> not, an answer will be empty
         %>
         %> @retval position Corresponding device name, 'error' if request was
         %>                sucessful but an error was returned or empty if request
@@ -1119,11 +1128,11 @@ classdef Epos < handle
                 index = me.objectIndex('PositionModeSettingValue');
                 subindex = uint8(0);
                 data = typecast(int32(position), 'uint16');
-                [Answer, OK] = me.writeObject(index, subindex, data);
+                [answer, OK] = me.writeObject(index, subindex, data);
                 if ~OK
                     %todo
                 else
-                    OK = ~me.checkError(Answer(2:3));
+                    OK = ~me.checkError(answer(2:3));
                     %check for errors
                 end
             end
@@ -1133,8 +1142,8 @@ classdef Epos < handle
         %> @brief reads the setted desired velocity 
         %>
         %> Ask Epos device for demand velocity object. If a correct 
-        %> request is made, the velocity is placed in Answer. If 
-        %> not, an Answer will be empty
+        %> request is made, the velocity is placed in answer. If 
+        %> not, an answer will be empty
         %>
         %> @retval velocity Corresponding device name, 'error' if request was
         %>                sucessful but an error was returned or empty if request
@@ -1179,11 +1188,11 @@ classdef Epos < handle
                 index = me.objectIndex('VelocityModeSettingValue');
                 subindex = uint8(0);
                 data = typecast(int32(velocity), 'uint16');
-                [Answer, OK] = me.writeObject(index, subindex, data);
+                [answer, OK] = me.writeObject(index, subindex, data);
                 if ~OK
                     %todo
                 else
-                    OK = ~me.checkError(Answer(2:3));
+                    OK = ~me.checkError(answer(2:3));
                     %check for errors
                 end
             end
@@ -1193,8 +1202,8 @@ classdef Epos < handle
         %> @brief reads the setted desired current 
         %>
         %> Ask Epos device for demand current object. If a correct 
-        %> request is made, the current is placed in Answer. If 
-        %> not, an Answer will be empty
+        %> request is made, the current is placed in answer. If 
+        %> not, an answer will be empty
         %>
         %> @retval current Corresponding device name, 'error' if request was
         %>                sucessful but an error was returned or empty if request
@@ -1239,11 +1248,11 @@ classdef Epos < handle
                 index = me.objectIndex('CurrentModeSettingValue');
                 subindex = uint8(0);
                 data = typecast(int16(current), 'uint16');
-                [Answer, OK] = me.writeObject(index, subindex, [data 0]);
+                [answer, OK] = me.writeObject(index, subindex, [data 0]);
                 if ~OK
                     %todo
                 else
-                    OK = ~me.checkError(Answer(2:3));
+                    OK = ~me.checkError(answer(2:3));
                     %check for errors
                 end
             end
@@ -1279,11 +1288,11 @@ classdef Epos < handle
             data = uint16([opMode 0]);
             index = me.objectIndex('ModesOperation');
             subindex = uint8(0);
-            [Answer, OK] = me.writeObject(index, subindex, data);
+            [answer, OK] = me.writeObject(index, subindex, data);
             if ~OK
                 %todo
             else
-                OK = ~me.checkError(Answer(2:3));
+                OK = ~me.checkError(answer(2:3));
             end
         end
         %=======================================================================
@@ -1401,12 +1410,12 @@ classdef Epos < handle
             index = me.objectIndex('MotorType');
             subindex = uint8(0);
             motorType = uint16([motorType 0]);
-            [Answer, OK] = me.writeObject(index, subindex, motorType);
+            [answer, OK] = me.writeObject(index, subindex, motorType);
             if ~OK
                 fprintf('[Epos setMotorConfig] Failed to set MotorType\n');
                 return;
             else
-                OK = ~me.checkError(Answer(2:3));
+                OK = ~me.checkError(answer(2:3));
             end
             % set continuous current limit
             %check ranges
@@ -1422,12 +1431,12 @@ classdef Epos < handle
             index = me.objectIndex('MotorData');
             subindex = uint8(1);
             currentLimit = uint16([currentLimit 0]);
-            [Answer, OK] = me.writeObject(index, subindex, currentLimit);
+            [answer, OK] = me.writeObject(index, subindex, currentLimit);
             if ~OK
                 fprintf('[Epos setMotorConfig] Failed to set MotorData current limit\n');
                 return;
             else
-                OK = ~me.checkError(Answer(2:3));
+                OK = ~me.checkError(answer(2:3));
                 if ~OK
                     return;
                 end
@@ -1436,12 +1445,12 @@ classdef Epos < handle
             % It is recommended to set the output current limit to a value doubles of continuous current limit [mA].
             subindex = uint8(2);
             outputCurrentLimit = uint16([2*currentLimit 0]);
-            [Answer, OK] = me.writeObject(index, subindex, outputCurrentLimit);
+            [answer, OK] = me.writeObject(index, subindex, outputCurrentLimit);
             if ~OK
                 fprintf('[Epos setMotorConfig] Failed to set MotorData output current limit\n');
                 return
             else
-                OK = ~me.checkError(Answer(2:3));
+                OK = ~me.checkError(answer(2:3));
                 if ~OK
                     return;
                 end
@@ -1457,12 +1466,12 @@ classdef Epos < handle
 				
 				subindex = uint8(3);
 				polePairNumber = uint16([uint8(polePairNumber) 0]);
-				[Answer, OK] = me.writeObject(index, subindex, polePairNumber);
+				[answer, OK] = me.writeObject(index, subindex, polePairNumber);
 				if ~OK
 					fprintf('[Epos setMotorConfig] Failed to set MotorData pole pair number\n');
 					return
 				else
-					OK = ~me.checkError(Answer(2:3));
+					OK = ~me.checkError(answer(2:3));
 					if ~OK
                         return;
                     end
@@ -1480,12 +1489,12 @@ classdef Epos < handle
             end
             subindex = uint8(4);
             maximumSpeed = uint16([maximumSpeed 0]);
-            [Answer, OK] = me.writeObject(index, subindex, maximumSpeed);
+            [answer, OK] = me.writeObject(index, subindex, maximumSpeed);
             if ~OK
                 fprintf('[Epos setMotorConfig] Failed to set MotorData maximum speed\n');
                 return
             else
-                OK = ~me.checkError(Answer(2:3));
+                OK = ~me.checkError(answer(2:3));
                 if ~OK
                     return;
                 end
@@ -1705,12 +1714,12 @@ classdef Epos < handle
             
             subindex = uint8(1);
             pulseNumber = uint16([pulseNumber 0]);
-            [Answer, OK] = me.writeObject(index, subindex, pulseNumber);
+            [answer, OK] = me.writeObject(index, subindex, pulseNumber);
             if ~OK
                 fprintf('[Epos setSensorConfig] Failed to set pulse number\n');
                 return;
             else
-                OK = ~me.checkError(Answer(2:3));
+                OK = ~me.checkError(answer(2:3));
                 if ~OK
                     return;
                 end
@@ -1720,12 +1729,12 @@ classdef Epos < handle
             
             subindex = uint8(2);
             sensorType = uint16([sensorType 0]);
-            [Answer, OK] = me.writeObject(index, subindex, sensorType);
+            [answer, OK] = me.writeObject(index, subindex, sensorType);
             if ~OK
                 fprintf('[Epos setSensorConfig] Failed to set sensor type\n');
                 return;
             else
-                OK = ~me.checkError(Answer(2:3));
+                OK = ~me.checkError(answer(2:3));
                 if ~OK
                     return;
                 end
@@ -1734,12 +1743,12 @@ classdef Epos < handle
             % With this parameter the position sensor and the hall sensor polarity can be changed.
             subindex = uint8(4);
             sensorPolarity = uint16([sensorPolarity 0]);
-            [Answer, OK] = me.writeObject(index, subindex, sensorPolarity);
+            [answer, OK] = me.writeObject(index, subindex, sensorPolarity);
             if ~OK
                 fprintf('[Epos setSensorConfig] Failed to set sensor polarity\n');
                 return;
             else
-                OK = ~me.checkError(Answer(2:3));
+                OK = ~me.checkError(answer(2:3));
                 if ~OK
                     return;
                 end
@@ -1920,12 +1929,12 @@ classdef Epos < handle
             index = me.objectIndex('CurrentControlParameterSet');
             subindex = uint8(1);
             pGain = int16(pGain);
-            [Answer, OK] = me.writeObject(index, subindex, [pGain 0]);
+            [answer, OK] = me.writeObject(index, subindex, [pGain 0]);
             if ~OK
                 fprintf('[Epos setCurrentControlParam] Failed to set pGain\n');
                 return;
             else
-                OK = ~me.checkError(Answer(2:3));
+                OK = ~me.checkError(answer(2:3));
                 if ~OK
                     return;
                 end
@@ -1933,13 +1942,814 @@ classdef Epos < handle
             % set iGain
             subindex = uint8(2);
             iGain = int16(iGain);
-            [Answer, OK] = me.writeObject(index, subindex, [iGain 0]);
+            [answer, OK] = me.writeObject(index, subindex, [iGain 0]);
             if ~OK
                 fprintf('[Epos setCurrentControlParam] Failed to set iGain\n');
                 return;
             else
-                OK = ~me.checkError(Answer(2:3));
+                OK = ~me.checkError(answer(2:3));
                 if ~OK
+                    return;
+                end
+            end
+        end
+        
+        function printCurrentControlParam(me)
+            [param, OK] = me.readCurrentControlParam();
+            if OK
+                fprintf('[Epos printCurrentControlParam] Current control gains:\n');
+                fprintf('Proportional Gain: %d\n', param.pGain);
+                fprintf('Integral Gain: %d\n', param.iGain);
+            else
+                fprintf('[Epos printCurrentControlParam] ERROR unable to read current mode control parameters\n');
+            end
+        end
+        
+        %=======================================================================
+        %> @fn [pos, OK] = readSoftwarePosLimit()
+        %> @brief reads the limits of the software position
+        %>
+        %>  
+        %> @retval pos    A structure with fields nimPos and maxPos
+        %> @retval OK     A boolean if all went ok or not.
+        %=======================================================================
+        function [pos, OK] = readSoftwarePosLimit(me)
+            index = me.objectIndex('SoftwarePositionLimit');
+            subindex = uint8(1);
+
+            [minPos, OK] = me.readObject(index, subindex);
+            
+            if(OK)
+                OK = ~me.checkError(minPos(2:3));
+                if OK 
+                    pos.minPos = typecast(minPos(4:5), 'int32');
+                else
+                    pos.minPos = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                pos.minPos = [];
+                OK = false;
+                return;
+            end
+            
+            subindex = uint8(2);
+            [maxPos, OK] = me.readObject(index, subindex);
+            
+            if(OK)
+                OK = ~me.checkError(maxPos(2:3));
+                if OK 
+                    pos.maxPos = typecast(maxPos(4:5), 'int32');
+                else
+                    pos.maxPos = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                OK = false;
+                pos.maxPos = [];
+                return;
+            end
+            
+        end
+        
+        %=======================================================================
+        %> @fn [OK] = setSoftwarePosLimit(me, minPos, maxPos)
+        %> @brief change software position limit
+        %>
+        %> Position Limits
+        %> range : [-2147483648|2147483647]
+        %>
+        %=======================================================================
+        
+        function [OK] = setSoftwarePosLimit(me, minPos, maxPos)
+            
+            % validate attributes first
+            if(minPos< -2^31 || minPos> 2^31)
+                fprintf('[Epos setSoftwarePosLimit] Error minPos out of range\n');
+                OK = false;
+                return;
+            end
+            if(maxPos< -2^31 || maxPos> 2^31)
+                fprintf('[Epos setSoftwarePosLimit] Error maxPos out of range\n');
+                OK = false;
+                return;
+            end
+            % grant it is a int32
+            minPos = int32(minPos);
+            maxPos = int32(maxPos);
+
+            index = me.objectIndex('SoftwarePositionLimit');
+            
+            % set minimum position limit
+            subindex = uint8(1);
+            minPos = typecast(minPos,'uint16');
+            [answer, OK] = me.writeObject(index, subindex, minPos);
+            if ~OK
+                fprintf('[Epos setSensorConfig] Failed to set software minimum limit position\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+            
+            % set maximum position limit
+            subindex = uint8(2);
+            maxPos = typecast(maxPos,'uint16');
+            [answer, OK] = me.writeObject(index, subindex, maxPos);
+            if ~OK
+                fprintf('[Epos setSensorConfig] Failed to set software maximum limit position\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+        end
+        
+        function printSoftwarePosLimit(me)
+            [pos, OK] = me.readSoftwarePosLimit();
+            if OK
+                fprintf('[Epos printSoftwarePosLimit] Software Position Limits:\n');
+                fprintf('Minimum [qc]: %d\n', pos.minPos);
+                fprintf('Maximum [qc]: %d\n', pos.maxPos);
+            else
+                fprintf('[Epos printSoftwarePosLimit] ERROR Unable to read software position limits\n');
+            end
+        end
+        %=======================================================================
+        %> @fn [velocityControlPIgains, OK] = readVelocityControlParam()
+        %> @brief  reads the parameters of the velocity control
+        %>
+        %>  
+        %> @retval velocityControlPIgains Values of PI gains in velocity
+        %>                                control mode
+        %> @retval OK                     A boolean if all went ok or not.
+        %=======================================================================
+        function [velocityControlPIgains, OK] = readVelocityControlParam(me)
+            index = me.objectIndex('VelocityControlParameterSet');
+            subindex = uint8(1);
+
+            [pGain, OK] = me.readObject(index, subindex);
+            
+            if(OK)
+                OK = ~me.checkError(pGain(2:3));
+                if OK 
+                    velocityControlPIgains.pGain = typecast(pGain(4), 'int16');
+                else
+                    velocityControlPIgains.pGain = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                velocityControlPIgains.pGain = [];
+                OK = false;
+                return;
+            end
+            
+            subindex = uint8(2);
+            [iGain, OK] = me.readObject(index, subindex);
+            
+            if(OK)
+                OK = ~me.checkError(iGain(2:3));
+                if OK 
+                    velocityControlPIgains.iGain = typecast(iGain(4), 'int16');
+                else
+                    velocityControlPIgains.iGain = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                OK = false;
+                velocityControlPIgains.iGain = [];
+                return;
+            end
+            
+        end
+        
+         %=======================================================================
+        %> @fn [OK] = setVelocityControlParam(me, propGain, intGain)
+        %> @brief change gains of the velocity control loop
+        %>
+        %> Gains range
+        %> range : [-2147483648|2147483647]
+        %>
+        %=======================================================================
+        
+        function [OK] = setVelocityControlParam(me, pGain, iGain)
+            
+            % validate attributes first
+            if(pGain< 0 || pGain> 2^15 - 1)
+                fprintf('[Epos setVelocityControlParam] Error pGain out of range\n');
+                OK = false;
+                return;
+            end
+            if(iGain< 0 || iGain> 2^15 - 1)
+                fprintf('[Epos setVelocityControlParam] Error iGain out of range\n');
+                OK = false;
+                return;
+            end
+            % grant it is a int16
+            pGain = int16(pGain);
+            iGain = int16(iGain);
+
+            index = me.objectIndex('VelocityControlParameterSet');
+            % set pGain           
+            subindex = uint8(1);
+            [answer, OK] = me.writeObject(index, subindex, [pGain 0]);
+            if ~OK
+                fprintf('[Epos setVelocityControlParam] Failed to set velocity control proportional gain\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+            
+            % set iGain.
+            subindex = uint8(2);
+            [answer, OK] = me.writeObject(index, subindex, [iGain 0]);
+            if ~OK
+                fprintf('[Epos setVelocityControlParam] Failed to set velocity control integral gain\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+        end
+        function printVelocityControlParam(me)
+            [param, OK] = me.readVelocityControlParam();
+            if OK
+                fprintf('[Epos printVelocityControlParam] Velocity control gains\n');
+                fprintf('Proportional gain: %d\n', param.pGain);
+                fprintf('Integral gain: %d\n', param.iGain);
+            else
+                fprintf('[Epos printVelocityControlParam] ERROR Unable to read velocity control parameters\n');
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [positionControlPIDgains, OK] = readPositionControlParam(me)
+            index = me.objectIndex('PositionControlParameterSet');
+            
+            % get pGain
+            subindex = uint8(1);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    positionControlPIDgains.pGain = typecast(answer(4), 'int16');
+                else
+                    positionControlPIDgains.pGain = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                positionControlPIDgains.pGain = [];
+                OK = false;
+                return;
+            end
+            % get iGain
+            subindex = uint8(2);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    positionControlPIDgains.iGain = typecast(answer(4), 'int16');
+                else
+                    positionControlPIDgains.iGain = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                positionControlPIDgains.iGain = [];
+                OK = false;
+                return;
+            end
+            % get dGain
+            subindex = uint8(3);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    positionControlPIDgains.dGain = typecast(answer(4), 'int16');
+                else
+                    positionControlPIDgains.dGain = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                positionControlPIDgains.dGain = [];
+                OK = false;
+                return;
+            end
+            % get vFeedForward
+            subindex = uint8(4);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    positionControlPIDgains.vFeedForward = typecast(answer(4), 'int16');
+                else
+                    positionControlPIDgains.vFeedForward = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                positionControlPIDgains.vFeedForward = [];
+                OK = false;
+                return;
+            end
+            % get aFeedForward
+            subindex = uint8(5);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    positionControlPIDgains.aFeedForward = typecast(answer(4), 'int16');
+                else
+                    positionControlPIDgains.aFeedForward = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                positionControlPIDgains.aFeedForward = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [OK] = setPositionControlParam(me, pGain, iGain, dGain, vFeed, aFeed)
+            
+            % validate attributes first
+            if(pGain < 0 || pGain > 32767)
+                fprintf('[Epos setPositionControlParam] ERROR pGain out of range\n');
+                OK = false;
+                return;
+            end
+            if(iGain < 0 || iGain > 32767)
+                fprintf('[Epos setPositionControlParam] ERROR iGain out of range\n');
+                OK = false;
+                return;
+            end
+            if(dGain < 0 || dGain > 32767)
+                fprintf('[Epos setPositionControlParam] ERROR dGain out of range\n');
+                OK = false;
+                return;
+            end
+            if(vFeed < 0 || vFeed > 65535)
+                fprintf('[Epos setPositionControlParam] ERROR vFeed out of range\n');
+                OK = false;
+                return;
+            end
+            if(aFeed < 0 || aFeed > 65535)
+                fprintf('[Epos setPositionControlParam] ERROR aFeed out of range\n');
+                OK = false;
+                return;
+            end
+            % grant it is uint16
+            pGain = uint16(pGain);
+            iGain = uint16(iGain);
+            dGain = uint16(iGain);
+            vFeed = uint16(vFeed);
+            aFeed = uint16(aFeed);
+
+            % set pGain
+            subindex = uint8(1);
+            [answer, OK] = me.writeObject(index, subindex, [pGain 0]);
+            if ~OK
+                fprintf('[Epos setPositionControlParam] Failed to set position control proportional gain\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+            % set iGain
+            subindex = uint8(2);
+            [answer, OK] = me.writeObject(index, subindex, [iGain 0]);
+            if ~OK
+                fprintf('[Epos setPositionControlParam] Failed to set position control integral gain\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+            % set dGain
+            subindex = uint8(3);
+            [answer, OK] = me.writeObject(index, subindex, [dGain 0]);
+            if ~OK
+                fprintf('[Epos setPositionControlParam] Failed to set position control diferential gain\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+            % set vFeed
+            subindex = uint8(4);
+            [answer, OK] = me.writeObject(index, subindex, [vFeed 0]);
+            if ~OK
+                fprintf('[Epos setPositionControlParam] Failed to set position control velocity feed forward factor\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+            % set aFeed
+            subindex = uint8(4);
+            [answer, OK] = me.writeObject(index, subindex, [aFeed 0]);
+            if ~OK
+                fprintf('[Epos setPositionControlParam] Failed to set position control acceleration feed forward factor\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function printPositionControlParam(me)
+            [param, OK] = me.readPositionControlParam();
+            if OK
+                fprintf('[Epos printPositionControlParam] Position control parameters:\n');
+                fprintf('Proportional gain: %d\n', param.pGain);
+                fprintf('Integral gain: %d\n', param.iGain);
+                fprintf('Differential gain: %d\n', param.dGain);
+                fprintf('Velocity feedforward factor: %d\n', param.vFeedForward);
+                fprintf('Acceleration feedforward factor: %d\n', param.aFeedForward);
+            else
+                fprintf('[Epos printPositionControlParam] ERROR unable to read position control parameters\n');
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [followingError, OK] = readFollowingError(me)
+
+            index = me.objectIndex('FollowingErrorActualValue');
+            subindex = uint8(0);
+
+            [answer, OK] = me.readObject(index, subindex);
+            if OK
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    followingError = typecast(answer(4), 'int16');
+                else
+                    followingError = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                followingError = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [maxFollowingError, OK] = readMaxFollowingError(me)
+
+            index = me.objectIndex('MaximalFollowingError');
+            subindex = uint8(0);
+
+            [answer, OK] = me.readObject(index, subindex);
+            if OK
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    maxFollowingError = typecast(answer(4:5), 'uint32');
+                else
+                    maxFollowingError = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                maxFollowingError = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [OK] = setMaxFollowingError(me, maxFollowingError)
+
+            % validate attributes
+            if(maxFollowingError<0 || maxFollowingError > 2^32 - 1)
+                fprintf('[Epos setMaxFollowingError] ERROR maxFollowingError out of range\n');
+                OK = false;
+                return;
+            end
+
+            index = me.objectIndex('MaximalFollowingError');
+            subindex = uint8(0);
+
+            % grant is a uint32
+            maxFollowingError = uint32(maxFollowingError);
+            [answer, OK] = me.writeObject(index, subindex, typecast(maxFollowingError, 'uint16') );
+            if ~OK
+                fprintf('[Epos setPositionControlParam] Failed to set maximum following error\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [position, OK] = readPositionValue(me)
+
+            index = me.objectIndex('PositionActualValue');
+            subindex = uint8(0);
+
+            [answer, OK] = me.readObject(index, subindex);
+            if OK
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    position = typecast(answer(4:5), 'int32');
+                else
+                    position = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                position = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [positionWindow, OK] = readPositionWindow(me)
+
+            index = me.objectIndex('PositionWindow');
+            subindex = uint8(0);
+
+            [answer, OK] = me.readObject(index, subindex);
+            if OK
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    positionWindow = typecast(answer(4:5), 'uint32');
+                else
+                    positionWindow = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                positionWindow = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [OK] = setPositionWindow(me, positionWindow)
+
+            % validate attributes
+            if(positionWindow<0 || positionWindow > 2^32 - 1)
+                fprintf('[Epos setMaxFollowingError] ERROR positionWindow out of range\n');
+                OK = false;
+                return;
+            end
+
+            index = me.objectIndex('PositionWindow');
+            subindex = uint8(0);
+
+            % grant is a uint32
+            positionWindow = uint32(positionWindow);
+            [answer, OK] = me.writeObject(index, subindex, typecast(positionWindow, 'uint16') );
+            if ~OK
+                fprintf('[Epos setPositionControlParam] Failed to set position positionWindow\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [positionWindowTime, OK] = readPositionWindowTime(me)
+
+            index = me.objectIndex('PositionWindowTime');
+            subindex = uint8(0);
+
+            [answer, OK] = me.readObject(index, subindex);
+            if OK
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    positionWindowTime = answer(4);
+                else
+                    positionWindowTime = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                positionWindowTime = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [OK] = setPositionWindowTime(me, positionWindowTime)
+
+            % validate attributes
+            if(positionWindowTime<0 || positionWindowTime > 2^16 - 1)
+                fprintf('[Epos setMaxFollowingError] ERROR positionWindowTime out of range\n');
+                OK = false;
+                return;
+            end
+
+            index = me.objectIndex('PositionWindowTime');
+            subindex = uint8(0);
+
+            % grant is a uint16
+            positionWindowTime = uint16(positionWindowTime);
+            [answer, OK] = me.writeObject(index, subindex, [positionWindowTime 0] );
+            if ~OK
+                fprintf('[Epos setPositionControlParam] Failed to set position positionWindowTime\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [velocity, OK] = readVelocityValue(me)
+
+            index = me.objectIndex('VelocityActualValue');
+            subindex = uint8(0);
+
+            [answer, OK] = me.readObject(index, subindex);
+            if OK
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    velocity = typecast(answer(4:5), 'int32');
+                else
+                    velocity = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                velocity = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [current, OK] = readCurrentValue(me)
+
+            index = me.objectIndex('CurrentActualValue');
+            subindex = uint8(0);
+
+            [answer, OK] = me.readObject(index, subindex);
+            if OK
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    current = typecast(answer(4), 'int16');
+                else
+                    current = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                current = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [position, OK] = readTargetPosition(me)
+
+            index = me.objectIndex('TargetPosition');
+            subindex = uint8(0);
+
+            [answer, OK] = me.readObject(index, subindex);
+            if OK
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    position = typecast(answer(4:5), 'int32');
+                else
+                    position = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                position = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [OK] = setTargetPosition(me, position)
+
+            % validate attributes
+            if(position< - 2^31 || position > 2^31 - 1)
+                fprintf('[Epos setTargetPosition] ERROR position out of range\n');
+                OK = false;
+                return;
+            end
+
+            index = me.objectIndex('TargetPosition');
+            subindex = uint8(0);
+
+            % grant is a int32
+            position = int32(position);
+            [answer, OK] = me.writeObject(index, subindex, typecast(position, 'uint16') );
+            if ~OK
+                fprintf('[Epos setTarget] Failed to set target position\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [homeOffset, OK] = readHomeOffset(me)
+
+            index = me.objectIndex('HomeOffset');
+            subindex = uint8(0);
+
+            [answer, OK] = me.readObject(index, subindex);
+            if OK
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    homeOffset = typecast(answer(4:5), 'int32');
+                else
+                    homeOffset = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                homeOffset = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [OK] = setHomeOffset(me, homeOffset)
+
+            % validate attributes
+            if(homeOffset< - 2^31 || homeOffset > 2^31 - 1)
+                fprintf('[Epos setHomeOffset] ERROR homeOffset out of range\n');
+                OK = false;
+                return;
+            end
+
+            index = me.objectIndex('HomeOffset');
+            subindex = uint8(0);
+
+            % grant is a int32
+            homeOffset = int32(homeOffset);
+            [answer, OK] = me.writeObject(index, subindex, typecast(homeOffset, 'uint16') );
+            if ~OK
+                fprintf('[Epos setHomeOffset] Failed to set home offset\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
                     return;
                 end
             end
