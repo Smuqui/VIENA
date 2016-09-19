@@ -137,12 +137,18 @@ classdef Epos < handle
         %> 115200)
         %=======================================================================
         
-        function begin(me, devname, Baud)
+        function [OK] = begin(me, devname, Baud)
             % begin(devname, Baud)
-            
-            if ~exist('Baud', 'var')
-                Baud = 115200;
-            end
+			if ~exist('Baud', 'var')
+				Baud = 115200;
+			end
+			% already open?
+			if me.connected
+				fprintf('[Epos begin] Already connected\n');
+				OK = true;
+				return;
+			end
+			% if not
             me.portObj = serial(devname,'BaudRate',Baud, 'Databits', 8, 'Parity', 'none', 'StopBits', 1, 'InputBufferSize', 1024, 'OutputBufferSize', 1024);
             me.portObj.TimeOut = 1;
             
@@ -153,9 +159,11 @@ classdef Epos < handle
                 me.connected = true;
                 flushinput(me.portObj);
                 flushoutput(me.portObj);
+				OK = true;
             else
                 fprintf('%s not found or in use', devname);
                 me.connected = false;
+				OK = false;
             end
             format hex;
         end
@@ -673,6 +681,154 @@ classdef Epos < handle
 
         %=======================================================================
         %}
+
+        function [listErrors, anyError, OK] = checkEposError(me)
+
+            % list of errors
+            %E_NOERR = hex2dec('0000'); %not used
+            E_GENERIC = hex2dec('1000');
+            E_OVERCURRENT = hex2dec('2310');
+            E_OVERVOLTAGE = hex2dec('3210');
+            E_UNDERVOLTAGE = hex2dec('3220');
+            E_OVERTEMPERATURE = hex2dec('4210');
+            E_LOW5V = hex2dec('5113');
+            E_INTERNALSW = hex2dec('6100');
+            E_SWPARAM = hex2dec('6320');
+            E_SENSORPOSITION = hex2dec('7320');
+            E_CANOVERRUN_LOST = hex2dec('8110');
+            E_CANOVERRUN = hex2dec('8111');
+            E_CANPASSIVEMODE = hex2dec('8120');
+            E_CANLIFEGUARD = hex2dec('8130');
+            E_CANTRANSMITCOLLISION = hex2dec('8150');
+            E_CANBUSOFF = hex2dec('81FD');
+            E_CANRXOVERRUN = hex2dec('81FE');
+            E_CANTXOVERRUN = hex2dec('81FF');
+            E_CANPDOLENGTH = hex2dec('8210');
+            E_FOLLOWING = hex2dec('8611');
+            E_HALLSENSOR = hex2dec('FF01');
+            E_INDEXPROCESSING = hex2dec('FF02');
+            E_ENCODERRESOLUTION = hex2dec('FF03');
+            E_HALLSENSORNOTFOUND = hex2dec('FF04');
+            E_NEGATIVELIMIT = hex2dec('FF06');
+            E_POSITIVELIMIT = hex2dec('FF07');
+            E_HALLANGLE = hex2dec('FF08');
+            E_SWPOSITIONLIMIT = hex2dec('FF09');
+            E_POSITIONSENSORBREACH = hex2dec('FF0A');
+            E_SYSTEMOVERLOADED = hex2dec('FF0B');
+
+            % check if there are any errors
+            index = me.objectIndex('ErrorHistory');
+            subindex = uint8(0);
+
+            [answer, OK] = me.readObject(index, subindex);
+			if (OK)
+				E_error = me.checkError(answer(2:3));
+				if E_error == 0
+					anyError = uint8(answer(4));
+					OK = true;
+				else
+					listErrors = 'error';
+					anyError = [];
+					OK = false;
+					return;
+				end
+			else
+				listErrors = [];
+				anyError = [];
+				OK = false;
+			end
+			
+            % list error(s) occurred
+			if anyError == 0
+                listErrors = 'No Errors'; % all OK
+                return;
+            else
+				for I=1:anyError
+					subindex = uint8(I);
+					[answer, OK] = me.readObject(index, subindex);
+					if (OK)
+						E_error = me.checkError(answer(2:3));
+						if E_error == 0
+							listErrors(I) = answer(4);
+						else
+							listErrors(I) = uint16(-1);
+						end
+					else
+						listErrors = uint16(-1);
+					end
+				end
+                % replace error code with text
+				temp =cellstr('');
+				while(I>0)
+					switch listErrors(I)
+                        case -1
+                            temp(I) = cellstr('Failed to read object');
+                        case E_GENERIC
+                            temp(I) = cellstr('Unspecific error occurred');
+                        case E_OVERCURRENT
+                            temp(I) = cellstr('Over Current: short circuit or not enough acceleration current');
+                        case E_OVERVOLTAGE
+                            temp(I) = cellstr('The power supply voltage is too high');
+                        case E_UNDERVOLTAGE
+                            temp(I) = cellstr('The supply voltage is too low for operation');
+                        case E_OVERTEMPERATURE
+                            temp(I) = cellstr('The temperature at the device power stage is too high');
+                        case E_LOW5V
+                            temp(I) = cellstr('There is a overload on internal generated 5V supply by the hall sensor connector or encoder connector');
+                        case E_INTERNALSW
+                            temp(I) = cellstr('Internal software error occurred');
+                        case E_SWPARAM
+                            temp(I) = cellstr('Too high Target position with too low Profile velocity');
+                        case E_SENSORPOSITION
+                            temp(I) = cellstr('The detected position from position sensor is no longer valid');
+                        case E_CANOVERRUN_LOST
+                            temp(I) = cellstr('One of the CAN mail boxes had a overflow because of too high communication rate');
+                        case E_CANOVERRUN
+                            temp(I) = cellstr('The execution of the CAN communication had an overrun because of too high communication rate');
+                        case E_CANPASSIVEMODE
+                            temp(I) = cellstr('Device changed to CAN passive Mode');
+                        case E_CANLIFEGUARD
+                            temp(I) = cellstr('The CANopen Life Guarding procedure has failed');
+                        case E_CANTRANSMITCOLLISION
+                            temp(I) = cellstr('The device has received a bad transmit PDO request');
+                        case E_CANBUSOFF
+                            temp(I) = cellstr('The CAN Controller has entered CAN bus off state');
+                        case E_CANRXOVERRUN
+                            temp(I) = cellstr('One of the CAN receive queues had a overrun because of too high communication rate');
+                        case E_CANTXOVERRUN
+                            temp(I) = cellstr('One of the CAN transmit queues had a overrun because of too high communication rate');
+                        case E_CANPDOLENGTH
+                            temp(I) = cellstr('The received PDO was not processed due to length error (to short)');
+                        case E_FOLLOWING
+                            temp(I) = cellstr('The difference between Position demand value and Position actual value is higher then Maximal following error');
+                        case E_HALLSENSOR
+                            temp(I) = cellstr('The motor hall sensors report an impossible signal combination');
+                        case E_INDEXPROCESSING
+                            temp(I) = cellstr('The encoder index signal was not found within two turns at start-up');
+                        case E_ENCODERRESOLUTION
+                            temp(I) = cellstr('The encoder pulses counted between the first two index pulses doesn’t fit to the resolution');
+                        case E_HALLSENSORNOTFOUND
+                            temp(I) = cellstr('No hall sensor 3 edge found within first motor turn');
+                        case E_NEGATIVELIMIT
+                            temp(I) = cellstr('The negative limit switch was or is active');
+                        case E_POSITIVELIMIT
+                            temp(I) = cellstr('The positive limit switch was or is active');
+                        case E_HALLANGLE
+                            temp(I) = cellstr('The angle difference measured between encoder and hall sensors is too high');
+                        case E_SWPOSITIONLIMIT
+                            temp(I) = cellstr('Movement commanded or actual position higher than maximal position limit or lower than minimal position limit');
+                        case E_POSITIONSENSORBREACH
+                            temp(I) = cellstr('The position sensor supervision has detected a bad working condition');
+                        case E_SYSTEMOVERLOADED
+                            temp(I) = cellstr('The device has not enough free resources to process the new target value');
+                        otherwise
+                            temp(I) = cellstr('UNKNOWN ERROR CODE');
+					end
+					I = I-1;
+				end
+				listErrors = temp;
+			end
+        end
         
         %=======================================================================
         %> @fn [state, ID, ok]=checkEposState()
@@ -830,87 +986,137 @@ classdef Epos < handle
         %> @retval OK boolean if all went ok and no error was received.
         %=======================================================================
         function [OK] = changeEposState(me, state)
-            data = uint16([0 0]);
+
             index = me.objectIndex('Controlword');
             subindex = uint8(hex2dec('0'));
-            % shoudl I read current control word????
+            [controlWord, OK] = me.readControlWord();
+			if ~OK
+				fprintf('[Epos changeEposState] Failed to read controlword\n');
+				return;
+			end
             
             switch state
                 case 'shutdown'
                     % shutdown, controlword: 0xxx x110
                     % set bits
-                    data(1) = bitor(data(1),bin2dec('00000110'));
-                    [answer, OK] = me.writeObject(index, subindex, data);
+                    controlWord = bitor(controlWord,bin2dec('0000 0110'));
+                    % unset bits
+                    controlWord = bitand(controlWord,bin2dec('0111 1110'));
+                    [answer, OK] = me.writeObject(index, subindex, [controlWord 0]);
                     if ~OK
-                        %todo
+                        fprintf('[Epos changeEposState] Failed to write state of epos\n');
+                        return;
                     else
                         OK = ~me.checkError(answer(2:3));
                         %check for errors
+                        if ~OK
+                            fprintf('[Epos changeEposState] Failed to set state of epos\n');
+                            return;
+                        end
                     end
                 case 'switch on'
                     % switch on, controlword: 0xxx x111
                     % set bits
-                    data(1) = bitor(data(1), bin2dec('00000111'));
-                    [answer, OK] = me.writeObject(index, subindex, data);
+                    controlWord = bitor(controlWord, bin2dec('0000 0111'));
+                    % unset bits
+                    controlWord = bitand(controlWord, bin2dec('0111 1111'));
+                    [answer, OK] = me.writeObject(index, subindex, [controlWord 0]);
                     if ~OK
-                        % todo
+                        fprintf('[Epos changeEposState] Failed to write state of epos\n');
+                        return;
                     else
                         OK = ~me.checkError(answer(2:3));
                         %check for errors
+                        if ~OK
+                            fprintf('[Epos changeEposState] Failed to set state of epos\n');
+                            return;
+                        end
                     end
                 case 'disable voltage'
                     % disable voltage, controlword 0xxx xx0x
-                    % already zeros so nothing to change.
-                    [answer, OK] = me.writeObject(index, subindex, data);
+                    % unset bits
+                    controlWord = bitand(controlWord, bin2dec('0111 1101'));
+                    [answer, OK] = me.writeObject(index, subindex, [controlWord 0]);
                     if ~OK
-                        % todo
+                        fprintf('[Epos changeEposState] Failed to write state of epos\n');
+                        return;
                     else
-                        OK = ~ me.checkError(answer(2:3));
+                        OK = ~me.checkError(answer(2:3));
                         %check for errors
+                        if ~OK
+                            fprintf('[Epos changeEposState] Failed to set state of epos\n');
+                            return;
+                        end
                     end
                 case 'quick stop'
                     % quick stop, controllword: 0xxx x01x
                     % set bits
-                    data(1) = bitor(data(1), bin2dec('00000010'));
-                    [answer, OK] = me.writeObject(index, subindex, data);
+                    controlWord = bitor(controlWord, bin2dec('0000 0010'));
+                    % unset bits
+                    controlWord = bitand(controlWord, bin2dec('0111 1011'));
+                    [answer, OK] = me.writeObject(index, subindex, [controlWord 0]);
                     if ~OK
-                        % todo
+                        fprintf('[Epos changeEposState] Failed to write state of epos\n');
+                        return;
                     else
                         OK = ~me.checkError(answer(2:3));
                         %check for errors
+                        if ~OK
+                            fprintf('[Epos changeEposState] Failed to set state of epos\n');
+                            return;
+                        end
                     end
                 case 'enable operation'
                     % enable operation, controlword: 0xxx 1111
                     % set bits
-                    data(1) = bitor(data(1), bin2dec('00001111'));
-                    [answer, OK] = me.writeObject(index, subindex, data);
+                    controlWord = bitor(controlWord, bin2dec('0000 1111'));
+                    % unset bits
+                    controlWord = bitand(controlWord, bin2dec('0111 1111'));
+                    [answer, OK] = me.writeObject(index, subindex, [controlWord 0]);
                     if ~OK
-                        % todo
+                        fprintf('[Epos changeEposState] Failed to write state of epos\n');
+                        return;
                     else
                         OK = ~me.checkError(answer(2:3));
                         %check for errors
+                        if ~OK
+                            fprintf('[Epos changeEposState] Failed to set state of epos\n');
+                            return;
+                        end
                     end
                 case 'disable operation'
                     % disable operation, controlword: 0xxx 0111
-                    % already zeros so nothing to change.
-                    [answer, OK] = me.writeObject(index, subindex, data);
+                    % set bits
+                    controlWord = bitor(controlWord, bin2dec('0000 0111'));
+                    % unset bits
+                    controlWord = bitand(controlWord, bin2dec('0111 0111'));
+                    [answer, OK] = me.writeObject(index, subindex, [controlWord 0]);
                     if ~OK
-                        % todo
+                        fprintf('[Epos changeEposState] Failed to write state of epos\n');
+                        return;
                     else
                         OK = ~me.checkError(answer(2:3));
                         %check for errors
+                        if ~OK
+                            fprintf('[Epos changeEposState] Failed to set state of epos\n');
+                            return;
+                        end
                     end
                 case 'fault reset'
                     % fault reset, controlword: 1xxx xxxx
                     % set bits
-                    data(1) = bitor(data(1), bin2dec('10000000'));
-                    [answer, OK] = me.writeObject(index, subindex, data);
-                    
+                    controlWord = bitor(controlWord, bin2dec('1000 0000'));
+                    [answer, OK] = me.writeObject(index, subindex, [controlWord 0]);
                     if ~OK
-                        % todo
+                        fprintf('[Epos changeEposState] Failed to write state of epos\n');
+                        return;
                     else
                         OK = ~me.checkError(answer(2:3));
                         %check for errors
+                        if ~OK
+                            fprintf('[Epos changeEposState] Failed to set state of epos\n');
+                            return;
+                        end
                     end
                 otherwise
                     fprintf('[Epos ChangeState] ERROR: demanded state %s is UNKNOWN!\n', state);
@@ -1030,7 +1236,7 @@ classdef Epos < handle
 				controlWord = dec2bin(controlWord,16);
 				fprintf('Bit 08: Halt:                                                                   %s\n', controlWord(8));
 				fprintf('Bit 07: Fault reset:                                                            %s\n', controlWord(9));
-				fprintf('Bit 06: Operation mode specific:[Abs|rel]                                       %s\n', controlWord(10));
+				fprintf('Bit 06: Operation mode specific:[Abs=0|rel=1]                                   %s\n', controlWord(10));
 				fprintf('Bit 05: Operation mode specific:[Change set immediately]                        %s\n', controlWord(11));
 				fprintf('Bit 04: Operation mode specific:[New set-point|reserved|Homing operation start] %s\n', controlWord(12));
 				fprintf('Bit 03: Enable operation:                                                       %s\n', controlWord(13));
@@ -1703,7 +1909,7 @@ classdef Epos < handle
             end
             %change to disable state;
             % reset first?
-            if(me.changeEposState('disable operation'))
+            if(~me.changeEposState('disable operation'))
                 fprintf('[Epos setSensorConfig] Failed to change EPOS to disable\n');
                 OK = false;
                 return;
@@ -1964,7 +2170,12 @@ classdef Epos < handle
                 fprintf('[Epos printCurrentControlParam] ERROR unable to read current mode control parameters\n');
             end
         end
-        
+        %=======================================================================
+        %
+        % Position profile functions
+        %
+        %=======================================================================
+
         %=======================================================================
         %> @fn [pos, OK] = readSoftwarePosLimit()
         %> @brief reads the limits of the software position
@@ -2083,6 +2294,571 @@ classdef Epos < handle
                 fprintf('[Epos printSoftwarePosLimit] ERROR Unable to read software position limits\n');
             end
         end
+
+        %=======================================================================
+        % This value is used as velocity limit in a position (or velocity) profile move
+        %=======================================================================
+        function [maxProfileVelocity, OK] = readMaxProfileVelocity(me)
+            %
+            index = me.objectIndex('MaximalProfileVelocity');
+            subindex = uint8(0);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    maxProfileVelocity = typecast(answer(4:5), 'uint32');
+                else
+                    maxProfileVelocity = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                maxProfileVelocity = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        % This value is used as velocity limit in a position (or velocity) profile move
+        %=======================================================================
+        function [OK] = setMaxProfileVelocity(me, maxProfileVelocity)
+            
+            % validate attributes
+            if(maxProfileVelocity< 1 || maxProfileVelocity > 25000)
+                fprintf('[Epos setMaxProfileVelocity] Error maxProfileVelocity out of range\n');
+                OK = false;
+                return;
+            end
+
+            index = me.objectIndex('MaximalProfileVelocity');
+            subindex = uint8(0);
+
+            maxProfileVelocity = typecast(uint32(maxProfileVelocity),'uint16');
+            [answer, OK] = me.writeObject(index, subindex, maxProfileVelocity);
+            if ~OK
+                fprintf('[Epos setMaxProfileVelocity] Failed to set maxProfileVelocity \n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+
+        end
+        %=======================================================================
+        % Todo
+        % The profile velocity is the velocity normally attained at the end of 
+        % the acceleration ramp during a profiled move [Velocity units]
+        %=======================================================================
+        function [profileVelocity, OK] = readProfileVelocity(me)
+            %
+            index = me.objectIndex('ProfileVelocity');
+            subindex = uint8(0);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    profileVelocity = typecast(answer(4:5), 'uint32');
+                else
+                    profileVelocity = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                profileVelocity = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        % Todo
+        % The profile velocity is the velocity normally attained at the end of 
+        % the acceleration ramp during a profiled move [Velocity units]
+        %=======================================================================
+        function [OK] = setProfileVelocity(me, profileVelocity)
+            
+            % validate attributes
+            if(profileVelocity< 1 || profileVelocity > 25000)
+                fprintf('[Epos setProfileVelocity] Error profileVelocity out of range\n');
+                OK = false;
+                return;
+            end
+
+            index = me.objectIndex('ProfileVelocity');
+            subindex = uint8(0);
+
+            profileVelocity = typecast(uint32(profileVelocity),'uint16');
+            [answer, OK] = me.writeObject(index, subindex, profileVelocity);
+            if ~OK
+                fprintf('[Epos setProfileVelocity] Failed to set profileVelocity \n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+
+        end
+        %=======================================================================
+        %=======================================================================
+        function [profileAcceleration, OK] = readProfileAcceleration(me)
+            %
+            index = me.objectIndex('ProfileAcceleration');
+            subindex = uint8(0);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    profileAcceleration = typecast(answer(4:5), 'uint32');
+                else
+                    profileAcceleration = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                profileAcceleration = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [OK] = setProfileAcceleration(me, profileAcceleration)
+            
+            % validate attributes
+            if(profileAcceleration< 1 || profileAcceleration > 2^32-1)
+                fprintf('[Epos setProfileAcceleration] Error profileAcceleration out of range\n');
+                OK = false;
+                return;
+            end
+
+            index = me.objectIndex('ProfileAcceleration');
+            subindex = uint8(0);
+
+            profileAcceleration = typecast(uint32(profileAcceleration),'uint16');
+            [answer, OK] = me.writeObject(index, subindex, profileAcceleration);
+            if ~OK
+                fprintf('[Epos setProfileAcceleration] Failed to set profileAcceleration \n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+
+        end
+        %=======================================================================
+        %=======================================================================
+        function [profileDeceleration, OK] = readProfileDeceleration(me)
+            %
+            index = me.objectIndex('ProfileDeceleration');
+            subindex = uint8(0);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    profileDeceleration = typecast(answer(4:5), 'uint32');
+                else
+                    profileDeceleration = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                profileDeceleration = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [OK] = setProfileDeceleration(me, profileDeceleration)
+            
+            % validate attributes
+            if(profileDeceleration< 1 || profileDeceleration > 2^32-1)
+                fprintf('[Epos setProfileDeceleration] Error profileDeceleration out of range\n');
+                OK = false;
+                return;
+            end
+
+            index = me.objectIndex('ProfileDeceleration');
+            subindex = uint8(0);
+
+            profileDeceleration = typecast(uint32(profileDeceleration),'uint16');
+            [answer, OK] = me.writeObject(index, subindex, profileDeceleration);
+            if ~OK
+                fprintf('[Epos setProfileDeceleration] Failed to set profileDeceleration \n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+
+        end
+        %=======================================================================
+        %=======================================================================
+        function [quickstopDeceleration, OK] = readQuickstopDeceleration(me)
+            %
+            index = me.objectIndex('QuickStopDeceleration');
+            subindex = uint8(0);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    quickstopDeceleration = typecast(answer(4:5), 'uint32');
+                else
+                    quickstopDeceleration = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                quickstopDeceleration = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [OK] = setQuickstopDeceleration(me, quickstopDeceleration)
+            
+            % validate attributes
+            if(quickstopDeceleration< 1 || quickstopDeceleration > 2^32-1)
+                fprintf('[Epos setQuickstopDeceleration] Error quickstopDeceleration out of range\n');
+                OK = false;
+                return;
+            end
+
+            index = me.objectIndex('QuickStopDeceleration');
+            subindex = uint8(0);
+
+            quickstopDeceleration = typecast(uint32(quickstopDeceleration),'uint16');
+            [answer, OK] = me.writeObject(index, subindex, quickstopDeceleration);
+            if ~OK
+                fprintf('[Epos setQuickstopDeceleration] Failed to set quickstopDeceleration \n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+
+        end
+        %=======================================================================
+        %=======================================================================
+        function [motionProfileType, OK] = readMotionProfileType(me)
+            %
+            index = me.objectIndex('MotionProfileType');
+            subindex = uint8(0);
+            [answer, OK] = me.readObject(index, subindex);
+            if(OK)
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    motionProfileType = typecast(answer(4:5), 'uint32');
+                else
+                    motionProfileType = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                motionProfileType = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [OK] = setMotionProfileType(me, motionProfileType)
+            
+            % validate attributes
+            if(~any([0 1] == motionProfileType))
+                fprintf('[Epos setMotionProfileType] Error motionProfileType out of range\n');
+                OK = false;
+                return;
+            end
+
+            index = me.objectIndex('MotionProfileType');
+            subindex = uint8(0);
+
+            profileDeceleration = uint16(motionProfileType);
+            [answer, OK] = me.writeObject(index, subindex, [profileDeceleration 0]);
+            if ~OK
+                fprintf('[Epos setMotionProfileType] Failed to set motionProfileType \n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+
+        end
+        %=======================================================================
+        %=======================================================================
+        function [positionProfileConfig, OK] = readPositionProfileConfig(me)
+            %
+            OK = [0 0 0 0 0 0 0 0];
+            [positionProfileConfig.maxFollowingError, OK(1)] = me.readMaxFollowingError();
+            [positionProfileConfig.softwarePositionLimit, OK(2)] = me.readSoftwarePosLimit();
+            [positionProfileConfig.maxProfileVelocity, OK(3)] = me.readMaxProfileVelocity();
+            [positionProfileConfig.profileVelocity, OK(4)] = me.readProfileVelocity();
+            [positionProfileConfig.profileAcceleration, OK(5)] = me.readProfileAcceleration();
+            [positionProfileConfig.profileDeceleration, OK(6)] = me.readProfileDeceleration();
+            [positionProfileConfig.quickstopDeceleration, OK(7)] = me.readQuickstopDeceleration();
+            [positionProfileConfig.motionProfileType, OK(8)] = me.readMotionProfileType();
+            if(any(OK == 0))
+                OK = false;
+            else
+                OK = true;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [OK] = setPositionProfileConfig(me, maxFollowingError, minPos, maxPos,...
+				maxProfileVelocity, profileVelocity, profileAcceleration, profileDeceleration,...
+				quickstopDeceleration, motionProfileType)
+			
+			OK = me.setMaxFollowingError(maxFollowingError);
+			if ~OK
+				fprintf('[Epos setMotionProfileConfig] ERROR setting maxFollowingError\n');
+				return;
+			end
+			OK = me.setSoftwarePosLimit(minPos, maxPos);
+			if ~OK
+				fprintf('[Epos setMotionProfileConfig] ERROR setting SoftwarePositionLimit\n');
+				return;
+			end
+			OK = me.setMaxProfileVelocity(maxProfileVelocity);
+			if ~OK
+				fprintf('[Epos setMotionProfileConfig] ERROR setting maxProfileVelocity\n');
+				return;
+			end
+			OK = me.setProfileVelocity(profileVelocity);
+			if ~OK
+				fprintf('[Epos setMotionProfileConfig] ERROR setting profileVelocity\n');
+				return;
+            end
+			OK = me.setProfileAcceleration(profileAcceleration);
+			if ~OK
+				fprintf('[Epos setMotionProfileConfig] ERROR setting profileAcceleration\n');
+				return;
+            end
+			OK = me.setProfileDeceleration(profileDeceleration);
+			if ~OK
+				fprintf('[Epos setMotionProfileConfig] ERROR setting profileDeceleration\n');
+				return;
+            end
+			OK = me.setQuickstopDeceleration(quickstopDeceleration);
+			if ~OK
+				fprintf('[Epos setMotionProfileConfig] ERROR setting quickstopDeceleration\n');
+				return;
+            end
+			OK = me.setMotionProfileType(motionProfileType);
+			if ~OK
+				fprintf('[Epos setMotionProfileConfig] ERROR setting motionProfileType\n');
+				return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+
+        function printPositionProfileConfig(me)
+            [positionProfileConfig, OK] = me.readPositionProfileConfig();
+            if OK
+                fprintf('[Epos printPositionProfileConfig] Position Profile Configuration parameters are:\n');
+                fprintf('Maximum following error [qc]: %d\n', positionProfileConfig.maxFollowingError);
+                fprintf('Minimum software position limit [qc]: %d\n', positionProfileConfig.softwarePositionLimit.minPos);
+                fprintf('Maximum software position limit [qc]: %d\n', positionProfileConfig.softwarePositionLimit.maxPos);
+                fprintf('Maximum velocity limit [rpm]: %d\n', positionProfileConfig.maxProfileVelocity);
+                fprintf('Maximum velocity [rpm]: %d\n', positionProfileConfig.profileVelocity);
+                fprintf('Acceleration [rpm/s]: %d\n', positionProfileConfig.profileAcceleration);
+                fprintf('Deceleration [rpm/s]: %d\n', positionProfileConfig.profileAcceleration);
+                fprintf('Quick stop deceleration [rpm/s]: %d\n', positionProfileConfig.quickstopDeceleration);
+                if(positionProfileConfig.motionProfileType)
+                    fprintf('Motion profile type: sinusoidal profile\n');
+                else
+                    fprintf('Motion profile type: linear profile\n');
+                end
+            else
+                fprintf('[Epos printPositionProfileConfig] Failed to request position profile configuration parameters\n');
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [position, OK] = readTargetPosition(me)
+
+            index = me.objectIndex('TargetPosition');
+            subindex = uint8(0);
+
+            [answer, OK] = me.readObject(index, subindex);
+            if OK
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    position = typecast(answer(4:5), 'int32');
+                else
+                    position = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                position = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [OK] = setTargetPosition(me, position)
+
+            % validate attributes
+            if(position< - 2^31 || position > 2^31 - 1)
+                fprintf('[Epos setTargetPosition] ERROR position out of range\n');
+                OK = false;
+                return;
+            end
+
+            index = me.objectIndex('TargetPosition');
+            subindex = uint8(0);
+
+            % grant is a int32
+            position = int32(position);
+            [answer, OK] = me.writeObject(index, subindex, typecast(position, 'uint16') );
+            if ~OK
+                fprintf('[Epos setTarget] Failed to set target position\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+        end
+		%=======================================================================
+        %=======================================================================
+        function [OK] = setPositioningControlOptions(me, isRelativePos, changeNow, newSetpoint)
+            
+			% validate attributes
+			if(~any([0 1] == isRelativePos))
+				fprintf('[Epos setPositioningControlOptions] isAbsolutePos not a boolean\n');
+                OK = false;
+				return;
+            end
+			if(~any([0 1] == changeNow))
+				fprintf('[Epos setPositioningControlOptions] changeNow not a boolean\n');
+				OK = false;
+				return;
+            end
+			if(~any([0 1] == newSetpoint))
+				fprintf('[Epos setPositioningControlOptions] newSetpoint not a boolean\n');
+				OK = false;
+				return;
+			end
+			
+			index = me.objectIndex('Controlword');
+			subindex = uint8(0);
+			[controlWord, OK] = me.readControlWord();
+			if ~OK
+				fprintf('[Epos setPositioningControlOptions] Failed to read control word\n');
+				return;
+            end
+			if isRelativePos
+				% is relative, set bit 6
+				% bitmask xxxx xxxx x1xx xxxx
+				controlWord = bitor(bin2dec('0000 0000 0100 0000'), controlWord);
+			else
+				% is Absolute, unset bit 6
+				% bitmask xxxx xxxx x0xx xxxx
+				controlWord = bitand(bin2dec('1111 1111 1011 1111'), controlWord);
+            end
+			if changeNow
+				% abort current positioning and change now.
+				% bitmask xxxx xxxx xx1x xxxx
+				controlWord = bitor(bin2dec('0000 0000 0010 0000'), controlWord);
+			else
+				% wait for current then change, unset bit 5
+                % bitmask xxxx xxxx xx0x xxxx
+				controlWord = bitand(bin2dec('1111 1111 1101 1111'), controlWord);
+            end
+			if newSetpoint
+				% assume new target position
+				% bitmask xxxx xxxx xxx1 xxxx
+                controlWord = bitor(bin2dec('0000 0000 0001 0000'), controlWord);
+			else
+				% do not assume new target position
+				% bitmask xxxx xxxx xxx0 xxxx
+				controlWord = bitand(bin2dec('1111 1111 1110 1111'), controlWord);
+            end
+			[answer, OK] = me.writeObject(index, subindex, [controlWord 0]);
+			if ~OK
+				fprintf('[Epos setPositioningControlOptions] Failed to write control word\n');
+				return;
+			else
+				OK = ~me.checkError(answer(2:3));
+				%check for errors
+				if(~OK)
+					return;
+                end
+            end
+        end
+        %=======================================================================
+        %=======================================================================
+        function [OK] = haltOperation(me)
+
+            index = me.objectIndex('Controlword');
+            subindex = uint8(0);
+            [controlWord, OK] = me.readControlWord();
+			if ~OK
+				fprintf('[Epos haltOperation] Failed to read control word\n');
+				return;
+			end
+            % halt is activated with bit 8 set to 1
+            % bitmask =  xxxx xxx1 xxxx xxxx
+            controlWord = bitor(bin2dec('0000 0001 0000 0000'), controlWord);
+            [answer, OK] = me.writeObject(index, subindex, [controlWord 0]);
+            if ~OK
+                fprintf('[Epos haltOperation] Failed to halt operation\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                if OK
+                    fprintf('[Epos haltOperation] Operation halted\n');
+                end
+            end
+        end
+        function [OK] = resumeHaltOpereation(me)
+            index = me.objectIndex('Controlword');
+            subindex = uint8(0);
+            [controlWord, OK] = me.readControlWord();
+            if ~OK
+                fprintf('[Epos resumeHaltOperation] Failed to read control word\n');
+                return;
+            end
+            % halt is activated with bit 8 set to 1
+            % bitmask =  xxxx xxx0 xxxx xxxx
+            controlWord = bitand(bin2dec('1111 1110 1111 1111'), controlWord);
+            [answer, OK] = me.writeObject(index, subindex, [controlWord 0]);
+            if ~OK
+                fprintf('[Epos resumeHaltOperation] Failed to resume halt operation\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                if OK
+                    fprintf('[Epos resumeHaltOperation] Operation resumed from halt\n');
+                end
+            end
+        end
+
         %=======================================================================
         %> @fn [velocityControlPIgains, OK] = readVelocityControlParam()
         %> @brief  reads the parameters of the velocity control
@@ -2631,6 +3407,29 @@ classdef Epos < handle
         end
         %=======================================================================
         %=======================================================================
+        function [velocity, OK] = readVelocityValueAveraged(me)
+
+            index = me.objectIndex('VelocityActualValueAveraged');
+            subindex = uint8(0);
+
+            [answer, OK] = me.readObject(index, subindex);
+            if OK
+                OK = ~me.checkError(answer(2:3));
+                if OK 
+                    velocity = typecast(answer(4:5), 'int32');
+                else
+                    velocity = 'error';
+                    OK = false;
+                    return;
+                end
+            else
+                velocity = [];
+                OK = false;
+                return;
+            end
+        end
+        %=======================================================================
+        %=======================================================================
         function [current, OK] = readCurrentValue(me)
 
             index = me.objectIndex('CurrentActualValue');
@@ -2654,55 +3453,28 @@ classdef Epos < handle
         end
         %=======================================================================
         %=======================================================================
-        function [position, OK] = readTargetPosition(me)
+        function [current, OK] = readCurrentValueAveraged(me)
 
-            index = me.objectIndex('TargetPosition');
+            index = me.objectIndex('CurrentActualValueAveraged');
             subindex = uint8(0);
 
             [answer, OK] = me.readObject(index, subindex);
             if OK
                 OK = ~me.checkError(answer(2:3));
                 if OK 
-                    position = typecast(answer(4:5), 'int32');
+                    current = typecast(answer(4), 'int16');
                 else
-                    position = 'error';
+                    current = 'error';
                     OK = false;
                     return;
                 end
             else
-                position = [];
+                current = [];
                 OK = false;
                 return;
             end
-        end
-        %=======================================================================
-        %=======================================================================
-        function [OK] = setTargetPosition(me, position)
-
-            % validate attributes
-            if(position< - 2^31 || position > 2^31 - 1)
-                fprintf('[Epos setTargetPosition] ERROR position out of range\n');
-                OK = false;
-                return;
-            end
-
-            index = me.objectIndex('TargetPosition');
-            subindex = uint8(0);
-
-            % grant is a int32
-            position = int32(position);
-            [answer, OK] = me.writeObject(index, subindex, typecast(position, 'uint16') );
-            if ~OK
-                fprintf('[Epos setTarget] Failed to set target position\n');
-                return;
-            else
-                OK = ~me.checkError(answer(2:3));
-                %check for errors
-                if(~OK)
-                    return;
-                end
-            end
-        end
+		end
+                
         %=======================================================================
         %=======================================================================
         function [homeOffset, OK] = readHomeOffset(me)
