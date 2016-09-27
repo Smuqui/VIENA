@@ -115,7 +115,9 @@ classdef Epos < handle
             me.nodeID=uint8(1); % zero sends to all
             me.portObj = [];
             me.baudRate = 115200;
-            format hex;
+			if me.debug_flag
+				format hex;
+			end
         end
         
         function [] = delete(me)
@@ -164,8 +166,7 @@ classdef Epos < handle
                 fprintf('%s not found or in use', devname);
                 me.connected = false;
 				OK = false;
-            end
-            format hex;
+			end
         end
         
         
@@ -178,8 +179,11 @@ classdef Epos < handle
             if(me.connected)
                 fclose(me.portObj);
                 me.connected = false;
-            end
-            format short;
+			end
+			if me.debug_flag
+				format short;
+			end
+            
         end
         
         %=======================================================================
@@ -2751,7 +2755,7 @@ classdef Epos < handle
 			% validate attributes
 			if(~any([0 1] == isRelativePos))
 				fprintf('[Epos setPositioningControlOptions] isAbsolutePos not a boolean\n');
-                OK = false;
+				OK = false;
 				return;
             end
 			if(~any([0 1] == changeNow))
@@ -2771,7 +2775,7 @@ classdef Epos < handle
 			if ~OK
 				fprintf('[Epos setPositioningControlOptions] Failed to read control word\n');
 				return;
-            end
+			end
 			if isRelativePos
 				% is relative, set bit 6
 				% bitmask xxxx xxxx x1xx xxxx
@@ -2780,20 +2784,20 @@ classdef Epos < handle
 				% is Absolute, unset bit 6
 				% bitmask xxxx xxxx x0xx xxxx
 				controlWord = bitand(bin2dec('1111 1111 1011 1111'), controlWord);
-            end
+			end
 			if changeNow
 				% abort current positioning and change now.
 				% bitmask xxxx xxxx xx1x xxxx
 				controlWord = bitor(bin2dec('0000 0000 0010 0000'), controlWord);
 			else
 				% wait for current then change, unset bit 5
-                % bitmask xxxx xxxx xx0x xxxx
+				% bitmask xxxx xxxx xx0x xxxx
 				controlWord = bitand(bin2dec('1111 1111 1101 1111'), controlWord);
             end
 			if newSetpoint
 				% assume new target position
 				% bitmask xxxx xxxx xxx1 xxxx
-                controlWord = bitor(bin2dec('0000 0000 0001 0000'), controlWord);
+				controlWord = bitor(bin2dec('0000 0000 0001 0000'), controlWord);
 			else
 				% do not assume new target position
 				% bitmask xxxx xxxx xxx0 xxxx
@@ -2808,7 +2812,7 @@ classdef Epos < handle
 				%check for errors
 				if(~OK)
 					return;
-                end
+				end
             end
         end
         %=======================================================================
