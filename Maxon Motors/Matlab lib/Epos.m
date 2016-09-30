@@ -3102,12 +3102,13 @@ classdef Epos < handle
             % grant it is uint16
             pGain = uint16(pGain);
             iGain = uint16(iGain);
-            dGain = uint16(iGain);
+            dGain = uint16(dGain);
             vFeed = uint16(vFeed);
             aFeed = uint16(aFeed);
 
             % set pGain
-            subindex = uint8(1);
+            index = me.objectIndex('PositionControlParameterSet');
+			subindex = uint8(1);
             [answer, OK] = me.writeObject(index, subindex, [pGain 0]);
             if ~OK
                 fprintf('[Epos setPositionControlParam] Failed to set position control proportional gain\n');
@@ -3159,7 +3160,7 @@ classdef Epos < handle
                 end
             end
             % set aFeed
-            subindex = uint8(4);
+            subindex = uint8(5);
             [answer, OK] = me.writeObject(index, subindex, [aFeed 0]);
             if ~OK
                 fprintf('[Epos setPositionControlParam] Failed to set position control acceleration feed forward factor\n');
