@@ -1,44 +1,44 @@
+% :Title:  Epos.m
+% :Author: Bruno Tibério
+% :Date:   September 2016
+% :email:  bruno.tiberio@tecnico.ulisboa.pt
+%
+% **BSD 2-Clause License**
+%
+% Copyright (c) 2016, Bruno Tibério
+% All rights reserved.
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%
+% * Redistributions of source code must retain the above copyright notice, this
+% list of conditions and the following disclaimer.
+%
+% * Redistributions in binary form must reproduce the above copyright notice,
+% this list of conditions and the following disclaimer in the documentation
+% and/or other materials provided with the distribution.
+%
+% THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+% AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+% IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+% DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+% FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+% DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+% SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+% CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+% OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+% OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+%
+
 classdef Epos < handle
-    %% Class for Maxton EPOS 70/10 motor control
-    %
-    % Class to control Epos device is based on libepos library originally 
-    % developed by Marcus Hauser, found here:
-    % https://sourceforge.net/projects/libepos/
-    % 
-    %     
-    % Class is not yet fully tested and is a work in progress.
-    %     
-    % Title:  Epos.m
-    % Author: Bruno Tibério
-    % Date:   September 2016
-    % email:  bruno.tiberio@tecnico.ulisboa.pt
-    %     
-    % BSD 2-Clause License
-    %     
-    % Copyright (c) 2016, Bruno Tibério
-    % All rights reserved.
-    %     
-    % Redistribution and use in source and binary forms, with or without
-    % modification, are permitted provided that the following conditions are met:
-    %     
-    % * Redistributions of source code must retain the above copyright notice, this
-    % list of conditions and the following disclaimer.
-    %     
-    % * Redistributions in binary form must reproduce the above copyright notice,
-    % this list of conditions and the following disclaimer in the documentation
-    % and/or other materials provided with the distribution.
-    %        
-    % THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-    % AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-    % IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-    % DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-    % FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-    % DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-    % SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-    % CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-    % OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-    % OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    %
+	%% Class for Maxton EPOS 70/10 motor control
+	%
+	% Class to control Epos device is based on libepos library originally
+	% developed by Marcus Hauser, found `here <https://sourceforge.net/projects/libepos/>`.
+	%
+	%
+	% .. warning:: Class is not yet fully tested and is a work in progress.
+    
     
     properties
         portObj;
@@ -99,11 +99,30 @@ classdef Epos < handle
     methods
         
         function me=Epos(debug_flag)
-            % me = Epos (debug_flag)
-            % EPOS Constructor
-            % If debug flag is active, it reports communications between PC and
-            % Epos device
-            
+			% EPOS Constructor
+			%
+			% If debug flag is active, it reports communications between PC and
+			% Epos device
+			%
+			% Args:
+			%     debug_flag [optional]: a boolean. If true, hexadecimal messages
+			%        are displayed.
+			%
+			% Returns:
+			%     An object of the class Epos.
+			%
+			% Examples:
+			%
+			% .. code-block:: matlab
+			%
+			%     epos = Epos();
+			%
+			%     epos = Epos(1);
+			%
+			% If debug flag is used the format is changed for 'hex' for easier
+			% understanding. See `help format`.
+
+
             % check if debug is used
             if exist('debug_flag','var')
                 me.debug_flag = debug_flag;
@@ -124,23 +143,21 @@ classdef Epos < handle
             me.disconnect();
         end
         
-        %=======================================================================
-        %> @fn begin(devname, Baud)
-        %> @brief connects to Epos
-        %>
-        %> Establish the connection to EPOS via RS232 connection
-        %> Sets connected if configuration was sucessfull or not.
-        %>
-        %> NOTE: it changes format to hex for easier visualization of message
-        %> transaction.
-        %>
-        %> @param devname Portname for the device (example: '/dev/ttyUSB0')
-        %> @param Baud [optional] baudrate for the communication (default
-        %> 115200)
-        %=======================================================================
         
         function [OK] = begin(me, devname, Baud)
-            % begin(devname, Baud)
+			%.. ====================================================================
+			% begin(devname, Baud)
+			%
+			% Connects to Epos device
+			%
+			% Establish the connection to EPOS via RS232 connection
+			% Sets connected if configuration was sucessfull or not.
+			%
+			% Args:
+			%     devname: Portname for the device (example: '/dev/ttyUSB0')
+			%     Baud [optional]:  baudrate for the communication (default 115200)
+			%.. ====================================================================
+
 			if ~exist('Baud', 'var')
 				Baud = 115200;
 			end
@@ -151,12 +168,14 @@ classdef Epos < handle
 				return;
 			end
 			% if not
-            me.portObj = serial(devname,'BaudRate',Baud, 'Databits', 8, 'Parity', 'none', 'StopBits', 1, 'InputBufferSize', 1024, 'OutputBufferSize', 1024);
+            me.portObj = serial(devname,'BaudRate',Baud, 'Databits', 8,...
+				'Parity', 'none', 'StopBits', 1, 'InputBufferSize', 1024,...
+				'OutputBufferSize', 1024);
             me.portObj.TimeOut = 1;
             
             fopen(me.portObj);
             
-            if strcmp(me.portObj.Status,'open')
+			if strcmp(me.portObj.Status,'open')
                 fprintf('%s is open\n', devname);
                 me.connected = true;
                 flushinput(me.portObj);
@@ -170,38 +189,39 @@ classdef Epos < handle
         end
         
         
-        %=======================================================================
-        %> @fn disconnect()
-        %> @brief closes epos port and sets format to short (default matlab)
-        %=======================================================================
-        
         function disconnect(me)
-            if(me.connected)
-                fclose(me.portObj);
-                me.connected = false;
+			%.. ====================================================================
+			% disconnect device
+			%
+			% closes epos port and sets format to short (default matlab) if debug
+			% flag was used.
+			%.. ====================================================================
+			if(me.connected)
+				fclose(me.portObj);
+				me.connected = false;
 			end
 			if me.debug_flag
 				format short;
 			end
-            
-        end
-        
-        %=======================================================================
+		end
+		
+		%.. ====================================================================
         %    basic I/O functions
-        %=======================================================================
+        %.. ====================================================================
         
-        
-        %=======================================================================
-        %> @fn writeBYTE(myByte)
-        %> @brief send a byte to epos
-        %>
-        %> @param myByte byte to be sent to epos
-        %> @retval  OK   a boolean if write was sucessfull or not
-        %=======================================================================
-        
-        
+
         function [OK] = writeBYTE(me, myByte)
-            % write single byte to EPOS
+            %.. ====================================================================
+			% send a byte to epos
+			%
+			% Args:
+            %     myByte: byte to be sent to epos device
+            %
+			% Returns:
+            %     OK: a boolean if write was sucessfull or not
+			% 
+			%.. ====================================================================
+			% write single byte to EPOS
             if ~me.connected
                 fprintf('[Epos.writeBYTE]: Port "%s" is not open\n', me.portObj.Port);
                 OK = 0;
@@ -1906,7 +1926,7 @@ classdef Epos < handle
                 OK = false;
                 return;
             end
-            if(~any(sensorPolarity == [0 1 2]))
+            if(~any(sensorPolarity == [0 1 2 3]))
                 fprintf('[Epos setSensorConfig] Error sensorPolarity not valid\n');
                 OK = false;
                 return;

@@ -507,7 +507,7 @@ if OK
 			warndlg('Failed to set Current Mode');
 			return;
 		end
-		handles.enableCurrentMode.Background = 'green';
+		handles.enableCurrentMode.Background = [0.906 0.906 0.906];
 		handles.enableCurrentMode.Enable = 'inactive';
 		handles.enableCurrentMode.Value = 1;
 	end
