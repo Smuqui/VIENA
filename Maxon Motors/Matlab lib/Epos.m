@@ -1933,7 +1933,7 @@ classdef Epos < handle
             end
             %change to disable state;
             % reset first?
-            if(~me.changeEposState('disable operation'))
+            if(~me.changeEposState('shutdown'))
                 fprintf('[Epos setSensorConfig] Failed to change EPOS to disable\n');
                 OK = false;
                 return;

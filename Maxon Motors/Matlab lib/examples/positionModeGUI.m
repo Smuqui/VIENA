@@ -22,7 +22,7 @@ function varargout = positionModeGUI(varargin)
 
 % Edit the above text to modify the response to help positionModeGUI
 
-% Last Modified by GUIDE v2.5 20-Oct-2016 16:58:30
+% Last Modified by GUIDE v2.5 30-Dec-2016 11:30:29
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -573,7 +573,12 @@ function sensorSpecsApply_Callback(hObject, eventdata, handles)
 % hObject    handle to sensorSpecsApply (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+% mutex = evalin('base','mutex');
+% mutex.acquire();
+% 
+% epos = evalin('base','epos');
+% 
+% mutex.release();
 %% todo
 
 
@@ -749,6 +754,18 @@ else
 		[position, OK] = epos.readPositionValue();
 		if OK
 			handles.currentPosition.String = position;
+		end
+		% get Epos state
+		[state, ID, OK] = epos.checkEposState();
+		if OK
+			handles.eposState.String = state;
+		end
+		if (ID ~= 7)
+			[listErrors, anyError, OK] = epos.checkEposError();
+			handles.log.String = char(listErrors);
+			handles.activateButton.BackgroundColor = [0.906 0.906 0.906];
+			handles.activateButton.String = 'Activate';
+			handles.activateButton.Value = 0;
 		end
 	end
 end
