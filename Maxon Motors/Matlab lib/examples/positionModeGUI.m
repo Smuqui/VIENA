@@ -22,7 +22,7 @@ function varargout = positionModeGUI(varargin)
 
 % Edit the above text to modify the response to help positionModeGUI
 
-% Last Modified by GUIDE v2.5 30-Dec-2016 11:30:29
+% Last Modified by GUIDE v2.5 07-Feb-2017 14:54:37
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -65,8 +65,12 @@ handles.myTimer = timer('Name', 'myTimer', 'Period', 1, ...
 	'timerfcn', {@update, hObject, eventdata, handles});
 
 assignin('base','epos',epos);
+
 evalin('base','import java.util.concurrent.Semaphore');
 evalin('base', 'mutex = Semaphore(1);');
+evalin('base', 'angleFactor = 1');
+angleFactor = evalin('base','angleFactor');
+handles.angleGain.String = num2str(angleFactor);
 % Update handles structure
 guidata(hObject, handles);
 
@@ -109,6 +113,7 @@ mutex = evalin('base','mutex');
 mutex.acquire();
 
 epos = evalin('base','epos');
+angleFactor = evalin('base','angleFactor');
 position = floor(str2double(handles.setPosition.String));
 if(isnan(position))
 	warndlg('Position must be a number');
@@ -121,15 +126,11 @@ if (~epos.connected)
 	return;
 end
 handles.setPosition.String = num2str(position);
+handles.setAngle.String = num2str(position/angleFactor);
 if(~epos.setPositionModeSetting(position))
 	warndlg('Failed to set position value');
     mutex.release();
 	return;
-end
-% give time to rotate
-[position, OK] = epos.readPositionValue();
-if OK
-	handles.currentPosition.String = position;
 end
 mutex.release();
 
@@ -573,13 +574,22 @@ function sensorSpecsApply_Callback(hObject, eventdata, handles)
 % hObject    handle to sensorSpecsApply (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% mutex = evalin('base','mutex');
-% mutex.acquire();
-% 
-% epos = evalin('base','epos');
-% 
-% mutex.release();
-%% todo
+ mutex = evalin('base','mutex');
+ mutex.acquire();
+ 
+ epos = evalin('base','epos');
+ 
+ pulseNumber = str2double(get(handles.pulseNumber, 'String'));
+ sensorType = handles.sensorType.Value;
+ sensorPolarity = handles.sensorPolarity.Value -1;
+ OK = epos.setSensorConfig(pulseNumber,sensorType, sensorPolarity);
+ if(~OK)
+	 warndlg('Failed to set motor specs');
+	 mutex.release();
+	 return;
+ end
+ mutex.release();
+
 
 
 % --- Executes during object creation, after setting all properties.
@@ -721,6 +731,101 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
+function angleGain_Callback(hObject, eventdata, handles)
+
+% --- Executes on button press in saveConfig.
+function saveConfig_Callback(hObject, eventdata, handles)
+% hObject    handle to saveConfig (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+mutex = evalin('base','mutex');
+mutex.acquire();
+epos = evalin('base','epos');
+if (~epos.connected)
+	warndlg('Not connected to Epos');
+    mutex.release();
+	return;
+end
+OK = epos.save();
+if(~OK)
+	warndlg('Failed to save Motor status');
+    mutex.release();
+	return;
+end
+mutex.release();
+
+
+% --- Executes on button press in setAngleApply.
+function setAngleApply_Callback(hObject, eventdata, handles)
+% hObject    handle to setAngleApply (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% wait for mutex
+
+mutex = evalin('base','mutex');
+angleFactor = evalin('base','angleFactor');
+mutex.acquire();
+
+epos = evalin('base','epos');
+angle = str2double(handles.setAngle.String);
+position = floor(angle*angleFactor);
+if(isnan(position))
+	warndlg('Position must be a number');
+    mutex.release();
+	return;
+end
+if (~epos.connected)
+	warndlg('Not connected to Epos');
+    mutex.release();
+	return;
+end
+handles.setPosition.String = num2str(position);
+handles.setAngle.String = num2str(position/angleFactor);
+if(~epos.setPositionModeSetting(position))
+	warndlg('Failed to set position value');
+    mutex.release();
+	return;
+end
+mutex.release();
+
+
+
+% --- Executes during object creation, after setting all properties.
+function setAngle_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to setAngle (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function angleGain_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to angleGain (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in angleGain_apply.
+function angleGain_apply_Callback(hObject, eventdata, handles)
+% hObject    handle to angleGain_apply (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+mutex = evalin('base','mutex');
+mutex.acquire();
+angleFactor = str2double(handles.angleGain.String);
+assignin('base', 'angleFactor', angleFactor);
+mutex.release();
 
 % --- Executes when user attempts to close figure1.
 function figure1_CloseRequestFcn(hObject, eventdata, handles)
@@ -742,6 +847,7 @@ delete(hObject);
 
 function update(obj, event, hObject, eventdata, handles)
 mutex = evalin('base','mutex');
+angleFactor = evalin('base','angleFactor');
 if(mutex.tryAcquire == 0)
 	return;
 else
@@ -753,7 +859,8 @@ else
 	else	 
 		[position, OK] = epos.readPositionValue();
 		if OK
-			handles.currentPosition.String = position;
+			handles.currentPosition.String = num2str(position);
+			handles.currentAngle.String = num2str(position/angleFactor);
 		end
 		% get Epos state
 		[state, ID, OK] = epos.checkEposState();
@@ -798,3 +905,6 @@ function setPosition_Callback(hObject, eventdata, handles)
 function maxCurrent_Callback(hObject, eventdata, handles)
 
 function sensorType_Callback(hObject, eventdata, handles)
+
+function setAngle_Callback(hObject, eventdata, handles)
+

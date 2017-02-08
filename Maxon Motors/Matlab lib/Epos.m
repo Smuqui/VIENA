@@ -191,7 +191,7 @@ classdef Epos < handle
         
         function disconnect(me)
 			%.. ====================================================================
-			% disconnect device
+			% Disconnect device
 			%
 			% closes epos port and sets format to short (default matlab) if debug
 			% flag was used.
@@ -206,13 +206,15 @@ classdef Epos < handle
 		end
 		
 		%.. ====================================================================
-        %    basic I/O functions
+        % -------------------
+        % basic I/O functions
+        % -------------------
         %.. ====================================================================
         
 
         function [OK] = writeBYTE(me, myByte)
             %.. ====================================================================
-			% send a byte to epos
+			% Send a byte to epos
 			%
 			% Args:
             %     myByte: byte to be sent to epos device
@@ -221,7 +223,7 @@ classdef Epos < handle
             %     OK: a boolean if write was sucessfull or not
 			% 
 			%.. ====================================================================
-			% write single byte to EPOS
+			
             if ~me.connected
                 fprintf('[Epos.writeBYTE]: Port "%s" is not open\n', me.portObj.Port);
                 OK = 0;
@@ -242,16 +244,18 @@ classdef Epos < handle
         end
         
         
-        %=======================================================================
-        %> @fn writeWORD(myWord)
-        %> @brief send a Word (2 bytes) to epos
-        %>
-        %> @param myWord byte to be sent to epos
-        %> @retval  OK   a boolean if write was sucessfull or not
-        %=======================================================================
         
         function [OK]= writeWORD(me, myWord)
-            %  write a single WORD to EPOS
+            %.. ====================================================================
+            % Send a word (2bytes) to Epos device
+            % 
+            % Args:
+            %     myWord: word to be sent to epos device
+            %
+            % Returns:
+            %     OK: a boolean if write was sucessfull or not
+            %.. ====================================================================
+        
             if ~me.connected
                 fprintf('[Epos.writeWORD]: Port "%s" is not open\n', me.portObj.Port);
                 OK = 0;
@@ -282,16 +286,16 @@ classdef Epos < handle
         end
         
         
-        %=======================================================================
-        %> @fn readBYTE()
-        %> @brief read a byte from epos
-        %>
-        %> @retval myByte byte read from epos
-        %> @retval OK     a boolean if write was sucessfull or not
-        %=======================================================================
+        
         
         function [myByte, OK] = readBYTE(me)
-            % read single byte to EPOS
+            %.. =======================================================================
+            % read a byte from epos
+            %
+            % Returns:
+            %     myByte: byte read from epos
+            %     OK:     a boolean if write was sucessfull or not
+            %.. =======================================================================
             if ~me.connected
                 fprintf('[Epos.readBYTE]: Port "%s" is not open\n', me.portObj.Port);
                 OK = 0;
@@ -316,15 +320,15 @@ classdef Epos < handle
         end
         
         
-        %=======================================================================
-        %> @fn readWORD()
-        %> @brief read a word (2 Bytes) from epos
-        %>
-        %> @retval myWord word read from epos
-        %> @retval OK         a boolean if write was sucessfull or not
-        %=======================================================================
         
         function [myWord, OK] = readWORD(me)
+            %.. =======================================================================
+            % read a word from epos
+            %
+            % Returns:
+            %     myWord: word read from epos
+            %     OK:     a boolean if write was sucessfull or not
+            %.. =======================================================================
             myWord =[];
             if ~me.connected
                 fprintf('[Epos.readWORD]: Port "%s" is not open\n', me.portObj.Port);
@@ -349,25 +353,28 @@ classdef Epos < handle
                 return;
             end
         end
-        %{
-        %=======================================================================
-
-                    End of low level I/O functions
-       
-        %=======================================================================
-        %}
         
-        %{
-        %=======================================================================
-
-            Set of basic functions for comunication
-
-        %=======================================================================
-        %}
+        %.. =======================================================================
+        %
+        %..          End of low level I/O functions
+        %
+        %.. =======================================================================
+        
+        %.. =======================================================================
+        % ---------------------------------------
+        % Set of basic functions for comunication
+        % ---------------------------------------
+        %.. =======================================================================
+        
         
         function [answer, NumWords] = readAnswer(me)
-            % Read an answer from a request
+            %.. =======================================================================
+            % read an answer from a request
             %
+            % Returns:
+            %     answer:    answer from previous request.
+            %     NumWords:  number of words in answer.
+            %.. =======================================================================
             answer = [];
             NumWords = 0;
             [newByte, OK] = me.readBYTE();
@@ -377,7 +384,7 @@ classdef Epos < handle
                         ,newByte, me.ResponseCodes('E_ANS'));
                     return;
                 else
-                    %Always ready, send ok in advance!
+                    % Always ready, send ok in advance!
                     me.writeBYTE(me.ResponseCodes('E_OK'));
                     % get len-1
                     [len_1, OK] = me.readBYTE();
@@ -385,7 +392,7 @@ classdef Epos < handle
                         NumWords = len_1+3;
                         answer = uint16(zeros(1,NumWords));
                         answer(1) = typecast([newByte len_1], 'uint16');
-                        %read len_1 +1 data words + crc = NumWords-1
+                        % read len_1 +1 data words + crc = NumWords-1
                         for index = 1:1:NumWords-1;
                             [answer(index+1), ~] = me.readWORD();
                         end
@@ -401,25 +408,25 @@ classdef Epos < handle
         end
         
         
-        %=======================================================================
-        %> @fn CRCcalc(DataArray, CRCnumberOfWords)
-        %> @brief calculate 16 bit CRC checksum
-        %>
-        %> CRCcalc calculates the CRC of frame message, wich is made of:
-        %> [header][DATA][CRC = 0]
-        %> For correct crc calculation, the last word (CRC field) must be zero.
-        %>
-        %> @param DataArray frame to be checked
-        %> @param CRCnumberOfWords number of words (word = 2 bytes) present in frame
-        %> @revalt CRC_OK a boolean if crc is match or not
-        %=======================================================================
-        
         
         function [ CRC ] = CRCcalc(~, DataArray, CRCnumberOfWords)
-            
+            %.. =======================================================================
+            % calculate 16 bit CRC checksum
+            %
+            % CRCcalc calculates the CRC of frame message, wich is made of:
+            % [header][DATA][CRC = 0]
+            % For correct crc calculation, the last word (CRC field) must be zero.
+            %
+            % Args:
+            %     DataArray: frame to be checked
+            %     CRCnumberOfWords: number of words (word = 2 bytes) present in frame
+            %
+            % Returns:
+            %     CRC_OK: a boolean if crc is match or not
+            %.. =======================================================================    
             CRC = uint16(0);
             for i=1:CRCnumberOfWords
-                %shifter = uint16(hex2dec('8000'));
+                % shifter = uint16(hex2dec('8000'));
                 shifter = uint16(32768);
                 c = DataArray(i);
                 
@@ -430,7 +437,7 @@ classdef Epos < handle
                         CRC = CRC +  1;
                     end
                     if(carry)
-                        %CRC = bitxor(CRC,uint16(hex2dec('1021')),'uint16');
+                        % CRC = bitxor(CRC,uint16(hex2dec('1021')),'uint16');
                         CRC = bitxor(CRC,uint16(4129),'uint16');
                     end
                     shifter = bitshift(shifter,-1,'uint16');
@@ -439,19 +446,21 @@ classdef Epos < handle
         end
         
         
-        %=======================================================================
-        %> @fn CRCCheck(DataArray)
-        %> @brief check if crc is correct
-        %>
-        %> CRCCecheck extracts the CRC received on message (last word of
-        %> array) replaces it to zero and calculates the new crc over all
-        %> array. After it compares value received with the new one
-        %> calculated.
-        %>
-        %> @param DataArray frame to be checked
-        %> @revalt CRC_OK a boolean if crc is match or not
-        %=======================================================================
         function [CRC_OK] = CRCCheck(me, DataArray)
+            %.. =======================================================================
+            % 
+            % check if crc is correct
+            %
+            % CRCCecheck extracts the CRC received on message (last word of
+            % array) replaces it to zero and calculates the new crc over all
+            % array. After it compares value received with the new one
+            % calculated.
+            %
+            % Args:
+            %     DataArray: frame to be checked.
+            % Returns:
+            %     CRC_OK: a boolean if crc is match or not.
+            %.. =======================================================================
             numWords = length(DataArray);
             DataArray = swapbytes(DataArray);
             crcReceived = uint16(DataArray(numWords));
@@ -465,18 +474,21 @@ classdef Epos < handle
             end
         end
         
-        %=======================================================================
-        %> @fn sendCom(DataArray, numWords)
-        %> @brief send command to EPOS
-        %>
-        %> Send command to EPOS, taking care of all necessary 'ack' and
-        %> checksum tests.
-        %>
-        %> @param DataArray frame to be sent.
-        %> @param numWords  number of words present in the frame
-        %> @revalt OK       boolean if all went ok or not
-        %=======================================================================
+        
         function [OK] = sendCom(me, DataArray, numWords)
+            %.. =======================================================================
+            % send command to EPOS
+            %
+            % Send command to EPOS, taking care of all necessary 'ack' and
+            % checksum tests.
+            %
+            % Args:
+            %     DataArray: frame to be sent.
+            %     numWords:  number of words present in the frame
+            % Returns:
+            %     OK:       boolean if all went ok or not
+            %.. =======================================================================
+            
             % calculate CRC
             CrcValue = me.CRCcalc(DataArray,numWords);
             DataArray(numWords) = CrcValue;
@@ -532,20 +544,20 @@ classdef Epos < handle
             fprintf('[Epos.SendCom]: EPOS CRCError, reply was 0x%02X\n',responseByte);
         end
         
-        %=======================================================================
-        %> @fn readObject(index, subindex)
-        %> @brief reads an object from dictionary
-        %>
-        %> Request a read from dictionary object referenced by index and subindex.
-        %>
-        %> @param index    reference of dictionary object index
-        %> @param subindex reference of dictionary object subindex
-        %>
-        %> @retval answer message returned by EPOS or empty if unsucessful
-        %> @retval OK     boolean if sucessful communication or not
-        %=======================================================================
         
         function [answer, OK] = readObject(me, index, subindex)
+            %.. =======================================================================
+            % reads an object from dictionary
+            %
+            % Request a read from dictionary object referenced by index and subindex.
+            %
+            % Args:
+            %     index:     reference of dictionary object index
+            %     subindex:  reference of dictionary object subindex
+            % Returns:
+            %     answer:  message returned by EPOS or empty if unsucessfull
+            %     OK:      boolean if all went ok or not
+            %.. =======================================================================
             validateattributes(index,{'uint16'},{'scalar'});
             subindex = uint8(subindex);
             header = hex2dec('1001'); % Allways fixed OpCode = 10, len-1 = 1
@@ -570,20 +582,22 @@ classdef Epos < handle
             end
         end
         
-        %=======================================================================
-        %> @fn writeObject(index, subindex, data)
-        %> @brief write an object from dictionary
-        %>
-        %> Request a write to dictionary object referenced by index and subindex.
-        %>
-        %> @param index    reference of dictionary object index
-        %> @param subindex reference of dictionary object subindex
-        %> @param data     array to be stored in object
-        %>
-        %> @retval answer message returned by EPOS or empty if unsucessful
-        %> @retval OK     boolean if sucessful communication or not
-        %=======================================================================
+        
         function [answer, OK] = writeObject(me, index, subindex,data)
+            %.. =======================================================================
+            % write an object to dictionary
+            %
+            % Request a write to dictionary object referenced by index and subindex.
+            %
+            % Args:
+            %     index:     reference of dictionary object index
+            %     subindex:  reference of dictionary object subindex
+            %     data:      array to be stored in object
+            %
+            % Returns:
+            %     answer:  message returned by EPOS or empty if unsucessfull
+            %     OK:      boolean if all went ok or not
+            %.. =======================================================================
             validateattributes(index,{'uint16'},{'scalar'});
             header = hex2dec('1103'); % allways fixed OpCode = 11, len-1 3
             frame = uint16(zeros(6,1));
@@ -608,18 +622,22 @@ classdef Epos < handle
             end
         end
         
-        %=======================================================================
-        %> @fn checkError(E_error)
-        %> @brief check if any error occurred in message received
-        %>
-        %> When you send a request to EPOS, the returned response frame, contains a
-        %> data field wich stores information of errors if any. The corresponding
-        %> message of error explaining it is printed.
-        %>
-        %> @param error data field from EPOS
-        %> @retval anyError boolean representing if any error happened.
-        %=======================================================================
+        
         function [anyError] = checkError(me, E_error)
+            %.. =======================================================================
+            % check if any error occurred in message received
+            %
+            % When you send a request to EPOS, the returned response frame, contains a
+            % data field wich stores information of errors if any. The corresponding
+            % message of error explaining it is printed.
+            %
+            % Args:
+            %     E_error:   error data field from EPOS
+            %
+            % Returns:
+            %     anyError:  boolean representing if any error happened.
+            % 
+            %.. =======================================================================
             anyError = true;
             E_error = typecast(E_error, 'uint32');
             
@@ -690,55 +708,65 @@ classdef Epos < handle
             end
         end
         
-        %{
-        %=======================================================================
-
-            End of basic functions for comunication
-
-        %=======================================================================
-        %}
         
-        %{
-        %=======================================================================
-            
-            High level functions
+        %.. =======================================================================
 
-        %=======================================================================
-        %}
+        %..    End of basic functions for comunication
+
+        %.. =======================================================================
+        
+        
+        
+        %.. =======================================================================
+        % --------------------  
+        % High level functions
+        % --------------------
+        %.. =======================================================================
+        
 
         function [listErrors, anyError, OK] = checkEposError(me)
+            %.. =======================================================================
+            % check if EPOS device is with any fault
+            %
+            % Request current ErrorHistory object and list the errors if any present. 
+            %
+            % Returns:
+            %     listErrors: cellstr containing errors found or "No Errors"
+            %     anyError:   boolean representing if any error happened.
+            %     OK:         boolean if request was sucessfull or not.
+            %.. =======================================================================
 
             % list of errors
             %E_NOERR = hex2dec('0000'); %not used
-            E_GENERIC = hex2dec('1000');
-            E_OVERCURRENT = hex2dec('2310');
-            E_OVERVOLTAGE = hex2dec('3210');
-            E_UNDERVOLTAGE = hex2dec('3220');
-            E_OVERTEMPERATURE = hex2dec('4210');
-            E_LOW5V = hex2dec('5113');
-            E_INTERNALSW = hex2dec('6100');
-            E_SWPARAM = hex2dec('6320');
-            E_SENSORPOSITION = hex2dec('7320');
-            E_CANOVERRUN_LOST = hex2dec('8110');
-            E_CANOVERRUN = hex2dec('8111');
-            E_CANPASSIVEMODE = hex2dec('8120');
-            E_CANLIFEGUARD = hex2dec('8130');
+            E_GENERIC              = hex2dec('1000');
+            E_OVERCURRENT          = hex2dec('2310');
+            E_OVERVOLTAGE          = hex2dec('3210');
+            E_UNDERVOLTAGE         = hex2dec('3220');
+            E_OVERTEMPERATURE      = hex2dec('4210');
+            E_LOW5V                = hex2dec('5113');
+            E_INTERNALSW           = hex2dec('6100');
+            E_SWPARAM              = hex2dec('6320');
+            E_SENSORPOSITION       = hex2dec('7320');
+            E_CANOVERRUN_LOST      = hex2dec('8110');
+            E_CANOVERRUN           = hex2dec('8111');
+            E_CANPASSIVEMODE       = hex2dec('8120');
+            E_CANLIFEGUARD         = hex2dec('8130');
             E_CANTRANSMITCOLLISION = hex2dec('8150');
-            E_CANBUSOFF = hex2dec('81FD');
-            E_CANRXOVERRUN = hex2dec('81FE');
-            E_CANTXOVERRUN = hex2dec('81FF');
-            E_CANPDOLENGTH = hex2dec('8210');
-            E_FOLLOWING = hex2dec('8611');
-            E_HALLSENSOR = hex2dec('FF01');
-            E_INDEXPROCESSING = hex2dec('FF02');
-            E_ENCODERRESOLUTION = hex2dec('FF03');
-            E_HALLSENSORNOTFOUND = hex2dec('FF04');
-            E_NEGATIVELIMIT = hex2dec('FF06');
-            E_POSITIVELIMIT = hex2dec('FF07');
-            E_HALLANGLE = hex2dec('FF08');
-            E_SWPOSITIONLIMIT = hex2dec('FF09');
+            E_CANBUSOFF            = hex2dec('81FD');
+            E_CANRXOVERRUN         = hex2dec('81FE');
+            E_CANTXOVERRUN         = hex2dec('81FF');
+            E_CANPDOLENGTH         = hex2dec('8210');
+            E_FOLLOWING            = hex2dec('8611');
+            E_HALLSENSOR           = hex2dec('FF01');
+            E_INDEXPROCESSING      = hex2dec('FF02');
+            E_ENCODERRESOLUTION    = hex2dec('FF03');
+            E_HALLSENSORNOTFOUND   = hex2dec('FF04');
+            E_NEGATIVELIMIT        = hex2dec('FF06');
+            E_POSITIVELIMIT        = hex2dec('FF07');
+            E_HALLANGLE            = hex2dec('FF08');
+            E_SWPOSITIONLIMIT      = hex2dec('FF09');
             E_POSITIONSENSORBREACH = hex2dec('FF0A');
-            E_SYSTEMOVERLOADED = hex2dec('FF0B');
+            E_SYSTEMOVERLOADED     = hex2dec('FF0B');
 
             % check if there are any errors
             index = me.objectIndex('ErrorHistory');
@@ -854,36 +882,48 @@ classdef Epos < handle
 			end
         end
         
-        %=======================================================================
-        %> @fn [state, ID, ok]=checkEposState()
-        %> @brief check current state of Epos
-        %>
-        %> Ask the StatusWord of EPOS and parse it to return the current state of
-        %> EPOS.
-        %>
-        %> |State                            | ID  | Statusword [binary] |
-        %> |:-------------------------------:|:---:|:-------------------:|
-        %> |Start                            | 0   | x0xx xxx0  x000 0000|
-        %> |Not Ready to Switch On           | 1   | x0xx xxx1  x000 0000|
-        %> |Switch on disabled               | 2   | x0xx xxx1  x100 0000|
-        %> |ready to switch on               | 3   | x0xx xxx1  x010 0001|
-        %> |switched on                      | 4   | x0xx xxx1  x010 0011|
-        %> |refresh                          | 5   | x1xx xxx1  x010 0011|
-        %> |measure init                     | 6   | x1xx xxx1  x011 0011|
-        %> |operation enable                 | 7   | x0xx xxx1  x011 0111|
-        %> |quick stop active                | 8   | x0xx xxx1  x001 0111|
-        %> |fault reaction active (disabled) | 9   | x0xx xxx1  x000 1111|
-        %> |fault reaction active (enabled)  | 10  | x0xx xxx1  x001 1111|
-        %> |Fault                            | 11  | x0xx xxx1  x000 1000|
-        %>
-        %> see section 8.1.1 of firmware manual for more details.
-        %>
-        %> @retval state text with current Epos state.
-        %> @retval ID numeric identification of the state
-        %> @retval OK boolean if corrected received status word or not
-        %>
-        %=======================================================================
+
         function [state, ID, OK] = checkEposState(me)
+            %.. =======================================================================
+            % check current state of Epos
+            %
+            % Ask the StatusWord of EPOS and parse it to return the current state of
+            % EPOS.
+            % +---------------------------------+-----+---------------------+
+            % |State                            | ID  | Statusword [binary] |
+            % +=================================+=====+=====================+
+            % | Start                           | 0   | x0xx xxx0  x000 0000|
+            % +---------------------------------+-----+---------------------+
+            % | Not Ready to Switch On          | 1   | x0xx xxx1  x000 0000|
+            % +---------------------------------+-----+---------------------+
+            % |Switch on disabled               | 2   | x0xx xxx1  x100 0000|
+            % +---------------------------------+-----+---------------------+
+            % |ready to switch on               | 3   | x0xx xxx1  x010 0001|
+            % +---------------------------------+-----+---------------------+
+            % |switched on                      | 4   | x0xx xxx1  x010 0011|
+            % +---------------------------------+-----+---------------------+
+            % |refresh                          | 5   | x1xx xxx1  x010 0011|
+            % +---------------------------------+-----+---------------------+
+            % |measure init                     | 6   | x1xx xxx1  x011 0011|
+            % +---------------------------------+-----+---------------------+
+            % |operation enable                 | 7   | x0xx xxx1  x011 0111|
+            % +---------------------------------+-----+---------------------+
+            % |quick stop active                | 8   | x0xx xxx1  x001 0111|
+            % +---------------------------------+-----+---------------------+
+            % |fault reaction active (disabled) | 9   | x0xx xxx1  x000 1111|
+            % +---------------------------------+-----+---------------------+
+            % |fault reaction active (enabled)  | 10  | x0xx xxx1  x001 1111|
+            % +---------------------------------+-----+---------------------+
+            % |Fault                            | 11  | x0xx xxx1  x000 1000|
+            % +---------------------------------+-----+---------------------+
+            %
+            % see section 8.1.1 of firmware manual for more details.
+            %
+            % Returns:
+            %     state: string with current EPOS state.
+            %     ID:    numeric identification of the state
+            %     OK:    boolean if corrected received status word or not
+            %.. =======================================================================
             [statusWord, OK] = me.readStatusWord();
             if ~OK
                 fprintf('[Epos checkEposState]: Failed to read StatusWord\n');
@@ -986,30 +1026,41 @@ classdef Epos < handle
                 return;
             end
         end
-        %=======================================================================
-        %> @fn [OK] = changeEposState(state)
-        %> @brief change Epos state using controlWord object
-        %> 
-        %> To change Epos state, a write to controlWord object is made.
-        %> The bit change in controlWord is made as shown in the following table:
-        %> 
-        %> |State            | LowByte of Controlword [binary]|
-        %> |:---------------:|:------------------------------:|
-        %> |shutdown         | 0xxx x110                      |
-        %> |switch on        | 0xxx x111                      |
-        %> |disable voltage  | 0xxx xx0x                      |
-        %> |quick stop       | 0xxx x01x                      |
-        %> |disable operation| 0xxx 0111                      |
-        %> |enable operation | 0xxx 1111                      |
-        %> |fault reset      | 1xxx xxxx                      |
-        %> 
-        %> see section 8.1.3 of firmware for more information
-        %> 
-        %> @param state string with state witch we want to switch.
-        %>
-        %> @retval OK boolean if all went ok and no error was received.
-        %=======================================================================
+        
+
         function [OK] = changeEposState(me, state)
+            %.. =======================================================================
+            %
+            % Change Epos state using controlWord object
+            % 
+            % To change Epos state, a write to controlWord object is made.
+            % The bit change in controlWord is made as shown in the following table:
+            % +-----------------+--------------------------------+ 
+            % |State            | LowByte of Controlword [binary]|
+            % +=================+================================+
+            % |shutdown         | 0xxx x110                      |
+            % +-----------------+--------------------------------+
+            % |switch on        | 0xxx x111                      |
+            % +-----------------+--------------------------------+
+            % |disable voltage  | 0xxx xx0x                      |
+            % +-----------------+--------------------------------+
+            % |quick stop       | 0xxx x01x                      |
+            % +-----------------+--------------------------------+
+            % |disable operation| 0xxx 0111                      |
+            % +-----------------+--------------------------------+
+            % |enable operation | 0xxx 1111                      |
+            % +-----------------+--------------------------------+
+            % |fault reset      | 1xxx xxxx                      |
+            % +-----------------+--------------------------------+
+            % 
+            % see section 8.1.3 of firmware for more information
+            % 
+            % Args:
+            %     state: string with state witch we want to switch.
+            %
+            % Returns: 
+            %     OK: boolean if all went ok and no error was received.
+            %.. =======================================================================
 
             index = me.objectIndex('Controlword');
             subindex = uint8(hex2dec('0'));
@@ -1148,20 +1199,21 @@ classdef Epos < handle
             end
         end
         
-        %=======================================================================
-        %> @fn [answer, OK] = readSatusWord()
-        %> @brief reads current status word object
-        %>
-        %> Ask Epos device for the current status word object. If a correct 
-        %> request is made, the status word is placed in answer. 
-        %>
-        %> @retval answer Corresponding status word, 'error' if request was
-        %>                sucessful but an error was returned or empty if request
-        %>                was not sucessfull.
-        %> @retval OK     A boolean if all went ok or not.
-        %=======================================================================
 
         function [answer, OK] = readStatusWord(me)
+            %.. ======================================================================
+            % reads current status word object
+            %
+            % Ask Epos device for the current status word object. If a correct 
+            % request is made, the status word is placed in answer. 
+            %
+            % Returns:
+            %     answer: Corresponding status word, 'error' if request was
+            %             sucessful but an error was returned or empty if request
+            %             was not sucessfull.
+            %     OK:     A boolean if all requests went ok or not.
+            %.. ======================================================================
+
             index = me.objectIndex('Statusword');
             subindex = uint8(0);
             [answer, sucess] = me.readObject(index, subindex);
@@ -1180,53 +1232,54 @@ classdef Epos < handle
                 OK = false;
             end
         end
-        %=======================================================================
-        %> @fn printStatusWord(statusWord)
-        %> @brief print the meaning of the status word passed.
-        %>
-        %> @param statusWord The status word to print the meaning.
-        %=======================================================================
+
         function [] = printStatusWord(me)
+            %.. ======================================================================
+            % 
+            % Print the meaning of the current status word.
+            %
+            %======================================================================
 			
             [statusWord, OK] = me.readStatusWord();
 			if OK
-            fprintf('[EPOS printStatusWord] meaning of statusWord 0x%04X is\n', statusWord)
-            statusWord = dec2bin(statusWord, 16);
-            fprintf('Bit 15: position referenced to home position:                  %s\n', statusWord(1));
-            fprintf('Bit 14: refresh cycle of power stage:                          %s\n', statusWord(2));
-            fprintf('Bit 13: OpMode specific, some error: [Following|Homing]        %s\n', statusWord(3));
-            fprintf('Bit 12: OpMode specific: [Set-point ack|Speed|Homing attained] %s\n', statusWord(4));
-            fprintf('Bit 11: Internal limit active:                                 %s\n', statusWord(5));
-            fprintf('Bit 10: Target reached:                                        %s\n', statusWord(6));
-            fprintf('Bit 09: Remote (NMT Slave State Operational):                  %s\n', statusWord(7));
-            fprintf('Bit 08: Offset current measured:                               %s\n', statusWord(8));
-            fprintf('Bit 07: not used (Warning):                                    %s\n', statusWord(9));
-            fprintf('Bit 06: Switch on disable:                                     %s\n', statusWord(10));
-            fprintf('Bit 05: Quick stop:                                            %s\n', statusWord(11));
-            fprintf('Bit 04: Voltage enabled (power stage on):                      %s\n', statusWord(12));
-            fprintf('Bit 03: Fault:                                                 %s\n', statusWord(13));
-            fprintf('Bit 02: Operation enable:                                      %s\n', statusWord(14));
-            fprintf('Bit 01: Switched on:                                           %s\n', statusWord(15));
-            fprintf('Bit 00: Ready to switch on:                                    %s\n', statusWord(16));
+                fprintf('[EPOS printStatusWord] meaning of statusWord 0x%04X is\n', statusWord)
+                statusWord = dec2bin(statusWord, 16);
+                fprintf('Bit 15: position referenced to home position:                  %s\n', statusWord(1));
+                fprintf('Bit 14: refresh cycle of power stage:                          %s\n', statusWord(2));
+                fprintf('Bit 13: OpMode specific, some error: [Following|Homing]        %s\n', statusWord(3));
+                fprintf('Bit 12: OpMode specific: [Set-point ack|Speed|Homing attained] %s\n', statusWord(4));
+                fprintf('Bit 11: Internal limit active:                                 %s\n', statusWord(5));
+                fprintf('Bit 10: Target reached:                                        %s\n', statusWord(6));
+                fprintf('Bit 09: Remote (NMT Slave State Operational):                  %s\n', statusWord(7));
+                fprintf('Bit 08: Offset current measured:                               %s\n', statusWord(8));
+                fprintf('Bit 07: not used (Warning):                                    %s\n', statusWord(9));
+                fprintf('Bit 06: Switch on disable:                                     %s\n', statusWord(10));
+                fprintf('Bit 05: Quick stop:                                            %s\n', statusWord(11));
+                fprintf('Bit 04: Voltage enabled (power stage on):                      %s\n', statusWord(12));
+                fprintf('Bit 03: Fault:                                                 %s\n', statusWord(13));
+                fprintf('Bit 02: Operation enable:                                      %s\n', statusWord(14));
+                fprintf('Bit 01: Switched on:                                           %s\n', statusWord(15));
+                fprintf('Bit 00: Ready to switch on:                                    %s\n', statusWord(16));
 			else
 				fprintf('[Epos printfStatusWord] ERROR Unable to read status word\n');
 			end
         end
         
-        %=======================================================================
-        %> @fn [answer, OK] = readControlWord()
-        %> @brief reads current control word object
-        %>
-        %> Ask Epos device for the current control word object. If a correct 
-        %> request is made, the control word is placed in answer. If not, an answer
-        %> will be empty
-        %>
-        %> @retval answer Corresponding control word, 'error' if request was
-        %>                sucessful but an error was returned or empty if request
-        %>                was not sucessfull.
-        %> @retval OK     A boolean if all went ok or not.
-        %=======================================================================
         function [answer, OK] = readControlWord(me)
+            %.. ======================================================================
+            % reads current control word object
+            %
+            % Ask Epos device for the current control word object. If a correct 
+            % request is made, the control word is placed in answer. If not, an answer
+            % will be empty
+            %
+            % Returns:
+            %      answer: Corresponding control word, 'error' if request was
+            %              sucessful but an error was returned or empty if request
+            %              was not sucessfull.
+            %      OK:     A boolean if all requests went ok or not.
+            %.. ======================================================================
+
             index = me.objectIndex('Controlword');
             subindex = uint8(0);
             [answer, sucess] = me.readObject(index, subindex);
@@ -1245,13 +1298,14 @@ classdef Epos < handle
                 OK = false;
             end
         end
-        %=======================================================================
-        %> @fn printControlWord(controlWord)
-        %> @brief print the meaning of the control word passed.
-        %>
-        %> @param controlWord The control word to print the meaning.
-        %=======================================================================
+
 		function printControlWord(me)
+            %.. ======================================================================
+            % 
+            % Print the meaning of the current control word.
+            %
+            %.. ======================================================================
+
             [controlWord, OK] = me.readControlWord();
 			if OK
 				fprintf('[Epos printControlWord] meaning of controlWord: 0x%04X\n', controlWord);
@@ -1272,20 +1326,21 @@ classdef Epos < handle
 			end
 		end
         
-        %=======================================================================
-        %> @fn [answer, OK] = readSWversion()
-        %> @brief reads Software version object
-        %>
-        %> Ask Epos device for software version object. If a correct 
-        %> request is made, the software version word is placed in answer. If 
-        %> not, an answer will be empty
-        %>
-        %> @retval answer Corresponding software version, 'error' if request was
-        %>                sucessful but an error was returned or empty if request
-        %>                was not sucessfull.
-        %> @retval OK     A boolean if all went ok or not.
-        %=======================================================================
         function [SWversion,OK] = readSWversion(me)
+            %.. ======================================================================
+            % Reads Software version object
+            %
+            % Ask Epos device for software version object. If a correct 
+            % request is made, the software version word is placed in answer. If 
+            % not, an answer will be empty
+            %
+            % Returns:
+            %     answer: Corresponding software version, 'error' if request was
+            %             sucessful but an error was returned or empty if request
+            %             was not sucessfull.
+            %     OK:     A boolean if all requests went ok or not.
+            %.. ======================================================================
+
             if(~me.connected)
                 SWversion = 'none';
                 OK = false;
@@ -1307,20 +1362,19 @@ classdef Epos < handle
             end
         end
         
-        %=======================================================================
-        %> @fn [position, OK] = readPositionModeSetting()
-        %> @brief reads the setted desired Position 
-        %>
-        %> Ask Epos device for demand position object. If a correct 
-        %> request is made, the position is placed in answer. If 
-        %> not, an answer will be empty
-        %>
-        %> @retval position Corresponding device name, 'error' if request was
-        %>                sucessful but an error was returned or empty if request
-        %>                was not sucessfull.
-        %> @retval OK     A boolean if all went ok or not.
-        %=======================================================================
         function [position,OK] = readPositionModeSetting(me)
+            %.. ======================================================================
+            % Reads the setted desired Position 
+            %
+            % Ask Epos device for demand position object. If a correct 
+            % request is made, the position is placed in answer. If 
+            % not, an answer will be empty
+            %
+            % Returns:
+            %     position: the demanded position value.
+            %     OK:       A boolean if all requests went ok or not.
+            %.. ======================================================================
+
             if(~me.connected)
                 position = [];
                 OK = false;
@@ -1341,15 +1395,18 @@ classdef Epos < handle
                 end
             end
 		end
-        %=======================================================================
-        %> @fn [OK] = setPositionModeSetting()
-        %> @brief sets the desired Position 
-        %>
-        %> Ask Epos device to set position mode setting object. 
-        %>
-        %> @retval OK     A boolean if all went ok or not.
-        %=======================================================================
+
 		function [OK] = setPositionModeSetting(me, position)
+            %.. ======================================================================
+            % 
+            % Sets the desired Position 
+            %
+            % Ask Epos device to define position mode setting object. 
+            %
+            % Returns:
+            %     OK: A boolean if all requests went ok or not.
+            %.. ======================================================================
+
             if(position < -2^31 || position > 2^31)
                 fprintf('[Epos setPositionModeSetting] Postion out of range\n');
                 OK = false;
@@ -1367,20 +1424,23 @@ classdef Epos < handle
                 end
             end
         end
-        %=======================================================================
-        %> @fn [velocity, OK] = readVelocityModeSetting()
-        %> @brief reads the setted desired velocity 
-        %>
-        %> Ask Epos device for demand velocity object. If a correct 
-        %> request is made, the velocity is placed in answer. If 
-        %> not, an answer will be empty
-        %>
-        %> @retval velocity Corresponding device name, 'error' if request was
-        %>                sucessful but an error was returned or empty if request
-        %>                was not sucessfull.
-        %> @retval OK     A boolean if all went ok or not.
-        %=======================================================================
+
         function [velocity,OK] = readVelocityModeSetting(me)
+            %.. ======================================================================
+            % @fn [velocity, OK] = readVelocityModeSetting()
+            % @brief reads the setted desired velocity 
+            %
+            % Ask Epos device for demand velocity object. If a correct 
+            % request is made, the velocity is placed in answer. If 
+            % not, an answer will be empty
+            %
+            % Returns:
+            %     velocity: Corresponding device name, 'error' if request was
+            %               sucessful but an error was returned or empty if request
+            %               was not sucessfull.
+            %     OK:       A boolean if all requests went ok or not.
+            %.. ======================================================================
+
             if(~me.connected)
                 velocity = [];
                 OK = false;
@@ -1401,15 +1461,17 @@ classdef Epos < handle
                 end
             end
         end
-        %=======================================================================
-        %> @fn [OK] = setVelocityModeSetting()
-        %> @brief sets the desired velocity  
-        %>
-        %> Ask Epos device to set velocity mode setting object. 
-        %>
-        %> @retval OK     A boolean if all went ok or not.
-        %=======================================================================
+
         function [OK] = setVelocityModeSetting(me, velocity)
+            %.. ======================================================================
+            % Sets the desired velocity  
+            %
+            % Ask Epos device to set velocity mode setting object. 
+            %
+            % Returns:
+            %     OK: A boolean if all requests went ok or not.
+            %.. ======================================================================
+
             if(velocity < -2^31 || velocity > 2^31)
                 fprintf('[Epos setVelocityModeSetting] Velocity out of range\n');
                 OK = false;
@@ -1427,20 +1489,23 @@ classdef Epos < handle
                 end
             end
         end
-        %=======================================================================
-        %> @fn [current, OK] = readCurrentModeSetting()
-        %> @brief reads the setted desired current 
-        %>
-        %> Ask Epos device for demand current object. If a correct 
-        %> request is made, the current is placed in answer. If 
-        %> not, an answer will be empty
-        %>
-        %> @retval current Corresponding device name, 'error' if request was
-        %>                sucessful but an error was returned or empty if request
-        %>                was not sucessfull.
-        %> @retval OK     A boolean if all went ok or not.
-        %=======================================================================
+
         function [current,OK] = readCurrentModeSetting(me)
+            %.. ======================================================================
+            % 
+            % Reads the setted desired current 
+            %
+            % Ask Epos device for demand current object. If a correct 
+            % request is made, the current is placed in answer. If 
+            % not, an answer will be empty
+            %
+            % Returns:
+            %     current: Corresponding device name, 'error' if request was
+            %              sucessful but an error was returned or empty if request
+            %              was not sucessfull.
+            %     OK:      A boolean if all requests went ok or not.
+            %.. ======================================================================
+
             if(~me.connected)
                 current = [];
                 OK = false;
@@ -1461,15 +1526,21 @@ classdef Epos < handle
                 end
             end
         end
-        %=======================================================================
-        %> @fn [OK] = setCurrentModeSetting()
-        %> @brief sets the desired current 
-        %>
-        %> Ask Epos device to set current mode setting object. 
-        %>
-        %> @retval OK     A boolean if all went ok or not.
-        %=======================================================================
+
         function [OK] = setCurrentModeSetting(me, current)
+            %.. ======================================================================
+            % 
+            % Sets the desired current 
+            %
+            % Ask Epos device to store current mode setting object. 
+            %
+            % Args:
+            %     current: current value to be set [mA]
+            %
+            % Returns:
+            %     OK: A boolean if all requests went ok or not.
+            %.. ======================================================================
+
             if(current < -2^15 || current > 2^15)
                 fprintf('[Epos setCurrentModeSetting] Postion out of range\n');
                 OK = false;
@@ -1487,27 +1558,40 @@ classdef Epos < handle
                 end
             end
         end
-        %=======================================================================
-        %> @fn [OK] = setOpMode(opMode)
-        %> @brief sets the operation mode
-        %>
-        %> Sets the operation mode of Epos. OpMode is described as:
-        %>
-        %> | OpMode | Description           |
-        %> |:------:|:----------------------|
-        %> | 6      | Homing Mode           |
-        %> | 3      | Profile Velocity Mode |
-        %> | 1      | Profile Position Mode |
-        %> | -1     | Position Mode         |
-        %> | -2     | Velocity Mode         |
-        %> | -3     | Current Mode          |
-        %> | -4     | Diagnostic Mode       |
-        %> | -5     | MasterEncoder Mode    |
-        %> | -6     | Step/Direction Mode   |
-        %>
-        %> @retval OK     A boolean if all went ok or not.
-        %=======================================================================
+
         function [OK] = setOpMode(me, opMode)
+            %.. ======================================================================
+            % 
+            % Set the operation mode
+            %
+            % Sets the operation mode of Epos. OpMode is described as:
+            %
+            % +--------+-----------------------+
+            % | OpMode | Description           |
+            % +========+=======================+
+            % | 6      | Homing Mode           |
+            % +--------+-----------------------+
+            % | 3      | Profile Velocity Mode |
+            % +--------+-----------------------+
+            % | 1      | Profile Position Mode |
+            % +--------+-----------------------+
+            % | -1     | Position Mode         |
+            % +--------+-----------------------+
+            % | -2     | Velocity Mode         |
+            % +--------+-----------------------+
+            % | -3     | Current Mode          |
+            % +--------+-----------------------+
+            % | -4     | Diagnostic Mode       |
+            % +--------+-----------------------+
+            % | -5     | MasterEncoder Mode    |
+            % +--------+-----------------------+
+            % | -6     | Step/Direction Mode   |
+            % +--------+-----------------------+
+            %
+            % Returns:
+            %     OK:     A boolean if all requests went ok or not.
+            %.. ======================================================================
+
             if(~any(opMode == [6 3 1 -1 -2 -3 -4 -5 -6]))
                 fprintf('[Epos setOpMode] Invalid mode of operation: %d\n', opMode);
                 OK = false;
@@ -1525,15 +1609,17 @@ classdef Epos < handle
                 OK = ~me.checkError(answer(2:3));
             end
         end
-        %=======================================================================
-        %> @fn [opMode, OK] = readOpMode()
-        %> @brief reads the operation mode
-        %>
-        %>  
-        %> @retval opMode current opMode of EPOS.
-        %> @retval OK     A boolean if all went ok or not.
-        %=======================================================================
+
         function [opMode, OK] = readOpMode(me)
+            %.. ======================================================================
+            % 
+            % Reads the operation mode object
+            %
+            % Returns:
+            %     opMode: current opMode of EPOS.
+            %     OK:     A boolean if all requests went ok or not.
+            %.. ======================================================================
+
             index = me.objectIndex('ModesOperationDisplay');
             subindex = uint8(0);
 
@@ -1552,11 +1638,11 @@ classdef Epos < handle
                 OK = false;
             end
         end
-        %=======================================================================
-        %> @fn printOpMode()
-        %> @brief prints the current operation mode.
-        %=======================================================================
+
 		function printOpMode(me)
+            %.. ======================================================================
+            % Prints the current operation mode.
+            %.. ======================================================================
 			[opMode, OK] = me.readOpMode();
 			if (OK)
 				switch opMode
@@ -1586,42 +1672,45 @@ classdef Epos < handle
 			end
 		end
 
-        %=======================================================================
-        %> @fn [OK] = setMotorConfig(motorType, currentLimit, maximumSpeed, polePairNumber)
-        %> @brief sets the basic configuration for motor.
-        %>
-        %> Sets the configuration of the motor parameters. The valid motor type is:
-        %>
-        %> |motorType              | value| Description              |
-        %> |:----------------------|:----:|:-------------------------|
-        %> |DC motor               | 1    | brushed DC motor         |
-        %> |Sinusoidal PM BL motor | 10   | EC motor sinus commutated|
-        %> |Trapezoidal PM BL motor| 11   | EC motor block commutated|
-        %>
-        %> The current limit is the current limit is the maximal permissible 
-        %> continuous current of the motor in mA.
-        %> Minimum value is 0 and max is hardware dependent.
-        %>
-        %> The output current limit is recommended to be 2 times the continuous
-        %> current limit.
-        %>  
-        %> The pole pair number refers to the number of magnetic pole pairs 
-        %> (number of poles / 2) from rotor of a brushless DC motor.
-        %> 
-        %> The maximum speed is used to prevent mechanical destroys in current 
-        %> mode. It is possible to limit the velocity [rpm]
-        %>
-        %> Thermal winding not changed, using default 40ms. 
-        %>
-        %> @param motorType      value of motor type. see table behind.
-        %> @param currentLimit   max continuous current limit [mA].
-        %> @param maximumSpeed   max allowed speed in current mode [rpm].
-        %> @param polePairNumber number of pole pairs for brushless DC motors.
-        %>
-        %> @retval OK     A boolean if all went ok or not.
-        %=======================================================================
-
         function [OK] = setMotorConfig(me, motorType, currentLimit, maximumSpeed, polePairNumber)
+            %.. ======================================================================
+            % 
+            % Sets the configuration of the motor parameters. The valid motor type is:
+            %
+            % +-----------------------+------+--------------------------+
+            % |motorType              | value| Description              |
+            % +=======================+======+==========================+
+            % |DC motor               | 1    | brushed DC motor         |
+            % +-----------------------+------+--------------------------+
+            % |Sinusoidal PM BL motor | 10   | EC motor sinus commutated|
+            % +-----------------------+------+--------------------------+
+            % |Trapezoidal PM BL motor| 11   | EC motor block commutated|
+            % +-----------------------+------+--------------------------+
+            %
+            % The current limit is the current limit is the maximal permissible 
+            % continuous current of the motor in mA.
+            % Minimum value is 0 and max is hardware dependent.
+            %
+            % The output current limit is recommended to be 2 times the continuous
+            % current limit.
+            %  
+            % The pole pair number refers to the number of magnetic pole pairs 
+            % (number of poles / 2) from rotor of a brushless DC motor.
+            % 
+            % The maximum speed is used to prevent mechanical destroys in current 
+            % mode. It is possible to limit the velocity [rpm]
+            %
+            % Thermal winding not changed, using default 40ms. 
+            %
+            % Args:
+            %     motorType:      value of motor type. see table behind.
+            %     currentLimit:   max continuous current limit [mA].
+            %     maximumSpeed:   max allowed speed in current mode [rpm].
+            %     polePairNumber: number of pole pairs for brushless DC motors.
+            %
+            % Returns:
+            %     OK:     A boolean if all requests went ok or not.
+            %.. ======================================================================
             
             %change to disable state;
             % reset first? 
@@ -1730,32 +1819,34 @@ classdef Epos < handle
                 end
             end
         end
-        %=======================================================================
-        %> @fn [motorConfig, OK] = readMotorConfig()
-        %> @brief gets the current motor configuration
-        %>
-        %> Requests from EPOS the current motor type and motor data.
-        %> The motorConfig is an struture containing the following information:
-        %>
-        %> [*] motorType - describes the type of motor.
-        %> [*] currentLimit - describes the maximum continuous current limit.
-        %> [*] maxCurrentLimit - describes the maximum allowed current limit. 
-        %> Usually is set as two times the continuous current limit.
-        %> [*] polePairNumber - describes the pole pair number of the rotor of 
-        %> the brushless DC motor.
-        %> [*] maximumSpeed - describes the maximum allowed speed in current mode.
-        %> [*] thermalTimeConstant - describes the thermal time constant of motor 
-        %> winding is used to calculate the time how long the maximal output 
-        %> current is allowed for the connected motor [100 ms].
-        %>
-        %> If unable to request the configuration or unsucessfull, an empty
-        %> structure is returned. Any error inside any field requests are marked
-        %> with 'error'. 
-        %>
-        %> @retval motorConfig A structure with the current configuration of motor
-        %> @retval OK          A boolean if all went as expected or not.         
-        %=======================================================================
+
         function [motorConfig, OK] = readMotorConfig(me)
+            %.. ======================================================================
+            % 
+            % Read the current motor configuration
+            %
+            % Requests from EPOS the current motor type and motor data.
+            % The motorConfig is an struture containing the following information:
+            %
+            % * motorType - describes the type of motor.
+            % * currentLimit - describes the maximum continuous current limit.
+            % * maxCurrentLimit - describes the maximum allowed current limit. 
+            %   Usually is set as two times the continuous current limit.
+            % * polePairNumber - describes the pole pair number of the rotor of 
+            %   the brushless DC motor.
+            % * maximumSpeed - describes the maximum allowed speed in current mode.
+            % * thermalTimeConstant - describes the thermal time constant of motor 
+            % winding is used to calculate the time how long the maximal output 
+            % current is allowed for the connected motor [100 ms].
+            %
+            % If unable to request the configuration or unsucessfull, an empty
+            % structure is returned. Any error inside any field requests are marked
+            % with 'error'. 
+            %
+            % Returns:
+            %     motorConfig: A structure with the current configuration of motor
+            %     OK:          A boolean if all went as expected or not.         
+            %.. ======================================================================
 
             % get MotorType object
             index = me.objectIndex('MotorType');
@@ -1875,6 +1966,9 @@ classdef Epos < handle
         end
         
         function printMotorConfig(me)
+            %.. ================================================================
+            % Print current Motor configuration
+            %.. ================================================================
             [motorConfig, OK] = me.readMotorConfig;
             if (OK)
                 fprintf('[Epos printMotorConfig] Current motor configuration is:\n');
@@ -1888,32 +1982,47 @@ classdef Epos < handle
                 fprintf('[Epos printMotorConfig] ERROR - Unable to get the motor configuration\n');
             end
         end
-        %=======================================================================
-        %> @fn [OK] = setSensorConfig(pulseNumber, sensorType, sensorPolatity)
-        %> @brief change sensor configuration
-        %>
-        %> Change the sensor configuration of motor. **Only possible if in disable state**
-        %> The encoder pulse number should be set to number of counts per 
-        %> revolution of the connected incremental encoder.
-        %> range : |16|7500|
-        %>
-        %> sensor type is described as:
-        %>
-        %> |value| description                                     |
-        %> |:---:|:------------------------------------------------|
-        %> |1    | Incremental Encoder with index (3-channel)      |
-        %> |2    | Incremental Encoder without index (2-channel)   |
-        %> |3    | Hall Sensors (Remark: consider worse resolution)|
-        %>
-        %> sensor polarity is set by setting the corresponding bit from the word
-        %> | Bit | description                                                                      |
-        %> |:---:|:---------------------------------------------------------------------------------|
-        %> | 15-2| Reserved (0)                                                                     |
-        %> | 1   | Hall sensors polarity 0: normal / 1: inverted                                    |
-        %> | 0   | Encoder polarity 0: normal / 1: inverted (or encoder mounted on motor shaft side)|
-        %>
-        %=======================================================================
+
         function [OK] = setSensorConfig(me, pulseNumber, sensorType, sensorPolarity)
+            %.. ======================================================================
+            % 
+            % Change sensor configuration
+            %
+            % Change the sensor configuration of motor. **Only possible if in disable state**
+            % The encoder pulse number should be set to number of counts per 
+            % revolution of the connected incremental encoder.
+            % range : |16|7500|
+            %
+            % sensor type is described as:
+            % +-----+-------------------------------------------------+
+            % |value| description                                     |
+            % +=====+=================================================+
+            % |1    | Incremental Encoder with index (3-channel)      |
+            % +-----+-------------------------------------------------+
+            % |2    | Incremental Encoder without index (2-channel)   |
+            % +-----+-------------------------------------------------+
+            % |3    | Hall Sensors (Remark: consider worse resolution)|
+            % +-----+-------------------------------------------------+
+            %
+            % sensor polarity is set by setting the corresponding bit from the word:
+            % +-----+----------------------------------------------------------------------------------+
+            % | Bit | description                                                                      |
+            % +=====+==================================================================================+
+            % | 15-2| Reserved (0)                                                                     |
+            % +-----+----------------------------------------------------------------------------------+
+            % | 1   | Hall sensors polarity 0: normal / 1: inverted                                    |
+            % +-----+----------------------------------------------------------------------------------+
+            % | 0   | Encoder polarity 0: normal / 1: inverted (or encoder mounted on motor shaft side)|
+            % +-----+----------------------------------------------------------------------------------+
+            % 
+            % Args:
+            %     pulseNumber:    Number of pulses per revolution.
+            %     sensorType:     1,2 or 3 according to the previous table.
+            %     sensorPolarity: a value between 0 and 3 describing the polarity
+            %                       of sensors as stated before.
+            % Returns:
+            %     OK: A boolean if all went as expected or not.
+            %.. ======================================================================
             
             % validate attributes first
             if(pulseNumber<16 || pulseNumber> 7500)
@@ -1984,27 +2093,29 @@ classdef Epos < handle
                 end
             end  
         end
-        %=======================================================================
-        %> @fn [Config, OK] = readSensorConfig()
-        %> @brief gets the current sensor configuration
-        %>
-        %> Requests from EPOS the current sensor configuration.
-        %> The sensorConfig is an struture containing the following information:
-        %>
-        %> [*] sensorType - describes the type of sensor.
-        %> [*] pulseNumber - describes the number of pulses per revolution in 
-        %> one channel.
-        %> [*] sensorPolarity - describes the of each sensor. 
-        %>
-        %> If unable to request the configuration or unsucessfull, an empty
-        %> structure is returned. Any error inside any field requests are marked
-        %> with 'error'. 
-        %> 
-        %> @retval sensorConfig A structure with the current configuration of 
-        %>                      the sensor
-        %> @retval OK           A boolean if all went as expected or not.         
-        %=======================================================================
+
         function [sensorConfig, OK] = readSensorConfig(me)
+            %.. ======================================================================
+            % 
+            % Read the current sensor configuration
+            %
+            % Requests from EPOS the current sensor configuration.
+            % The sensorConfig is an struture containing the following information:
+            %
+            % * sensorType - describes the type of sensor.
+            % * pulseNumber - describes the number of pulses per revolution in 
+            %   one channel.
+            % * sensorPolarity - describes the of each sensor. 
+            %
+            % If unable to request the configuration or unsucessfull, an empty
+            % structure is returned. Any error inside any field requests are marked
+            % with 'error'. 
+            % 
+            % Returns: 
+            %     sensorConfig: A structure with the current configuration of 
+            %                   the sensor
+            %     OK:           A boolean if all went as expected or not.         
+            %.. ======================================================================
 
             % get pulseNumber
             index = me.objectIndex('SensorConfiguration');
@@ -2089,7 +2200,11 @@ classdef Epos < handle
                 return;
             end
         end
+
         function printSensorConfig(me)
+            %.. ================================================================
+            % Prints the current sensor config
+            %.. ================================================================
             [sensorConfig, OK] = me.readSensorConfig;
             if (OK)
                 fprintf('[Epos printSensorConfig] Current sensor configuration is:\n');
@@ -2101,10 +2216,16 @@ classdef Epos < handle
                 fprintf('[Epos MotorConfig] ERROR - Unable to get the motor configuration\n');
             end
         end
-        %=======================================================================
-        %=======================================================================
+        
         function [currentControlPIgains, OK] = readCurrentControlParam(me)
-
+            %.. ================================================================
+            % Read the PI gains used in current control mode
+            %
+            % Returns:
+            %     currentControlPIgains: a structure with P and I gains.
+            %     OK:                    A boolean if all went as expected or not.
+            %.. ================================================================
+            
             %read current regulator P-gain
             index = me.objectIndex('CurrentControlParameterSet');
             subindex = uint8(1);
@@ -2140,10 +2261,17 @@ classdef Epos < handle
                 return;
             end
         end
-        %=======================================================================
-        %=======================================================================
+        
         function [OK] = setCurrentControlParam(me, pGain, iGain)
-
+            %.. ================================================================
+            % Set the PI gains used in current control mode
+            %
+            % Args:
+            %     pGain: Proportional gain.
+            %     iGain: Integral gain.
+            % Returns:
+            %     OK: A boolean if all went as expected or not.
+            %.. ================================================================
             % validate attributes first
             if( pGain < 0 || pGain > 2^15-1)
                 fprintf('[Epos setCurrentControlParam] pGain is out of range [0 - 32767]\n');
@@ -2185,6 +2313,9 @@ classdef Epos < handle
         end
         
         function printCurrentControlParam(me)
+            %.. ================================================================
+            % Print actual current control mode gains
+            %.. ================================================================
             [param, OK] = me.readCurrentControlParam();
             if OK
                 fprintf('[Epos printCurrentControlParam] Current control gains:\n');
@@ -2194,21 +2325,22 @@ classdef Epos < handle
                 fprintf('[Epos printCurrentControlParam] ERROR unable to read current mode control parameters\n');
             end
         end
-        %=======================================================================
+        %.. ====================================================================
         %
-        % Position profile functions
+        %..  Position profile functions
         %
-        %=======================================================================
+        %.. ====================================================================
 
-        %=======================================================================
-        %> @fn [pos, OK] = readSoftwarePosLimit()
-        %> @brief reads the limits of the software position
-        %>
-        %>  
-        %> @retval pos    A structure with fields nimPos and maxPos
-        %> @retval OK     A boolean if all went ok or not.
-        %=======================================================================
+        
         function [pos, OK] = readSoftwarePosLimit(me)
+            %..======================================================================
+            % 
+            % Reads the limits of the software position
+            %
+            % Returns:
+            %     pos:   A structure with fields minPos and maxPos
+            %     OK:    A boolean if all requests went ok or not.
+            %..======================================================================
             index = me.objectIndex('SoftwarePositionLimit');
             subindex = uint8(1);
 
@@ -2249,17 +2381,21 @@ classdef Epos < handle
             
         end
         
-        %=======================================================================
-        %> @fn [OK] = setSoftwarePosLimit(me, minPos, maxPos)
-        %> @brief change software position limit
-        %>
-        %> Position Limits
-        %> range : [-2147483648|2147483647]
-        %>
-        %=======================================================================
-        
         function [OK] = setSoftwarePosLimit(me, minPos, maxPos)
-            
+            %.. ================================================================
+            % 
+            % Set the software position limits
+            %
+            % range : [-2147483648|2147483647]
+            %
+            % Args:
+            %     minPos: minimum limit.
+            %     maxPos: maximum limit.
+            %
+            % Returns:
+            %     OK: A boolean if all requests went ok or not.  
+            %.. ================================================================
+
             % validate attributes first
             if(minPos< -2^31 || minPos> 2^31)
                 fprintf('[Epos setSoftwarePosLimit] Error minPos out of range\n');
@@ -2309,6 +2445,9 @@ classdef Epos < handle
         end
         
         function printSoftwarePosLimit(me)
+            %.. ================================================================
+            % Prints software position limits.
+            %.. ================================================================
             [pos, OK] = me.readSoftwarePosLimit();
             if OK
                 fprintf('[Epos printSoftwarePosLimit] Software Position Limits:\n');
@@ -2319,10 +2458,18 @@ classdef Epos < handle
             end
         end
 
-        %=======================================================================
-        % This value is used as velocity limit in a position (or velocity) profile move
-        %=======================================================================
         function [maxProfileVelocity, OK] = readMaxProfileVelocity(me)
+            %.. ================================================================
+            % Reads the maximum velocity of Profile modes.
+            %
+            % This value is used as velocity limit in a position (or velocity)
+            % profile mode
+            %
+            % Returns:
+            %     maxProfileVelocity: the value of maximum velocity.
+            %     OK:                 A boolean if all requests went ok or not.
+            %.. ================================================================
+
             %
             index = me.objectIndex('MaximalProfileVelocity');
             subindex = uint8(0);
@@ -2342,10 +2489,20 @@ classdef Epos < handle
                 return;
             end
         end
-        %=======================================================================
-        % This value is used as velocity limit in a position (or velocity) profile move
-        %=======================================================================
+        
         function [OK] = setMaxProfileVelocity(me, maxProfileVelocity)
+            %.. ================================================================
+            % Set the maximum velocity of Profile modes.
+            %
+            % This value is used as velocity limit in a position (or velocity)
+            % profile mode
+            %
+            % Args:
+            %     maxProfileVelocity: the value of maximum velocity.
+            %
+            % Returns:
+            %     OK:                 A boolean if all requests went ok or not.
+            %.. ================================================================
             
             % validate attributes
             if(maxProfileVelocity< 1 || maxProfileVelocity > 25000)
@@ -2371,13 +2528,19 @@ classdef Epos < handle
             end
 
         end
-        %=======================================================================
-        % Todo
-        % The profile velocity is the velocity normally attained at the end of 
-        % the acceleration ramp during a profiled move [Velocity units]
-        %=======================================================================
+        
         function [profileVelocity, OK] = readProfileVelocity(me)
+            %.. ================================================================
+            % Read the profile velocity.
             %
+            % The profile velocity is the velocity normally attained at the end 
+            % of the acceleration ramp during a profiled move [Velocity units]
+            %
+            % Returns:
+            %     profileVelocity: The value of velocity.
+            %     OK:              A boolean if all requests went ok or not. 
+            %.. ================================================================
+            
             index = me.objectIndex('ProfileVelocity');
             subindex = uint8(0);
             [answer, OK] = me.readObject(index, subindex);
@@ -2396,12 +2559,20 @@ classdef Epos < handle
                 return;
             end
         end
-        %=======================================================================
-        % Todo
-        % The profile velocity is the velocity normally attained at the end of 
-        % the acceleration ramp during a profiled move [Velocity units]
-        %=======================================================================
+        
         function [OK] = setProfileVelocity(me, profileVelocity)
+            %.. ================================================================
+            % Set the profile velocity.
+            %
+            % The profile velocity is the velocity normally attained at the end 
+            % of the acceleration ramp during a profiled move [Velocity units]
+            %
+            % Args:
+            %     profileVelocity: The value of velocity.
+            %
+            % Returns:
+            %     OK: A boolean if all requests went ok or not. 
+            %.. ================================================================
             
             % validate attributes
             if(profileVelocity< 1 || profileVelocity > 25000)
@@ -2427,9 +2598,17 @@ classdef Epos < handle
             end
 
         end
-        %=======================================================================
-        %=======================================================================
+        
         function [profileAcceleration, OK] = readProfileAcceleration(me)
+            %.. ================================================================
+            % Read the profile acceleration.
+            %
+            % Defines the acceleration ramp during a movement.
+            %
+            % Returns:
+            %     profileAcceleration: The value of acceleration.
+            %     OK:                  A boolean if all requests went ok or not. 
+            %.. ================================================================
             %
             index = me.objectIndex('ProfileAcceleration');
             subindex = uint8(0);
@@ -2449,9 +2628,19 @@ classdef Epos < handle
                 return;
             end
         end
-        %=======================================================================
-        %=======================================================================
+
         function [OK] = setProfileAcceleration(me, profileAcceleration)
+            %.. ================================================================
+            % Set the profile acceleration.
+            %
+            % Defines the acceleration ramp during a movement.
+            %
+            % Args:
+            %     profileVelocity: The value of acceleration.
+            %
+            % Returns:
+            %     OK: A boolean if all requests went ok or not. 
+            %.. ================================================================
             
             % validate attributes
             if(profileAcceleration< 1 || profileAcceleration > 2^32-1)
@@ -2477,9 +2666,19 @@ classdef Epos < handle
             end
 
         end
-        %=======================================================================
-        %=======================================================================
+        
         function [profileDeceleration, OK] = readProfileDeceleration(me)
+            %.. ================================================================
+            % Read the profile deceleration.
+            %
+            % The profile deceleration defines the deceleration ramp during a 
+            % movement.
+            %
+            % Returns:
+            %     profileDeceleration: The value of deceleration.
+            %     OK:                  A boolean if all requests went ok or not. 
+            %.. ================================================================
+        
             %
             index = me.objectIndex('ProfileDeceleration');
             subindex = uint8(0);
@@ -2499,9 +2698,20 @@ classdef Epos < handle
                 return;
             end
         end
-        %=======================================================================
-        %=======================================================================
+        
         function [OK] = setProfileDeceleration(me, profileDeceleration)
+            %.. ================================================================
+            % Set the profile deceleration.
+            %
+            % The profile deceleration defines the deceleration ramp during a 
+            % movement.
+            %
+            % Args:
+            %     profileDeceleration: The value of deceleration.
+            %
+            % Returns:
+            %     OK: A boolean if all requests went ok or not. 
+            %.. ================================================================
             
             % validate attributes
             if(profileDeceleration< 1 || profileDeceleration > 2^32-1)
@@ -2527,9 +2737,17 @@ classdef Epos < handle
             end
 
         end
-        %=======================================================================
-        %=======================================================================
+        
         function [quickstopDeceleration, OK] = readQuickstopDeceleration(me)
+            %.. ================================================================
+            % Read the quickstop deceleration.
+            %
+            % Deceleration used in fault reaction state.
+            %
+            % Returns:
+            %     quickstopDeceleration: The value of deceleration.
+            %     OK:                    A boolean if all requests went ok or not. 
+            %.. ================================================================
             %
             index = me.objectIndex('QuickStopDeceleration');
             subindex = uint8(0);
@@ -2549,9 +2767,20 @@ classdef Epos < handle
                 return;
             end
         end
-        %=======================================================================
-        %=======================================================================
+        
         function [OK] = setQuickstopDeceleration(me, quickstopDeceleration)
+            %.. ================================================================
+            % Set the quickstop deceleration.
+            %
+            % The quickstop deceleration defines the deceleration during a fault
+            % reaction.
+            %
+            % Args:
+            %     quickstopDeceleration: The value of deceleration.
+            %
+            % Returns:
+            %     OK: A boolean if all requests went ok or not. 
+            %.. ================================================================
             
             % validate attributes
             if(quickstopDeceleration< 1 || quickstopDeceleration > 2^32-1)
@@ -2577,9 +2806,19 @@ classdef Epos < handle
             end
 
         end
-        %=======================================================================
-        %=======================================================================
+        
         function [motionProfileType, OK] = readMotionProfileType(me)
+            %.. ================================================================
+            % Read the motion profile type.
+            % 
+            % Motion profile type describes the type of trajectories used in
+            % profile modes to generate the paths.
+            %
+            % Returns:
+            %     motionProfileType: 0 if linear ramp, 1 if sin^2 ramp.
+            %     OK:                A boolean if all requests went ok or not.
+            %.. ================================================================
+
             %
             index = me.objectIndex('MotionProfileType');
             subindex = uint8(0);
@@ -2599,10 +2838,20 @@ classdef Epos < handle
                 return;
             end
         end
-        %=======================================================================
-        %=======================================================================
+        
         function [OK] = setMotionProfileType(me, motionProfileType)
-            
+            %.. ================================================================
+            % Set the motion profile type.
+            % 
+            % Motion profile type describes the type of trajectories used in
+            % profile modes to generate the paths.
+            %
+            % Args:
+            %     motionProfileType: 0 if linear ramp, 1 if sin^2 ramp.
+            %
+            % Returns:
+            %     OK:                A boolean if all requests went ok or not.
+            %.. ================================================================
             % validate attributes
             if(~any([0 1] == motionProfileType))
                 fprintf('[Epos setMotionProfileType] Error motionProfileType out of range\n');
@@ -2627,10 +2876,27 @@ classdef Epos < handle
             end
 
         end
-        %=======================================================================
-        %=======================================================================
+        
         function [positionProfileConfig, OK] = readPositionProfileConfig(me)
+            %.. ================================================================
+            % Read all parameters related to position profile configuration mode.
+            % 
+            % The parameters are stored in a structure with:
             %
+            % * maxFollowingError
+            % * softwarePositionLimit
+            % * maxProfileVelocity
+            % * profileVelocity
+            % * profileAcceleration
+            % * profileDeceleration
+            % * quickstopDeceleration
+            % * motionProfileType 
+            %
+            % Returns:
+            %     positionProfileConfig: Struture with all parameters.
+            %     OK:                    A boolean if all requests went ok or not.
+            %.. ================================================================
+            
             OK = [0 0 0 0 0 0 0 0];
             [positionProfileConfig.maxFollowingError, OK(1)] = me.readMaxFollowingError();
             [positionProfileConfig.softwarePositionLimit, OK(2)] = me.readSoftwarePosLimit();
@@ -2646,12 +2912,28 @@ classdef Epos < handle
                 OK = true;
             end
         end
-        %=======================================================================
-        %=======================================================================
+        
         function [OK] = setPositionProfileConfig(me, maxFollowingError, minPos, maxPos,...
 				maxProfileVelocity, profileVelocity, profileAcceleration, profileDeceleration,...
 				quickstopDeceleration, motionProfileType)
-			
+		    %.. ================================================================
+            % Set all parameters related to position profile configuration mode.
+            % 
+            % Args:
+            %     maxFollowingError:     max permissible following error
+            %     minPos:                software limit minimum position
+            %     maxPos:                software limit maximum position
+            %     maxProfileVelocity:    max velocity allowed in profile mode
+            %     profileVelocity:       velocity at end of acceleration ramps
+            %     profileAcceleration:   acceleration value at ramps up
+            %     profileDeceleration:   deceleration value at ramps down
+            %     quickstopDeceleration: deceleration value at fault reaction
+            %     motionProfile:         type of motion profiles to be generated
+            %
+            % Returns:
+            %     positionProfileConfig: Struture with all parameters.
+            %     OK:                    A boolean if all requests went ok or not.
+            %.. ================================================================	
 			OK = me.setMaxFollowingError(maxFollowingError);
 			if ~OK
 				fprintf('[Epos setMotionProfileConfig] ERROR setting maxFollowingError\n');
@@ -2693,10 +2975,11 @@ classdef Epos < handle
 				return;
             end
         end
-        %=======================================================================
-        %=======================================================================
 
         function printPositionProfileConfig(me)
+            %.. ================================================================
+            % Print position profile configuration parameters
+            %.. ================================================================
             [positionProfileConfig, OK] = me.readPositionProfileConfig();
             if OK
                 fprintf('[Epos printPositionProfileConfig] Position Profile Configuration parameters are:\n');
@@ -2717,8 +3000,7 @@ classdef Epos < handle
                 fprintf('[Epos printPositionProfileConfig] Failed to request position profile configuration parameters\n');
             end
         end
-        %=======================================================================
-        %=======================================================================
+        
         function [position, OK] = readTargetPosition(me)
 
             index = me.objectIndex('TargetPosition');
@@ -2890,7 +3172,7 @@ classdef Epos < handle
         %>  
         %> @retval velocityControlPIgains Values of PI gains in velocity
         %>                                control mode
-        %> @retval OK                     A boolean if all went ok or not.
+        %> @retval OK                     A boolean if all requests went ok or not.
         %=======================================================================
         function [velocityControlPIgains, OK] = readVelocityControlParam(me)
             index = me.objectIndex('VelocityControlParameterSet');
@@ -3089,10 +3371,61 @@ classdef Epos < handle
                 return;
             end
         end
-        %=======================================================================
-        %=======================================================================
+        
         function [OK] = setPositionControlParam(me, pGain, iGain, dGain, vFeed, aFeed)
-            
+            %.. ================================================================
+            % Set position control PID gains and feedfoward velocity and
+            % acceleration values.
+            % 
+            % Feedback and Feed Forward
+            % 
+            % PID feedback amplification
+            %
+            % PID stands for Proportional, Integral and Derivative control parameters.
+            % They describe how the error signal e is amplified in order to 
+            % produce an appropriate correction. The goal is to reduce this error, i.e.
+            % the deviation between the set (or demand) value and the measured (or
+            % actual) value. Low values of control parameters will usually result in a
+            % sluggish control behavior. High values will lead to a stiffer control with the
+            % risk of overshoot and at too high an amplification, the system may start
+            % oscillating. 
+            % 
+            % Feed-forward
+            %
+            % With the PID algorithms, corrective action only occurs if there is
+            % a deviation between the set and actual values. For positioning
+            % systems, this means that there always is – in fact, there has to
+            % be a position error while in motion. This is called following
+            % error. The objective of the feedforward control is to minimize
+            % this following error by taking into account the set value changes
+            % in advance. Energy is provided in an open-loop controller set-up
+            % to compensate friction and for the purpose of mass inertia acceleration.
+            % Generally, there are two parameters available in feed-forward.
+            % They have to be determined for the specific application and motion
+            % task: 
+            % * Speed feed-forward gain: This component is multiplied by the 
+            %   demanded speed and compensates for speed-proportional friction.
+            % * Acceleration feed-forward correction: This component is related
+            %   to the mass inertia of the system and provides sufficient current
+            %   to accelerate this inertia.
+            % Incorporating the feed forward features reduces the average following
+            % error when accelerating and decelerating. By combining a feed-forward
+            % control and PID, the PID controller only has to correct the
+            % residual error remaining after feed-forward, thereby improving the
+            % system response and allowing very stiff control behavior.
+            %
+            % Args:
+            %     pGain: Proportional gain value
+            %     iGain: Integral gain value
+            %     dGain: Derivative gain value
+            %     vFeed: velocity feed foward gain value
+            %     aFeed: acceleration feed foward gain value
+            %
+            % Returns:
+            %     OK: A boolean if all requests went ok or not
+            %.. ================================================================
+
+
             % validate attributes first
             if(pGain < 0 || pGain > 32767)
                 fprintf('[Epos setPositionControlParam] ERROR pGain out of range\n');
@@ -3193,9 +3526,12 @@ classdef Epos < handle
                 end
             end
         end
-        %=======================================================================
-        %=======================================================================
+        
         function printPositionControlParam(me)
+            %.. ================================================================
+            % Print position control PID gains.
+            %.. ================================================================
+
             [param, OK] = me.readPositionControlParam();
             if OK
                 fprintf('[Epos printPositionControlParam] Position control parameters:\n');
@@ -3208,9 +3544,16 @@ classdef Epos < handle
                 fprintf('[Epos printPositionControlParam] ERROR unable to read position control parameters\n');
             end
         end
-        %=======================================================================
-        %=======================================================================
+
         function [followingError, OK] = readFollowingError(me)
+            %.. ================================================================
+            % Read the current following error value which is the difference
+            % between atual value and desired value.
+            %
+            % Returns:
+            %     followingError: value of actual following error.
+            %     OK:             A boolean if all requests went ok or not.
+            %.. ================================================================
 
             index = me.objectIndex('FollowingErrorActualValue');
             subindex = uint8(0);
@@ -3231,9 +3574,22 @@ classdef Epos < handle
                 return;
             end
         end
-        %=======================================================================
-        %=======================================================================
+        
         function [maxFollowingError, OK] = readMaxFollowingError(me)
+            %.. ================================================================
+            % Reads the maximum following error
+            %
+            % The Max Following Error is the maximum permissible difference
+            % between demanded and actual position at any time of evaluation. 
+            % It serves as a safety and motion-supervising feature.
+            % If the following error becomes too high, this is a sign of something
+            % going wrong: Either the drive cannot reach the required speed
+            % or it is even blocked. 
+            %
+            % Returns:
+            %     maxFollowingError: The value of maximum following error.
+            %     OK:                A boolean if all requests went ok or not.
+            %.. ================================================================
 
             index = me.objectIndex('MaximalFollowingError');
             subindex = uint8(0);
@@ -3257,6 +3613,21 @@ classdef Epos < handle
         %=======================================================================
         %=======================================================================
         function [OK] = setMaxFollowingError(me, maxFollowingError)
+            %.. ================================================================
+            % Set the maximum following error
+            %
+            % The Max Following Error is the maximum permissible difference
+            % between demanded and actual position at any time of evaluation. 
+            % It serves as a safety and motion-supervising feature.
+            % If the following error becomes too high, this is a sign of something
+            % going wrong: Either the drive cannot reach the required speed
+            % or it is even blocked. 
+            %
+            % Args:
+            %     maxFollowingError: The value of maximum following error.
+            % Returns:
+            %     OK:                A boolean if all requests went ok or not.
+            %.. ================================================================
 
             % validate attributes
             if(maxFollowingError<0 || maxFollowingError > 2^32 - 1)
@@ -3282,9 +3653,16 @@ classdef Epos < handle
                 end
             end
         end
-        %=======================================================================
-        %=======================================================================
+       
         function [position, OK] = readPositionValue(me)
+            %.. ================================================================
+            % Read current position value
+            %
+            % Returns:
+            %     position: current position in quadrature counts
+            %     OK:       A boolean if all requests went ok or not.
+            %.. ================================================================
+
 
             index = me.objectIndex('PositionActualValue');
             subindex = uint8(0);
@@ -3550,6 +3928,30 @@ classdef Epos < handle
                     return;
                 end
             end
-        end
+		end
+		
+		function [OK] = save(me)
+            %.. ================================================================
+            % All parameters of device are stored in non volatile memory. For that,
+            % the code “save” is written to this object.
+            %
+            % Returns:
+            %     OK: a boolean if write was sucessfull or not. 
+            %.. ================================================================
+			index = me.objectIndex('Store');
+            subindex = uint8(1);
+            data = uint32(hex2dec('65766173')); % hex of word "save"
+            [answer, OK] = me.writeObject(index, subindex, typecast(data, 'uint16') );
+            if ~OK
+                fprintf('[Epos save] Failed to store parameters\n');
+                return;
+            else
+                OK = ~me.checkError(answer(2:3));
+                %check for errors
+                if(~OK)
+                    return;
+                end
+            end
+		end
     end
 end
