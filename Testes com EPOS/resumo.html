@@ -1,0 +1,425 @@
+<!DOCTYPE html> <html> <head> <title>resumo</title> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">  <style> .markdown-preview-enhanced { font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif; font-size: 16px; line-height: 1.6; color: rgb(171, 178, 191); overflow: initial; margin: 10px 13px; padding: 2em; box-sizing: border-box; word-wrap: break-word; background-color: rgb(40, 44, 52); }
+.markdown-preview-enhanced[data-use-github-style] { color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); }
+.markdown-preview-enhanced > :first-child { margin-top: 0px; }
+.markdown-preview-enhanced[is="space-pen-div"] { width: 100%; margin: 0px; z-index: 999; overflow: scroll; font-size: 16px; display: block; position: absolute; }
+.markdown-preview-enhanced[is="space-pen-div"][data-use-github-style] { }
+.markdown-preview-enhanced[is="space-pen-div"][data-use-github-style] ::-webkit-scrollbar-track { box-shadow: rgba(218, 218, 218, 0.6) 0px 0px 3px inset; background-color: rgb(244, 244, 244); }
+.markdown-preview-enhanced[is="space-pen-div"][data-use-github-style] ::-webkit-scrollbar-thumb { border-radius: 10px; border-color: transparent; background-color: rgb(204, 204, 204); }
+.markdown-preview-enhanced h1, .markdown-preview-enhanced h2, .markdown-preview-enhanced h3, .markdown-preview-enhanced h4, .markdown-preview-enhanced h5, .markdown-preview-enhanced h6 { line-height: 1.2; margin-top: 1em; margin-bottom: 16px; color: rgb(255, 255, 255); }
+.markdown-preview-enhanced[data-use-github-style] h1, .markdown-preview-enhanced[data-use-github-style] h2, .markdown-preview-enhanced[data-use-github-style] h3, .markdown-preview-enhanced[data-use-github-style] h4, .markdown-preview-enhanced[data-use-github-style] h5 { color: rgb(51, 51, 51); font-weight: 600; }
+.markdown-preview-enhanced[data-use-github-style] h5 { font-size: 1em; }
+.markdown-preview-enhanced[data-use-github-style] h6 { color: rgb(119, 119, 119); }
+.markdown-preview-enhanced h1 { font-size: 2.25em; font-weight: 300; padding-bottom: 0.3em; border-bottom: 1px solid rgb(75, 83, 98); }
+.markdown-preview-enhanced h2 { font-size: 1.75em; font-weight: 400; padding-bottom: 0.3em; border-bottom: 1px solid rgb(75, 83, 98); }
+.markdown-preview-enhanced h3 { font-size: 1.5em; font-weight: 500; }
+.markdown-preview-enhanced h4 { font-size: 1.25em; font-weight: 600; }
+.markdown-preview-enhanced h5 { font-size: 1.1em; font-weight: 600; }
+.markdown-preview-enhanced h6 { font-size: 1em; font-weight: 600; }
+.markdown-preview-enhanced[data-use-github-style] h1, .markdown-preview-enhanced[data-use-github-style] h2 { border-bottom: 1px solid rgb(231, 231, 231); }
+.markdown-preview-enhanced strong { color: rgb(255, 255, 255); }
+.markdown-preview-enhanced[data-use-github-style] strong { color: rgb(51, 51, 51); }
+.markdown-preview-enhanced del { color: rgb(124, 135, 156); }
+.markdown-preview-enhanced a:not([href]) { color: inherit; text-decoration: none; }
+.markdown-preview-enhanced a { color: rgb(0, 136, 204); text-decoration: none; }
+.markdown-preview-enhanced a:hover { color: rgb(0, 80, 163); text-decoration: none; }
+.markdown-preview-enhanced img, .markdown-preview-enhanced svg { max-width: 100%; }
+.markdown-preview-enhanced > p { margin-top: 0px; margin-bottom: 16px; word-wrap: break-word; }
+.markdown-preview-enhanced > ul, .markdown-preview-enhanced > ol { margin-bottom: 16px; }
+.markdown-preview-enhanced ul, .markdown-preview-enhanced ol { padding-left: 2em; }
+.markdown-preview-enhanced ul.no-list, .markdown-preview-enhanced ol.no-list { padding: 0px; list-style-type: none; }
+.markdown-preview-enhanced ul ul, .markdown-preview-enhanced ul ol, .markdown-preview-enhanced ol ol, .markdown-preview-enhanced ol ul { margin-top: 0px; margin-bottom: 0px; }
+.markdown-preview-enhanced li { margin-bottom: 0px; }
+.markdown-preview-enhanced li.task-list-item { list-style: none; }
+.markdown-preview-enhanced li > p { margin-top: 0px; margin-bottom: 0px; }
+.markdown-preview-enhanced .task-list-item-checkbox { margin: 0px 0.2em 0.25em -1.6em; vertical-align: middle; }
+.markdown-preview-enhanced .task-list-item-checkbox:hover { cursor: pointer; }
+.markdown-preview-enhanced blockquote { margin: 16px 0px; font-size: inherit; padding: 0px 15px; color: rgb(124, 135, 156); border-left: 4px solid rgb(75, 83, 98); }
+.markdown-preview-enhanced blockquote > :first-child { margin-top: 0px; }
+.markdown-preview-enhanced blockquote > :last-child { margin-bottom: 0px; }
+.markdown-preview-enhanced[data-use-github-style] blockquote { color: rgb(119, 119, 119); border-left: 4px solid rgb(221, 221, 221); }
+.markdown-preview-enhanced hr { height: 4px; margin: 32px 0px; border: 0px none; background-color: rgb(75, 83, 98); }
+.markdown-preview-enhanced[data-use-github-style] hr { background-color: rgb(231, 231, 231); }
+.markdown-preview-enhanced table { margin: 10px 0px 15px; border-collapse: collapse; border-spacing: 0px; display: block; width: 100%; overflow: auto; word-break: keep-all; }
+.markdown-preview-enhanced table th { font-weight: bold; color: rgb(255, 255, 255); }
+.markdown-preview-enhanced table td, .markdown-preview-enhanced table th { border: 1px solid rgb(75, 83, 98); padding: 6px 13px; }
+.markdown-preview-enhanced[data-use-github-style] th { color: rgb(51, 51, 51); }
+.markdown-preview-enhanced[data-use-github-style] td, .markdown-preview-enhanced[data-use-github-style] th { border: 1px solid rgb(221, 221, 221); }
+.markdown-preview-enhanced dl { padding: 0px; }
+.markdown-preview-enhanced dl dt { padding: 0px; margin-top: 16px; font-size: 1em; font-style: italic; font-weight: bold; }
+.markdown-preview-enhanced dl dd { padding: 0px 16px; margin-bottom: 16px; }
+.markdown-preview-enhanced code { font-family: Menlo, Monaco, Consolas, "Courier New", monospace; color: rgb(255, 255, 255); border-radius: 3px; padding: 0.2em 0px; font-size: 0.85em !important; background-color: rgb(58, 63, 75); }
+.markdown-preview-enhanced code::before, .markdown-preview-enhanced code::after { letter-spacing: -0.2em; content: " "; }
+.markdown-preview-enhanced[data-use-github-style] code { color: inherit; background-color: rgba(0, 0, 0, 0.0392157) !important; }
+.markdown-preview-enhanced pre > code { padding: 0px; margin: 0px; word-break: normal; white-space: pre; border: 0px; font-size: 0.85em !important; background: transparent; }
+.markdown-preview-enhanced .highlight { margin-bottom: 16px; }
+.markdown-preview-enhanced .highlight pre, .markdown-preview-enhanced pre { font-family: Menlo, Monaco, Consolas, "Courier New", monospace; padding: 16px; overflow: auto; line-height: 1.45; color: rgb(171, 178, 191); border: rgb(75, 83, 98); border-radius: 3px; font-size: 0.85em !important; background-color: rgb(49, 54, 63); }
+.markdown-preview-enhanced .highlight pre { margin-bottom: 0px; word-break: normal; }
+.markdown-preview-enhanced pre { word-wrap: break-word; white-space: normal; word-break: break-all; }
+.markdown-preview-enhanced pre .section { opacity: 1; }
+.markdown-preview-enhanced pre code, .markdown-preview-enhanced pre tt { display: inline; max-width: initial; padding: 0px; margin: 0px; overflow: initial; line-height: inherit; word-wrap: normal; border: 0px; background-color: transparent; }
+.markdown-preview-enhanced pre code::before, .markdown-preview-enhanced pre tt::before, .markdown-preview-enhanced pre code::after, .markdown-preview-enhanced pre tt::after { content: normal; }
+.markdown-preview-enhanced p, .markdown-preview-enhanced blockquote, .markdown-preview-enhanced ul, .markdown-preview-enhanced ol, .markdown-preview-enhanced dl, .markdown-preview-enhanced pre { margin-top: 0px; margin-bottom: 16px; }
+.markdown-preview-enhanced pre.editor-colors { margin: 16px 0px; padding: 1em; font-size: 0.92em; border-radius: 3px; background-color: rgb(49, 54, 63); }
+.markdown-preview-enhanced kbd { color: rgb(255, 255, 255); border-width: 1px 1px 2px; border-style: solid; border-color: rgb(75, 83, 98) rgb(75, 83, 98) rgb(62, 68, 81); padding: 2px 4px; background-color: rgb(58, 63, 75); }
+.markdown-preview-enhanced[data-use-github-style] kbd { color: rgb(51, 51, 51); border-width: 1px; border-style: solid; border-color: rgb(204, 204, 204) rgb(204, 204, 204) rgb(187, 187, 187); border-radius: 3px; box-shadow: rgb(187, 187, 187) 0px -1px 0px inset; background-color: rgb(252, 252, 252); }
+.markdown-preview-enhanced .pagebreak, .markdown-preview-enhanced .newpage { break-before: page; }
+@media screen and (min-width: 914px) { 
+  .markdown-preview-enhanced { width: 980px; margin: 10px auto; background: rgb(40, 44, 52); }
+}
+@media screen and (max-width: 400px) { 
+  .markdown-preview-enhanced { font-size: 14px; margin: 0px auto; padding: 15px; }
+}
+@media screen and (min-width: 914px) { 
+  .markdown-preview-enhanced[data-use-github-style] { background: rgb(255, 255, 255); }
+}
+@media print { 
+  .markdown-preview-enhanced { background-color: rgb(40, 44, 52); }
+  .markdown-preview-enhanced h1, .markdown-preview-enhanced h2, .markdown-preview-enhanced h3, .markdown-preview-enhanced h4, .markdown-preview-enhanced h5, .markdown-preview-enhanced h6 { color: rgb(255, 255, 255); break-after: avoid; }
+  .markdown-preview-enhanced blockquote { color: rgb(124, 135, 156); }
+  .markdown-preview-enhanced table, .markdown-preview-enhanced pre { break-inside: avoid; }
+  .markdown-preview-enhanced table { display: table; }
+  .markdown-preview-enhanced img { display: block; max-width: 100%; max-height: 100%; }
+  .markdown-preview-enhanced pre, .markdown-preview-enhanced code { word-wrap: break-word; white-space: normal; }
+}
+@media print { 
+  .markdown-preview-enhanced[data-use-github-style] { background-color: rgb(255, 255, 255); }
+  .markdown-preview-enhanced[data-use-github-style] h1, .markdown-preview-enhanced[data-use-github-style] h2, .markdown-preview-enhanced[data-use-github-style] h3, .markdown-preview-enhanced[data-use-github-style] h4, .markdown-preview-enhanced[data-use-github-style] h5, .markdown-preview-enhanced[data-use-github-style] h6 { color: rgb(34, 34, 34); }
+  .markdown-preview-enhanced[data-use-github-style] blockquote { color: rgb(119, 119, 119); }
+  .markdown-preview-enhanced[data-use-github-style] pre { border: 2px solid rgb(246, 246, 246); }
+}
+.markdown-preview-enhanced[is="space-pen-div"] .code-chunk { position: relative; }
+.markdown-preview-enhanced[is="space-pen-div"] .code-chunk .output-div { overflow-x: auto; }
+.markdown-preview-enhanced[is="space-pen-div"] .code-chunk .output-div svg { display: block; }
+.markdown-preview-enhanced[is="space-pen-div"] .code-chunk pre { cursor: text; }
+.markdown-preview-enhanced[is="space-pen-div"] .code-chunk .btn-group { position: absolute; right: 0px; top: 0px; display: none; }
+.markdown-preview-enhanced[is="space-pen-div"] .code-chunk .btn-group .run-btn, .markdown-preview-enhanced[is="space-pen-div"] .code-chunk .btn-group .run-all-btn { float: right; margin-left: 4px; border-radius: 3px; font-size: 0.8em; color: rgb(238, 238, 238); border: none; background-image: none; background-color: rgb(82, 139, 255); }
+.markdown-preview-enhanced[is="space-pen-div"] .code-chunk .btn-group .run-btn:hover, .markdown-preview-enhanced[is="space-pen-div"] .code-chunk .btn-group .run-all-btn:hover { cursor: pointer; background-color: rgb(75, 127, 232); }
+.markdown-preview-enhanced[is="space-pen-div"] .code-chunk:hover .btn-group { display: block; }
+.markdown-preview-enhanced[is="space-pen-div"] .code-chunk .status { position: absolute; right: 0px; top: 0px; font-size: 0.85em; color: inherit; padding: 2px 6px; display: none; background-color: rgba(0, 0, 0, 0.0392157); }
+.markdown-preview-enhanced[is="space-pen-div"] .code-chunk.running .btn-group { display: none; }
+.markdown-preview-enhanced[is="space-pen-div"] .code-chunk.running .status { display: block; }
+.markdown-preview-enhanced[is="space-pen-div"] .back-to-top-btn, .markdown-preview-enhanced[is="space-pen-div"] .refresh-btn { position: fixed; display: none; right: 24px; top: 54px; }
+.markdown-preview-enhanced[is="space-pen-div"] .back-to-top-btn { right: 72px; }
+.markdown-preview-enhanced[is="space-pen-div"]:hover .back-to-top-btn, .markdown-preview-enhanced[is="space-pen-div"]:hover .refresh-btn { display: block; opacity: 0.4; }
+.markdown-preview-enhanced[is="space-pen-div"]:hover .back-to-top-btn:hover, .markdown-preview-enhanced[is="space-pen-div"]:hover .refresh-btn:hover { opacity: 1; }
+.markdown-preview-enhanced:not([is="space-pen-div"]) .code-chunk .btn-group { display: none; }
+.markdown-preview-enhanced:not([is="space-pen-div"]) .code-chunk .status { display: none; }
+.markdown-preview-enhanced:not([is="space-pen-div"]) .back-to-top-btn { display: none; }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors { color: rgb(51, 51, 51); background-color: rgb(247, 247, 247); }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .line.cursor-line { background-color: rgb(245, 245, 245); }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .invisible { color: rgb(192, 192, 192); }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .cursor { border-left: 2px solid rgb(0, 0, 0); }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .selection .region { background-color: rgb(200, 200, 250); }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .bracket-matcher .region { border-bottom: 1px solid rgb(0, 0, 0); box-sizing: border-box; }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .invisible-character { color: rgb(192, 192, 192); }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .indent-guide { color: rgb(192, 192, 192); }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .wrap-guide { background-color: rgb(192, 192, 192); }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .gutter { color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .gutter .line-number { color: rgb(51, 51, 51); -webkit-font-smoothing: antialiased; }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .gutter .line-number.cursor-line { color: rgb(51, 51, 51); background-color: rgb(245, 245, 245); }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .gutter .line-number.cursor-line-no-selection { background-color: transparent; }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .gutter .line-number .icon-right { color: rgb(51, 51, 51); }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .gutter:not(.git-diff-icon) .line-number.git-line-removed.git-line-removed::before { bottom: -3px; }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .gutter:not(.git-diff-icon) .line-number.git-line-removed::after { content: ""; position: absolute; left: 0px; bottom: 0px; width: 25px; border-bottom: 1px dotted rgba(255, 236, 236, 0.498039); pointer-events: none; }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .gutter .line-number.folded, .markdown-preview-enhanced .github-syntax-theme pre.editor-colors .gutter .line-number::after, .markdown-preview-enhanced .github-syntax-theme pre.editor-colors .fold-marker::after { color: rgb(51, 51, 51); }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .search-results .mpe-syntax--marker .region { border: 1px solid rgb(237, 106, 67); background-color: transparent; }
+.markdown-preview-enhanced .github-syntax-theme pre.editor-colors .search-results .mpe-syntax--marker.current-result .region { border: 1px solid rgb(255, 255, 255); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--comment, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--comment, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--string.mpe-syntax--comment { color: rgb(150, 152, 150); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--constant, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--entity.mpe-syntax--name.mpe-syntax--constant, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--variable.mpe-syntax--other.mpe-syntax--constant, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--variable.mpe-syntax--language { color: rgb(0, 134, 179); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--entity, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--entity.mpe-syntax--name { font-weight: normal; font-style: normal; text-decoration: none; color: rgb(121, 93, 163); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--variable.mpe-syntax--parameter.mpe-syntax--function { color: rgb(51, 51, 51); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--entity.mpe-syntax--name.mpe-syntax--tag { font-weight: normal; font-style: normal; text-decoration: none; color: rgb(99, 163, 92); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--keyword { font-weight: normal; font-style: normal; text-decoration: none; color: rgb(167, 29, 93); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--storage, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--storage.mpe-syntax--type { color: rgb(167, 29, 93); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--storage.mpe-syntax--modifier.mpe-syntax--package, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--storage.mpe-syntax--modifier.mpe-syntax--import, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--storage.mpe-syntax--type.mpe-syntax--java { color: rgb(51, 51, 51); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--string, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--string, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--string .mpe-syntax--punctuation.mpe-syntax--section.mpe-syntax--embedded .mpe-syntax--source { font-weight: normal; font-style: normal; text-decoration: none; color: rgb(24, 54, 145); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--support { font-weight: normal; font-style: normal; text-decoration: none; color: rgb(0, 134, 179); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--meta.mpe-syntax--property-name { font-weight: normal; font-style: normal; text-decoration: none; color: rgb(0, 134, 179); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--variable { font-weight: normal; font-style: normal; text-decoration: none; color: rgb(237, 106, 67); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--variable.mpe-syntax--other { color: rgb(51, 51, 51); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--invalid.mpe-syntax--broken { font-weight: bold; font-style: italic; text-decoration: underline; color: rgb(181, 42, 29); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--invalid.mpe-syntax--deprecated { font-weight: bold; font-style: italic; text-decoration: underline; color: rgb(181, 42, 29); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--invalid.mpe-syntax--illegal { font-style: italic; text-decoration: underline; color: rgb(248, 248, 248); background-color: rgb(181, 42, 29); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--carriage-return { font-style: italic; text-decoration: underline; color: rgb(248, 248, 248); background-color: rgb(181, 42, 29); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--invalid.mpe-syntax--unimplemented { font-weight: bold; font-style: italic; text-decoration: underline; color: rgb(181, 42, 29); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--message.mpe-syntax--error { color: rgb(181, 42, 29); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--string .mpe-syntax--source { font-weight: normal; font-style: normal; text-decoration: none; color: rgb(51, 51, 51); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--string .mpe-syntax--variable { font-weight: normal; font-style: normal; text-decoration: none; color: rgb(0, 134, 179); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--source.mpe-syntax--regexp, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--string.mpe-syntax--regexp { font-weight: normal; font-style: normal; text-decoration: none; color: rgb(24, 54, 145); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--string.mpe-syntax--regexp.mpe-syntax--character-class, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--string.mpe-syntax--regexp .mpe-syntax--constant.mpe-syntax--character.mpe-syntax--escape, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--string.mpe-syntax--regexp .mpe-syntax--source.mpe-syntax--ruby.mpe-syntax--embedded, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--string.mpe-syntax--regexp .mpe-syntax--string.mpe-syntax--regexp.mpe-syntax--arbitrary-repitition { color: rgb(24, 54, 145); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--string.mpe-syntax--regexp .mpe-syntax--constant.mpe-syntax--character.mpe-syntax--escape { font-weight: bold; color: rgb(99, 163, 92); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--support.mpe-syntax--constant { font-weight: normal; font-style: normal; text-decoration: none; color: rgb(0, 134, 179); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--support.mpe-syntax--variable { color: rgb(0, 134, 179); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--meta.mpe-syntax--module-reference { color: rgb(0, 134, 179); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--markup.mpe-syntax--list { color: rgb(105, 58, 23); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--markup.mpe-syntax--heading, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--markup.mpe-syntax--heading .mpe-syntax--entity.mpe-syntax--name { font-weight: bold; color: rgb(29, 62, 129); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--markup.mpe-syntax--quote { color: rgb(0, 128, 128); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--markup.mpe-syntax--italic { font-style: italic; color: rgb(51, 51, 51); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--markup.mpe-syntax--bold { font-weight: bold; color: rgb(51, 51, 51); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--markup.mpe-syntax--raw { font-weight: normal; font-style: normal; text-decoration: none; color: rgb(0, 134, 179); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--markup.mpe-syntax--deleted, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--meta.mpe-syntax--diff.mpe-syntax--header.mpe-syntax--from-file, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--deleted { color: rgb(189, 44, 0); background-color: rgb(255, 236, 236); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--markup.mpe-syntax--inserted, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--meta.mpe-syntax--diff.mpe-syntax--header.mpe-syntax--to-file, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--inserted { color: rgb(85, 165, 50); background-color: rgb(234, 255, 234); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--markup.mpe-syntax--changed, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--changed { color: rgb(239, 151, 0); background-color: rgb(255, 227, 180); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--markup.mpe-syntax--ignored, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--markup.mpe-syntax--untracked { color: rgb(216, 216, 216); background-color: rgb(128, 128, 128); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--meta.mpe-syntax--diff.mpe-syntax--range { color: rgb(121, 93, 163); font-weight: bold; }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--meta.mpe-syntax--diff.mpe-syntax--header { color: rgb(0, 134, 179); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--meta.mpe-syntax--separator { font-weight: bold; color: rgb(29, 62, 129); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--meta.mpe-syntax--output { color: rgb(29, 62, 129); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--brackethighlighter.mpe-syntax--tag, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--brackethighlighter.mpe-syntax--curly, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--brackethighlighter.mpe-syntax--round, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--brackethighlighter.mpe-syntax--square, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--brackethighlighter.mpe-syntax--angle, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--brackethighlighter.mpe-syntax--quote { color: rgb(89, 94, 98); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--brackethighlighter.mpe-syntax--unmatched { color: rgb(181, 42, 29); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--sublimelinter.mpe-syntax--mark.mpe-syntax--error { color: rgb(181, 42, 29); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--sublimelinter.mpe-syntax--mark.mpe-syntax--warning { color: rgb(237, 106, 67); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--sublimelinter.mpe-syntax--gutter-mark { color: rgb(192, 192, 192); }
+.markdown-preview-enhanced .github-syntax-theme .mpe-syntax--constant.mpe-syntax--other.mpe-syntax--reference.mpe-syntax--link, .markdown-preview-enhanced .github-syntax-theme .mpe-syntax--string.mpe-syntax--other.mpe-syntax--link { color: rgb(24, 54, 145); text-decoration: underline; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors { color: rgb(51, 51, 51) !important; background-color: rgb(247, 247, 247) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .line.cursor-line { background-color: rgb(245, 245, 245) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .invisible { color: rgb(192, 192, 192) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .cursor { border-left: 2px solid rgb(0, 0, 0) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .selection .region { background-color: rgb(200, 200, 250) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .bracket-matcher .region { border-bottom: 1px solid rgb(0, 0, 0) !important; box-sizing: border-box !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .invisible-character { color: rgb(192, 192, 192) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .indent-guide { color: rgb(192, 192, 192) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .wrap-guide { background-color: rgb(192, 192, 192) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .gutter { color: rgb(51, 51, 51) !important; background-color: rgb(255, 255, 255) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .gutter .line-number { color: rgb(51, 51, 51) !important; -webkit-font-smoothing: antialiased !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .gutter .line-number.cursor-line { color: rgb(51, 51, 51) !important; background-color: rgb(245, 245, 245) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .gutter .line-number.cursor-line-no-selection { background-color: transparent !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .gutter .line-number .icon-right { color: rgb(51, 51, 51) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .gutter:not(.git-diff-icon) .line-number.git-line-removed.git-line-removed::before { bottom: -3px !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .gutter:not(.git-diff-icon) .line-number.git-line-removed::after { content: "" !important; position: absolute !important; left: 0px !important; bottom: 0px !important; width: 25px !important; border-bottom: 1px dotted rgba(255, 236, 236, 0.498039) !important; pointer-events: none !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .gutter .line-number.folded, .markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .gutter .line-number::after, .markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .fold-marker::after { color: rgb(51, 51, 51) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .search-results .mpe-syntax--marker .region { border: 1px solid rgb(237, 106, 67) !important; background-color: transparent !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] pre.editor-colors .search-results .mpe-syntax--marker.current-result .region { border: 1px solid rgb(255, 255, 255) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--comment, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--comment, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--string.mpe-syntax--comment { color: rgb(150, 152, 150) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--constant, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--entity.mpe-syntax--name.mpe-syntax--constant, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--variable.mpe-syntax--other.mpe-syntax--constant, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--variable.mpe-syntax--language { color: rgb(0, 134, 179) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--entity, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--entity.mpe-syntax--name { font-weight: normal !important; font-style: normal !important; text-decoration: none !important; color: rgb(121, 93, 163) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--variable.mpe-syntax--parameter.mpe-syntax--function { color: rgb(51, 51, 51) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--entity.mpe-syntax--name.mpe-syntax--tag { font-weight: normal !important; font-style: normal !important; text-decoration: none !important; color: rgb(99, 163, 92) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--keyword { font-weight: normal !important; font-style: normal !important; text-decoration: none !important; color: rgb(167, 29, 93) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--storage, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--storage.mpe-syntax--type { color: rgb(167, 29, 93) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--storage.mpe-syntax--modifier.mpe-syntax--package, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--storage.mpe-syntax--modifier.mpe-syntax--import, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--storage.mpe-syntax--type.mpe-syntax--java { color: rgb(51, 51, 51) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--string, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--string, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--string .mpe-syntax--punctuation.mpe-syntax--section.mpe-syntax--embedded .mpe-syntax--source { font-weight: normal !important; font-style: normal !important; text-decoration: none !important; color: rgb(24, 54, 145) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--support { font-weight: normal !important; font-style: normal !important; text-decoration: none !important; color: rgb(0, 134, 179) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--meta.mpe-syntax--property-name { font-weight: normal !important; font-style: normal !important; text-decoration: none !important; color: rgb(0, 134, 179) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--variable { font-weight: normal !important; font-style: normal !important; text-decoration: none !important; color: rgb(237, 106, 67) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--variable.mpe-syntax--other { color: rgb(51, 51, 51) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--invalid.mpe-syntax--broken { font-weight: bold !important; font-style: italic !important; text-decoration: underline !important; color: rgb(181, 42, 29) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--invalid.mpe-syntax--deprecated { font-weight: bold !important; font-style: italic !important; text-decoration: underline !important; color: rgb(181, 42, 29) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--invalid.mpe-syntax--illegal { font-style: italic !important; text-decoration: underline !important; color: rgb(248, 248, 248) !important; background-color: rgb(181, 42, 29) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--carriage-return { font-style: italic !important; text-decoration: underline !important; color: rgb(248, 248, 248) !important; background-color: rgb(181, 42, 29) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--invalid.mpe-syntax--unimplemented { font-weight: bold !important; font-style: italic !important; text-decoration: underline !important; color: rgb(181, 42, 29) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--message.mpe-syntax--error { color: rgb(181, 42, 29) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--string .mpe-syntax--source { font-weight: normal !important; font-style: normal !important; text-decoration: none !important; color: rgb(51, 51, 51) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--string .mpe-syntax--variable { font-weight: normal !important; font-style: normal !important; text-decoration: none !important; color: rgb(0, 134, 179) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--source.mpe-syntax--regexp, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--string.mpe-syntax--regexp { font-weight: normal !important; font-style: normal !important; text-decoration: none !important; color: rgb(24, 54, 145) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--string.mpe-syntax--regexp.mpe-syntax--character-class, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--string.mpe-syntax--regexp .mpe-syntax--constant.mpe-syntax--character.mpe-syntax--escape, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--string.mpe-syntax--regexp .mpe-syntax--source.mpe-syntax--ruby.mpe-syntax--embedded, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--string.mpe-syntax--regexp .mpe-syntax--string.mpe-syntax--regexp.mpe-syntax--arbitrary-repitition { color: rgb(24, 54, 145) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--string.mpe-syntax--regexp .mpe-syntax--constant.mpe-syntax--character.mpe-syntax--escape { font-weight: bold !important; color: rgb(99, 163, 92) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--support.mpe-syntax--constant { font-weight: normal !important; font-style: normal !important; text-decoration: none !important; color: rgb(0, 134, 179) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--support.mpe-syntax--variable { color: rgb(0, 134, 179) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--meta.mpe-syntax--module-reference { color: rgb(0, 134, 179) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--markup.mpe-syntax--list { color: rgb(105, 58, 23) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--markup.mpe-syntax--heading, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--markup.mpe-syntax--heading .mpe-syntax--entity.mpe-syntax--name { font-weight: bold !important; color: rgb(29, 62, 129) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--markup.mpe-syntax--quote { color: rgb(0, 128, 128) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--markup.mpe-syntax--italic { font-style: italic !important; color: rgb(51, 51, 51) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--markup.mpe-syntax--bold { font-weight: bold !important; color: rgb(51, 51, 51) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--markup.mpe-syntax--raw { font-weight: normal !important; font-style: normal !important; text-decoration: none !important; color: rgb(0, 134, 179) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--markup.mpe-syntax--deleted, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--meta.mpe-syntax--diff.mpe-syntax--header.mpe-syntax--from-file, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--deleted { color: rgb(189, 44, 0) !important; background-color: rgb(255, 236, 236) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--markup.mpe-syntax--inserted, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--meta.mpe-syntax--diff.mpe-syntax--header.mpe-syntax--to-file, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--inserted { color: rgb(85, 165, 50) !important; background-color: rgb(234, 255, 234) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--markup.mpe-syntax--changed, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--punctuation.mpe-syntax--definition.mpe-syntax--changed { color: rgb(239, 151, 0) !important; background-color: rgb(255, 227, 180) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--markup.mpe-syntax--ignored, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--markup.mpe-syntax--untracked { color: rgb(216, 216, 216) !important; background-color: rgb(128, 128, 128) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--meta.mpe-syntax--diff.mpe-syntax--range { color: rgb(121, 93, 163) !important; font-weight: bold !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--meta.mpe-syntax--diff.mpe-syntax--header { color: rgb(0, 134, 179) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--meta.mpe-syntax--separator { font-weight: bold !important; color: rgb(29, 62, 129) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--meta.mpe-syntax--output { color: rgb(29, 62, 129) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--brackethighlighter.mpe-syntax--tag, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--brackethighlighter.mpe-syntax--curly, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--brackethighlighter.mpe-syntax--round, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--brackethighlighter.mpe-syntax--square, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--brackethighlighter.mpe-syntax--angle, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--brackethighlighter.mpe-syntax--quote { color: rgb(89, 94, 98) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--brackethighlighter.mpe-syntax--unmatched { color: rgb(181, 42, 29) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--sublimelinter.mpe-syntax--mark.mpe-syntax--error { color: rgb(181, 42, 29) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--sublimelinter.mpe-syntax--mark.mpe-syntax--warning { color: rgb(237, 106, 67) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--sublimelinter.mpe-syntax--gutter-mark { color: rgb(192, 192, 192) !important; }
+.markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--constant.mpe-syntax--other.mpe-syntax--reference.mpe-syntax--link, .markdown-preview-enhanced[data-use-github-syntax-theme] .mpe-syntax--string.mpe-syntax--other.mpe-syntax--link { color: rgb(24, 54, 145) !important; text-decoration: underline !important; }
+.markdown-preview-enhanced[data-presentation-mode] { font-size: 24px; width: 100%; box-sizing: border-box; margin: 0px; padding: 0px; }
+.markdown-preview-enhanced[data-presentation-mode] h1, .markdown-preview-enhanced[data-presentation-mode] h2, .markdown-preview-enhanced[data-presentation-mode] h3, .markdown-preview-enhanced[data-presentation-mode] h4, .markdown-preview-enhanced[data-presentation-mode] h5, .markdown-preview-enhanced[data-presentation-mode] h6 { margin-top: 0px; }
+.markdown-preview-enhanced[data-presentation-mode] strong { font-weight: bold; }
+.markdown-preview-enhanced[data-presentation-mode]::-webkit-scrollbar { display: none; }
+.markdown-preview-enhanced .slides { text-align: left !important; } </style> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css">  </head> <body class="markdown-preview-enhanced " data-use-github-style data-use-github-syntax-theme > <h1 id="resumos-de-testes-com-o-volante">Resumos de testes com o volante</h1>
+<ul>
+<li><p><a href="#resumos-de-testes-com-o-volante">Resumos de testes com o volante</a>
+<ul>
+<li><p><a href="#1-sine-following">1. Sine following</a>
+<ul>
+<li><p><a href="#11-interior-do-laborat&#xF3;rio">1.1 Interior  do laboratório</a></p></li>
+<li><p><a href="#12-exterior-do-laborat&#xF3;rio">1.2 Exterior do laboratório.</a></p></li>
+</ul></p></li>
+<li><p><a href="#2-chirp-following">2. Chirp following</a>
+<ul>
+<li><p><a href="#21-interior-do-laborat&#xF3;rio">2.1 Interior  do laboratório</a></p></li>
+<li><p><a href="#22-exterior-do-laborat&#xF3;rio">2.2 Exterior do laboratório</a></p></li>
+</ul></p></li>
+<li><p><a href="#3-trajectory-follower">3. Trajectory follower</a></p></li>
+</ul></p></li>
+</ul>
+<h2 id="1-sine-following">1. Sine following</h2>
+<p>Série de testes usando uma onda sinusoidal para definir a posição desejada do volante.</p>
+<h3 id="11-interior-do-laborat&#xF3;rio">1.1 Interior  do laboratório</h3>
+<table>
+<thead>
+<tr><th>ganhos</th><th style="text-align:center">test1.mat</th><th style="text-align:center">test2.mat</th><th style="text-align:center">test3.mat</th><th style="text-align:center">test4.mat</th><th style="text-align:center">test5.mat</th><th style="text-align:center">test6.mat</th><th style="text-align:center">test7.mat</th><th style="text-align:center">test8.mat</th><th style="text-align:center">test9.mat</th></tr>
+</thead>
+<tbody>
+<tr><td>P</td><td style="text-align:center">9</td><td style="text-align:center">9</td><td style="text-align:center">9</td><td style="text-align:center">10</td><td style="text-align:center">12</td><td style="text-align:center">15</td><td style="text-align:center">9</td><td style="text-align:center">13</td><td style="text-align:center">15</td></tr>
+<tr><td>I</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td></tr>
+<tr><td>D</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">3</td></tr>
+<tr><td>vFeed</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td></tr>
+<tr><td>aFeed</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td></tr>
+<tr><td>Period</td><td style="text-align:center">10</td><td style="text-align:center">7.5</td><td style="text-align:center">5</td><td style="text-align:center">10</td><td style="text-align:center">10</td><td style="text-align:center">10</td><td style="text-align:center">10</td><td style="text-align:center">10</td><td style="text-align:center">10</td></tr>
+</tbody>
+</table>
+<p><strong>teste1.mat</strong><br>
+<img src="sines/wheels%20down/teste1.svg?0.3681137434661972" alt=""></p>
+<p><strong>teste2.mat</strong><br>
+<img src="sines/wheels%20down/teste2.svg?0.9873993512728545" alt=""></p>
+<p><strong>teste3.mat</strong><br>
+<img src="sines/wheels%20down/teste3.svg?0.19890720442530663" alt=""></p>
+<p><strong>teste4.mat</strong><br>
+<img src="sines/wheels%20down/teste4.svg?0.6905938282314443" alt=""></p>
+<p><strong>teste5.mat</strong><br>
+<img src="sines/wheels%20down/teste5.svg?0.7501036850197744" alt=""></p>
+<p><strong>teste6.mat</strong><br>
+<img src="sines/wheels%20down/teste6.svg?0.8597070862729776" alt=""></p>
+<p><strong>teste7.mat</strong><br>
+<img src="sines/wheels%20down/teste7.svg?0.06119231568131411" alt=""></p>
+<p><strong>teste8.mat</strong><br>
+<img src="sines/wheels%20down/teste8.svg?0.18318951404840345" alt=""></p>
+<p><strong>teste9.mat</strong><br>
+<img src="sines/wheels%20down/teste9.svg?0.14840292993768234" alt=""></p>
+<hr>
+<h3 id="12-exterior-do-laborat&#xF3;rio">1.2 Exterior do laboratório.</h3>
+<table>
+<thead>
+<tr><th style="text-align:center">ganhos</th><th style="text-align:center">sine01.mat</th><th style="text-align:center">sine02.mat</th><th style="text-align:center">sine03.mat</th><th style="text-align:center">sine04.mat</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align:center">P</td><td style="text-align:center">50</td><td style="text-align:center">50</td><td style="text-align:center">50</td><td style="text-align:center">50</td></tr>
+<tr><td style="text-align:center">I</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td></tr>
+<tr><td style="text-align:center">D</td><td style="text-align:center">3</td><td style="text-align:center">3</td><td style="text-align:center">3</td><td style="text-align:center">3</td></tr>
+<tr><td style="text-align:center">vFeed</td><td style="text-align:center">5</td><td style="text-align:center">5</td><td style="text-align:center">5</td><td style="text-align:center">5</td></tr>
+<tr><td style="text-align:center">aFeed</td><td style="text-align:center">3</td><td style="text-align:center">3</td><td style="text-align:center">3</td><td style="text-align:center">3</td></tr>
+<tr><td style="text-align:center">Period</td><td style="text-align:center">10</td><td style="text-align:center">8</td><td style="text-align:center">20</td><td style="text-align:center">20</td></tr>
+<tr><td style="text-align:center">Turns</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1.5</td><td style="text-align:center">2</td></tr>
+</tbody>
+</table>
+<p><strong>sine01.mat</strong><br>
+<img src="sines/wheels%20down%20car%20out/sine01_position.svg?0.2919426738460609" alt="">  <br>
+<img src="sines/wheels%20down%20car%20out/sine01_error.svg?0.2386867809766562" alt="">  <br>
+<img src="sines/wheels%20down%20car%20out/sine01_vel_acc.svg?0.8810904746791646" alt=""></p>
+<p><strong>sine02.mat</strong><br>
+<img src="sines/wheels%20down%20car%20out/sine02_position.svg?0.5588007989399244" alt="">  <br>
+<img src="sines/wheels%20down%20car%20out/sine02_error.svg?0.2299911304982687" alt="">  <br>
+<img src="sines/wheels%20down%20car%20out/sine02_vel_acc.svg?0.13602926563143702" alt=""></p>
+<p><strong>sine03.mat</strong><br>
+<img src="sines/wheels%20down%20car%20out/sine03_position.svg?0.07153196411797214" alt="">  <br>
+<img src="sines/wheels%20down%20car%20out/sine03_error.svg?0.46231120481930565" alt="">  <br>
+<img src="sines/wheels%20down%20car%20out/sine03_vel_acc.svg?0.6438377809186557" alt=""></p>
+<p><strong>sine04.mat</strong><br>
+<img src="sines/wheels%20down%20car%20out/sine04_position.svg?0.10642979377674511" alt="">  <br>
+<img src="sines/wheels%20down%20car%20out/sine04_error.svg?0.7502018480610289" alt="">  <br>
+<img src="sines/wheels%20down%20car%20out/sine04_vel_acc.svg?0.588777667021416" alt=""></p>
+<hr>
+<h2 id="2-chirp-following">2. Chirp following</h2>
+<p>Série de testes usando uma função do tipo chirp para definir a posição desejada do volante.</p>
+<p>A frequência varia linearmente de acordo com a fórmula:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><msub><mi>f</mi><mn>0</mn></msub><mo>+</mo><mi>k</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">f(t) = f_0 + kt</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathit">t</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord mathrm mtight">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span><span class="mbin">+</span><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="mord mathit">t</span></span></span></span></span><br>
+onde <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.03148em;">k</span></span></span></span> é definido como sendo:<br>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi><mo>=</mo><mfrac><mrow><msub><mi>f</mi><mn>0</mn></msub><mo>−</mo><msub><mi>f</mi><mrow><mi>e</mi><mi>n</mi><mi>d</mi></mrow></msub></mrow><mrow><mi>T</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">k = \frac{f_0-f_{end}}{T}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.37144em;"></span><span class="strut bottom" style="height:2.05744em;vertical-align:-0.686em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="mrel">=</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="mopen sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord mathrm mtight">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span><span class="mbin">−</span><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord scriptstyle cramped mtight"><span class="mord mathit mtight">e</span><span class="mord mathit mtight">n</span><span class="mord mathit mtight">d</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span></span><br>
+Pretende-se que a frequência do chirp varie desde 0 até à frequência máxima que será atingida no final do sinal então, tomando <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>f</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">f_0=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord mathrm mtight">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span><span class="mrel">=</span><span class="mord mathrm">0</span></span></span></span> e <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>=</mo><msub><mi>t</mi><mrow><mi>e</mi><mi>n</mi><mi>d</mi></mrow></msub></mrow><annotation encoding="application/x-tex">T = t_{end}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mrel">=</span><span class="mord"><span class="mord mathit">t</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord scriptstyle cramped mtight"><span class="mord mathit mtight">e</span><span class="mord mathit mtight">n</span><span class="mord mathit mtight">d</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span> resulta em:<br>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mi>k</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">f(t) = kt</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathit">t</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="mord mathit">t</span></span></span></span></span><br>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi><mo>=</mo><mfrac><mrow><msub><mi>f</mi><mrow><mi>e</mi><mi>n</mi><mi>d</mi></mrow></msub></mrow><mrow><msub><mi>t</mi><mrow><mi>e</mi><mi>n</mi><mi>d</mi></mrow></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">k= \frac{f_{end}}{t_{end}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.37144em;"></span><span class="strut bottom" style="height:2.20744em;vertical-align:-0.8360000000000001em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="mrel">=</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="mopen sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord"><span class="mord mathit">t</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord scriptstyle cramped mtight"><span class="mord mathit mtight">e</span><span class="mord mathit mtight">n</span><span class="mord mathit mtight">d</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord scriptstyle cramped mtight"><span class="mord mathit mtight">e</span><span class="mord mathit mtight">n</span><span class="mord mathit mtight">d</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span></span></p>
+<h3 id="21-interior-do-laborat&#xF3;rio">2.1 Interior  do laboratório</h3>
+<p><strong>estão apenas representados alguns testes</strong></p>
+<table>
+<thead>
+<tr><th style="text-align:center">ganhos</th><th style="text-align:center">chrip005.mat</th><th style="text-align:center">chrip008.mat</th><th style="text-align:center">chrip014.mat</th><th style="text-align:center">chrip015.mat</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align:center">P</td><td style="text-align:center">30</td><td style="text-align:center">20</td><td style="text-align:center">50</td><td style="text-align:center">50</td></tr>
+<tr><td style="text-align:center">I</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td></tr>
+<tr><td style="text-align:center">D</td><td style="text-align:center">5</td><td style="text-align:center">3</td><td style="text-align:center">3</td><td style="text-align:center">3</td></tr>
+<tr><td style="text-align:center">vFeed</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">5</td><td style="text-align:center">5</td></tr>
+<tr><td style="text-align:center">aFeed</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">2</td><td style="text-align:center">2</td></tr>
+<tr><td style="text-align:center"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>f</mi><mrow><mi>e</mi><mi>n</mi><mi>d</mi></mrow></msub></mrow><annotation encoding="application/x-tex">f_{end}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord scriptstyle cramped mtight"><span class="mord mathit mtight">e</span><span class="mord mathit mtight">n</span><span class="mord mathit mtight">d</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></td><td style="text-align:center">0.1</td><td style="text-align:center">0.03</td><td style="text-align:center">0.03</td><td style="text-align:center">0.05</td></tr>
+<tr><td style="text-align:center">Turns</td><td style="text-align:center">1.5</td><td style="text-align:center">1.5</td><td style="text-align:center">1.5</td><td style="text-align:center">1.5</td></tr>
+</tbody>
+</table>
+<p><strong>chirp005_ground.mat</strong><br>
+Neste exemplo nota-se que a corrente ficou limitada.<br>
+<img src="chirps/wheels%20down/chirp005_ground_position.svg?0.2198683495417475" alt="">  <br>
+<img src="chirps/wheels%20down/chirp005_ground_error.svg?0.17929608177328182" alt="">  <br>
+<img src="chirps/wheels%20down/chirp005_ground_vel_acc.svg?0.8053357445101759" alt=""></p>
+<p><strong>chirp008_ground.mat</strong><br>
+<img src="chirps/wheels%20down/chirp008_ground_position.svg?0.49839508924459164" alt="">  <br>
+<img src="chirps/wheels%20down/chirp008_ground_error.svg?0.05886515055800423" alt="">  <br>
+<img src="chirps/wheels%20down/chirp008_ground_vel_acc.svg?0.18498723397537087" alt=""></p>
+<p><strong>chirp014_ground.mat</strong><br>
+<img src="chirps/wheels%20down/chirp014_ground_position.svg?0.2965170949124627" alt="">  <br>
+<img src="chirps/wheels%20down/chirp014_ground_error.svg?0.27513705707997294" alt="">  <br>
+<img src="chirps/wheels%20down/chirp014_ground_vel_acc.svg?0.8868480520000932" alt=""></p>
+<p><strong>chirp015_ground.mat</strong><br>
+<img src="chirps/wheels%20down/chirp015_ground_position.svg?0.8278080337999187" alt="">  <br>
+<img src="chirps/wheels%20down/chirp015_ground_error.svg?0.7580407346064915" alt="">  <br>
+<img src="chirps/wheels%20down/chirp015_ground_vel_acc.svg?0.8236566315088409" alt=""></p>
+<h3 id="22-exterior-do-laborat&#xF3;rio">2.2 Exterior do laboratório</h3>
+<div><iframe width="853" height="480" src="https://www.youtube.com/embed/TmFjZiST00c?rel=0" frameborder="0" allowfullscreen=""></iframe>
+</div>
+<table>
+<thead>
+<tr><th style="text-align:center">ganhos</th><th style="text-align:center">chrip01.mat</th><th style="text-align:center">chrip02.mat</th><th style="text-align:center">chrip03.mat</th><th style="text-align:center">chrip04.mat</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align:center">P</td><td style="text-align:center">50</td><td style="text-align:center">50</td><td style="text-align:center">50</td><td style="text-align:center">50</td></tr>
+<tr><td style="text-align:center">I</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td></tr>
+<tr><td style="text-align:center">D</td><td style="text-align:center">3</td><td style="text-align:center">3</td><td style="text-align:center">3</td><td style="text-align:center">3</td></tr>
+<tr><td style="text-align:center">vFeed</td><td style="text-align:center">3</td><td style="text-align:center">5</td><td style="text-align:center">5</td><td style="text-align:center">5</td></tr>
+<tr><td style="text-align:center">aFeed</td><td style="text-align:center">3</td><td style="text-align:center">5</td><td style="text-align:center">3</td><td style="text-align:center">3</td></tr>
+<tr><td style="text-align:center"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>f</mi><mrow><mi>e</mi><mi>n</mi><mi>d</mi></mrow></msub></mrow><annotation encoding="application/x-tex">f_{end}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord scriptstyle cramped mtight"><span class="mord mathit mtight">e</span><span class="mord mathit mtight">n</span><span class="mord mathit mtight">d</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></td><td style="text-align:center">0.05</td><td style="text-align:center">0.05</td><td style="text-align:center">0.0667</td><td style="text-align:center">0.1</td></tr>
+<tr><td style="text-align:center">Turns</td><td style="text-align:center">1.5</td><td style="text-align:center">1.5</td><td style="text-align:center">1.5</td><td style="text-align:center">1.5</td></tr>
+</tbody>
+</table>
+<p><strong>chirp01.mat</strong><br>
+<img src="chirps/wheels%20down%20car%20out/chirp01_position.svg?0.773086984112126" alt="">  <br>
+<img src="chirps/wheels%20down%20car%20out/chirp01_error.svg?0.9153542489299769" alt="">  <br>
+<img src="chirps/wheels%20down%20car%20out/chirp01_vel_acc.svg?0.11681233762104659" alt=""></p>
+<p><strong>chirp02.mat</strong><br>
+<img src="chirps/wheels%20down%20car%20out/chirp02_position.svg?0.5539211467158458" alt="">  <br>
+<img src="chirps/wheels%20down%20car%20out/chirp02_error.svg?0.27221165717471574" alt="">  <br>
+<img src="chirps/wheels%20down%20car%20out/chirp02_vel_acc.svg?0.6258461335466352" alt=""></p>
+<p><strong>chirp03.mat</strong><br>
+<img src="chirps/wheels%20down%20car%20out/chirp03_position.svg?0.10736937232025423" alt="">  <br>
+<img src="chirps/wheels%20down%20car%20out/chirp03_error.svg?0.7806686372041023" alt="">  <br>
+<img src="chirps/wheels%20down%20car%20out/chirp03_vel_acc.svg?0.6798739409252772" alt=""></p>
+<p><strong>chirp04.mat</strong><br>
+<img src="chirps/wheels%20down%20car%20out/chirp04_position.svg?0.8365631036562264" alt="">  <br>
+<img src="chirps/wheels%20down%20car%20out/chirp04_error.svg?0.198632367883824" alt="">  <br>
+<img src="chirps/wheels%20down%20car%20out/chirp04_vel_acc.svg?0.28465496501579346" alt=""></p>
+<hr>
+<h2 id="3-trajectory-follower">3. Trajectory follower</h2>
+<p>Dois exemplos usando uma trajectória gerada automaticamente para atingir o ponto<br>
+final de acordo com as seguintes restrições:</p>
+<ul>
+<li><p>velocidade máxima durante a trajectória não pode exceder <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>≈</mo><mn>2</mn><mn>1</mn><msup><mn>1</mn><mi>o</mi></msup><mi mathvariant="normal">/</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">\approx 211^o/s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mrel">≈</span><span class="mord mathrm">2</span><span class="mord mathrm">1</span><span class="mord"><span class="mord mathrm">1</span><span class="msupsub"><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped mtight"><span class="mord mathit mtight">o</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span><span class="mord mathrm">/</span><span class="mord mathit">s</span></span></span></span> (limiar de oscilação)</p></li>
+<li><p>aceleração  máxima limitada a <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>6</mn><mn>0</mn><mn>0</mn><mn>0</mn><mi>q</mi><mi>c</mi><mi mathvariant="normal">/</mi><msup><mi>s</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">6000 qc/s^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">6</span><span class="mord mathrm">0</span><span class="mord mathrm">0</span><span class="mord mathrm">0</span><span class="mord mathit" style="margin-right:0.03588em;">q</span><span class="mord mathit">c</span><span class="mord mathrm">/</span><span class="mord"><span class="mord mathit">s</span><span class="msupsub"><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped mtight"><span class="mord mathrm mtight">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span>. O valor é puramente impirico, mas tendo como referência o valor máximo de aceleração numa onda sinusoidal de periodo 1.7s (limiar da oscilação).</p></li>
+<li><p>a velocidade e aceleração nos pontos iniciais e finais devem ser zero.</p></li>
+</ul>
+<p>Objectivo: gerar uma trajectória que seja suave, sem acelerações bruscas causando<br>
+baixos arranques (low and finite jerk).</p>
+<p>As formulas utilizadas para desenho da trajectoria podem ser vistas em:<br>
+<a href="https://www.researchgate.net/publication/267794207_Motion_profile_planning_for_reduced_jerk_and_vibration_residuals">https://www.researchgate.net/publication/267794207_Motion_profile_planning_for_reduced_jerk_and_vibration_residuals</a></p>
+<p>O epos contêm um método idêntico (motion profile mode) mas apenas garante velocidade igual a zero nas extermidades da trajectória.</p>
+<p><strong>trajectory01.mat</strong><br>
+<img src="trajectory/trajectory01_position.svg?0.2547225656669938" alt="">  <br>
+<img src="trajectory/trajectory01_error.svg?0.10160877900149701" alt="">  <br>
+<img src="trajectory/trajectory01_vel_acc.svg?0.7372941271970954" alt=""></p>
+<p><strong>trajectory02.mat</strong><br>
+<img src="trajectory/trajectory02_position.svg?0.6592320719853246" alt="">  <br>
+<img src="trajectory/trajectory02_error.svg?0.31635500953125817" alt="">  <br>
+<img src="trajectory/trajectory02_vel_acc.svg?0.04549505425848488" alt=""></p>
+ </body>  </html>
