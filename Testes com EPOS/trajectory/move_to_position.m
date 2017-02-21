@@ -59,6 +59,7 @@ MAXERROR = 5000;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% connect to epos
 addpath('/home/bruno/DATA/Dropbox/Tese/Fiat-Elektra/Maxon-Epos/Matlab Lib');
+
 if(~evalin('base','exist(''epos'', ''var'')'))
 	evalin('base', 'epos =  Epos()');
 	epos = evalin('base','epos');
