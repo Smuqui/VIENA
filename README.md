@@ -1,5 +1,5 @@
 # Fiat Elettra
-This is a temporary repo for a project beeing developed at [Instituto Superior Técnico](https://tecnico.ulisboa.pt/pt/).
+This is a temporary repo for a project being developed at [Instituto Superior Técnico](https://tecnico.ulisboa.pt/pt/).
 The goal of the project is to convert an old Fiat Elettra car to be autonumous
 driven and be a possible investigation platform for further projects.
 
