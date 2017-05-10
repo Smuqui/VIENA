@@ -1,16 +1,22 @@
+<style>
+  p {
+    text-align:justify;
+  }
+</style>
+
+<!-- untoc -->
 # Resumos de testes com o volante #
 
 
 <!-- toc orderedList:0 depthFrom:1 depthTo:6 -->
 
-* [Resumos de testes com o volante](#resumos-de-testes-com-o-volante)
-  * [1. Sine following](#1-sine-following)
-    * [1.1 Interior  do laboratório](#11-interior-do-laboratório)
-    * [1.2 Exterior do laboratório.](#12-exterior-do-laboratório)
-  * [2. Chirp following](#2-chirp-following)
-    * [2.1 Interior  do laboratório](#21-interior-do-laboratório)
-    * [2.2 Exterior do laboratório](#22-exterior-do-laboratório)
-  * [3. Trajectory follower](#3-trajectory-follower)
+* [1. Sine following](#1-sine-following)
+  * [1.1 Interior  do laboratório](#11-interior-do-laboratório)
+  * [1.2 Exterior do laboratório.](#12-exterior-do-laboratório)
+* [2. Chirp following](#2-chirp-following)
+  * [2.1 Interior  do laboratório](#21-interior-do-laboratório)
+  * [2.2 Exterior do laboratório](#22-exterior-do-laboratório)
+* [3. Trajectory follower](#3-trajectory-follower)
 
 <!-- tocstop -->
 
@@ -29,31 +35,31 @@ Série de testes usando uma onda sinusoidal para definir a posição desejada do
 |Period|10       |7.5      |5        |10       |10       |10       |10       |10       |10       |
 
 **teste1.mat**
-@import "./sines/wheels%20down/teste1.svg"
+![](./sines/wheels%20down/teste1.svg)
 
 **teste2.mat**
-@import "./sines/wheels%20down/teste2.svg"
+![](./sines/wheels%20down/teste2.svg)
 
 **teste3.mat**
-@import "./sines/wheels%20down/teste3.svg"
+![](./sines/wheels%20down/teste3.svg)
 
 **teste4.mat**
-@import "./sines/wheels%20down/teste4.svg"
+![](./sines/wheels%20down/teste4.svg)
 
 **teste5.mat**
-@import "./sines/wheels%20down/teste5.svg"
+![](./sines/wheels%20down/teste5.svg)
 
 **teste6.mat**
-@import "./sines/wheels%20down/teste6.svg"
+![](./sines/wheels%20down/teste6.svg)
 
 **teste7.mat**
-@import "./sines/wheels%20down/teste7.svg"
+![](./sines/wheels%20down/teste7.svg)
 
 **teste8.mat**
-@import "./sines/wheels%20down/teste8.svg"
+![](./sines/wheels%20down/teste8.svg)
 
 **teste9.mat**
-@import "./sines/wheels%20down/teste9.svg"
+![](./sines/wheels%20down/teste9.svg)
 
 ---
 
@@ -70,24 +76,24 @@ Série de testes usando uma onda sinusoidal para definir a posição desejada do
 |Turns   |1         |1         |1.5       |2         |
 
 **sine01.mat**
-@import "./sines/wheels%20down%20car%20out/sine01_position.svg"
-@import "./sines/wheels%20down%20car%20out/sine01_error.svg"
-@import "./sines/wheels%20down%20car%20out/sine01_vel_acc.svg"
+![](./sines/wheels%20down%20car%20out/sine01_position.svg)
+![](./sines/wheels%20down%20car%20out/sine01_error.svg)
+![](./sines/wheels%20down%20car%20out/sine01_vel_acc.svg)
 
 **sine02.mat**
-@import "./sines/wheels%20down%20car%20out/sine02_position.svg"
-@import "./sines/wheels%20down%20car%20out/sine02_error.svg"
-@import "./sines/wheels%20down%20car%20out/sine02_vel_acc.svg"
+![](./sines/wheels%20down%20car%20out/sine02_position.svg)
+![](./sines/wheels%20down%20car%20out/sine02_error.svg)
+![](./sines/wheels%20down%20car%20out/sine02_vel_acc.svg)
 
 **sine03.mat**
-@import "./sines/wheels%20down%20car%20out/sine03_position.svg"
-@import "./sines/wheels%20down%20car%20out/sine03_error.svg"
-@import "./sines/wheels%20down%20car%20out/sine03_vel_acc.svg"
+![](./sines/wheels%20down%20car%20out/sine03_position.svg)
+![](./sines/wheels%20down%20car%20out/sine03_error.svg)
+![](./sines/wheels%20down%20car%20out/sine03_vel_acc.svg)
 
 **sine04.mat**
-@import "./sines/wheels%20down%20car%20out/sine04_position.svg"
-@import "./sines/wheels%20down%20car%20out/sine04_error.svg"
-@import "./sines/wheels%20down%20car%20out/sine04_vel_acc.svg"
+![](./sines/wheels%20down%20car%20out/sine04_position.svg)
+![](./sines/wheels%20down%20car%20out/sine04_error.svg)
+![](./sines/wheels%20down%20car%20out/sine04_vel_acc.svg)
 
 ---
 
@@ -119,24 +125,24 @@ $$k= \frac{f_{end}}{t_{end}}$$
 
 **chirp005_ground.mat**
 Neste exemplo nota-se que a corrente ficou limitada.
-@import "./chirps/wheels%20down/chirp005_ground_position.svg"
-@import "./chirps/wheels%20down/chirp005_ground_error.svg"
-@import "./chirps/wheels%20down/chirp005_ground_vel_acc.svg"
+![](./chirps/wheels%20down/chirp005_ground_position.svg)
+![](./chirps/wheels%20down/chirp005_ground_error.svg)
+![](./chirps/wheels%20down/chirp005_ground_vel_acc.svg)
 
 **chirp008_ground.mat**
-@import "./chirps/wheels%20down/chirp008_ground_position.svg"
-@import "./chirps/wheels%20down/chirp008_ground_error.svg"
-@import "./chirps/wheels%20down/chirp008_ground_vel_acc.svg"
+![](./chirps/wheels%20down/chirp008_ground_position.svg)
+![](./chirps/wheels%20down/chirp008_ground_error.svg)
+![](./chirps/wheels%20down/chirp008_ground_vel_acc.svg)
 
 **chirp014_ground.mat**
-@import "./chirps/wheels%20down/chirp014_ground_position.svg"
-@import "./chirps/wheels%20down/chirp014_ground_error.svg"
-@import "./chirps/wheels%20down/chirp014_ground_vel_acc.svg"
+![](./chirps/wheels%20down/chirp014_ground_position.svg)
+![](./chirps/wheels%20down/chirp014_ground_error.svg)
+![](./chirps/wheels%20down/chirp014_ground_vel_acc.svg)
 
 **chirp015_ground.mat**
-@import "./chirps/wheels%20down/chirp015_ground_position.svg"
-@import "./chirps/wheels%20down/chirp015_ground_error.svg"
-@import "./chirps/wheels%20down/chirp015_ground_vel_acc.svg"
+![](./chirps/wheels%20down/chirp015_ground_position.svg)
+![](./chirps/wheels%20down/chirp015_ground_error.svg)
+![](./chirps/wheels%20down/chirp015_ground_vel_acc.svg)
 
 
 ### 2.2 Exterior do laboratório ###
@@ -156,24 +162,24 @@ Neste exemplo nota-se que a corrente ficou limitada.
 
 
 **chirp01.mat**
-@import "./chirps/wheels%20down%20car%20out/chirp01_position.svg"
-@import "./chirps/wheels%20down%20car%20out/chirp01_error.svg"
-@import "./chirps/wheels%20down%20car%20out/chirp01_vel_acc.svg"
+![](./chirps/wheels%20down%20car%20out/chirp01_position.svg)
+![](./chirps/wheels%20down%20car%20out/chirp01_error.svg)
+![](./chirps/wheels%20down%20car%20out/chirp01_vel_acc.svg)
 
 **chirp02.mat**
-@import "./chirps/wheels%20down%20car%20out/chirp02_position.svg"
-@import "./chirps/wheels%20down%20car%20out/chirp02_error.svg"
-@import "./chirps/wheels%20down%20car%20out/chirp02_vel_acc.svg"
+![](./chirps/wheels%20down%20car%20out/chirp02_position.svg)
+![](./chirps/wheels%20down%20car%20out/chirp02_error.svg)
+![](./chirps/wheels%20down%20car%20out/chirp02_vel_acc.svg)
 
 **chirp03.mat**
-@import "./chirps/wheels%20down%20car%20out/chirp03_position.svg"
-@import "./chirps/wheels%20down%20car%20out/chirp03_error.svg"
-@import "./chirps/wheels%20down%20car%20out/chirp03_vel_acc.svg"
+![](./chirps/wheels%20down%20car%20out/chirp03_position.svg)
+![](./chirps/wheels%20down%20car%20out/chirp03_error.svg)
+![](./chirps/wheels%20down%20car%20out/chirp03_vel_acc.svg)
 
 **chirp04.mat**
-@import "./chirps/wheels%20down%20car%20out/chirp04_position.svg"
-@import "./chirps/wheels%20down%20car%20out/chirp04_error.svg"
-@import "./chirps/wheels%20down%20car%20out/chirp04_vel_acc.svg"
+![](./chirps/wheels%20down%20car%20out/chirp04_position.svg)
+![](./chirps/wheels%20down%20car%20out/chirp04_error.svg)
+![](./chirps/wheels%20down%20car%20out/chirp04_vel_acc.svg)
 
 ---
 
@@ -195,11 +201,11 @@ https://www.researchgate.net/publication/267794207_Motion_profile_planning_for_r
 O epos contêm um método idêntico (motion profile mode) mas apenas garante velocidade igual a zero nas extermidades da trajectória.
 
 **trajectory01.mat**
-@import "./trajectory/trajectory01_position.svg"
-@import "./trajectory/trajectory01_error.svg"
-@import "./trajectory/trajectory01_vel_acc.svg"
+![](./trajectory/trajectory01_position.svg)
+![](./trajectory/trajectory01_error.svg)
+![](./trajectory/trajectory01_vel_acc.svg)
 
 **trajectory02.mat**
-@import "./trajectory/trajectory02_position.svg"
-@import "./trajectory/trajectory02_error.svg"
-@import "./trajectory/trajectory02_vel_acc.svg"
+![](./trajectory/trajectory02_position.svg)
+![](./trajectory/trajectory02_error.svg)
+![](./trajectory/trajectory02_vel_acc.svg)
