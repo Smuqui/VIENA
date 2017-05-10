@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <title>resumo</title> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">  <style> .markdown-preview-enhanced { font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif; font-size: 16px; line-height: 1.6; color: rgb(171, 178, 191); overflow: initial; margin: 10px 13px; padding: 2em; box-sizing: border-box; word-wrap: break-word; background-color: rgb(40, 44, 52); }
+<!DOCTYPE html> <html> <head> <title>readme</title> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">  <style> .markdown-preview-enhanced { font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif; font-size: 16px; line-height: 1.6; color: rgb(171, 178, 191); overflow: initial; margin: 10px 13px; padding: 2em; box-sizing: border-box; word-wrap: break-word; background-color: rgb(40, 44, 52); }
 .markdown-preview-enhanced[data-use-github-style] { color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); }
 .markdown-preview-enhanced > :first-child { margin-top: 0px; }
 .markdown-preview-enhanced[is="space-pen-div"] { width: 100%; margin: 0px; z-index: 999; overflow: scroll; font-size: 16px; display: block; position: absolute; }
@@ -241,185 +241,21 @@
 .markdown-preview-enhanced[data-presentation-mode] h1, .markdown-preview-enhanced[data-presentation-mode] h2, .markdown-preview-enhanced[data-presentation-mode] h3, .markdown-preview-enhanced[data-presentation-mode] h4, .markdown-preview-enhanced[data-presentation-mode] h5, .markdown-preview-enhanced[data-presentation-mode] h6 { margin-top: 0px; }
 .markdown-preview-enhanced[data-presentation-mode] strong { font-weight: bold; }
 .markdown-preview-enhanced[data-presentation-mode]::-webkit-scrollbar { display: none; }
-.markdown-preview-enhanced .slides { text-align: left !important; } </style> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css">  </head> <body class="markdown-preview-enhanced " data-use-github-style data-use-github-syntax-theme > <h1 id="resumos-de-testes-com-o-volante">Resumos de testes com o volante</h1>
+.markdown-preview-enhanced .slides { text-align: left !important; } </style> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css">  </head> <body class="markdown-preview-enhanced " data-use-github-style data-use-github-syntax-theme > <style>
+  p {
+    text-align:justify;
+  }
+</style>
+<h1 id="teste-de-influ&#xEA;ncia-do-motor-el&#xE9;ctrico-no-magnet&#xF3;metro">Teste de influência do motor eléctrico no magnetómetro</h1>
+<p>Série de testes com o motor eléctrico a rodar a várias velocidades através do controlo de V/F.<br>
+O objectivo é determinar se a variação do campo electromagnético do motor poderá influenciar de forma significativa o uso do magnetómetro para a estimação da orientação do carro.</p>
+<p>Frequências testadas:</p>
 <ul>
-<li><p><a href="#resumos-de-testes-com-o-volante">Resumos de testes com o volante</a>
-<ul>
-<li><p><a href="#1-sine-following">1. Sine following</a>
-<ul>
-<li><p><a href="#11-interior-do-laborat&#xF3;rio">1.1 Interior  do laboratório</a></p></li>
-<li><p><a href="#12-exterior-do-laborat&#xF3;rio">1.2 Exterior do laboratório.</a></p></li>
-</ul></p></li>
-<li><p><a href="#2-chirp-following">2. Chirp following</a>
-<ul>
-<li><p><a href="#21-interior-do-laborat&#xF3;rio">2.1 Interior  do laboratório</a></p></li>
-<li><p><a href="#22-exterior-do-laborat&#xF3;rio">2.2 Exterior do laboratório</a></p></li>
-</ul></p></li>
-<li><p><a href="#3-trajectory-follower">3. Trajectory follower</a></p></li>
-</ul></p></li>
+<li><p>0Hz</p></li>
+<li><p>10Hz</p></li>
+<li><p>20Hz</p></li>
+<li><p>30Hz</p></li>
 </ul>
-<h2 id="1-sine-following">1. Sine following</h2>
-<p>Série de testes usando uma onda sinusoidal para definir a posição desejada do volante.</p>
-<h3 id="11-interior-do-laborat&#xF3;rio">1.1 Interior  do laboratório</h3>
-<table>
-<thead>
-<tr><th>ganhos</th><th style="text-align:center">test1.mat</th><th style="text-align:center">test2.mat</th><th style="text-align:center">test3.mat</th><th style="text-align:center">test4.mat</th><th style="text-align:center">test5.mat</th><th style="text-align:center">test6.mat</th><th style="text-align:center">test7.mat</th><th style="text-align:center">test8.mat</th><th style="text-align:center">test9.mat</th></tr>
-</thead>
-<tbody>
-<tr><td>P</td><td style="text-align:center">9</td><td style="text-align:center">9</td><td style="text-align:center">9</td><td style="text-align:center">10</td><td style="text-align:center">12</td><td style="text-align:center">15</td><td style="text-align:center">9</td><td style="text-align:center">13</td><td style="text-align:center">15</td></tr>
-<tr><td>I</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td></tr>
-<tr><td>D</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">3</td></tr>
-<tr><td>vFeed</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td></tr>
-<tr><td>aFeed</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td></tr>
-<tr><td>Period</td><td style="text-align:center">10</td><td style="text-align:center">7.5</td><td style="text-align:center">5</td><td style="text-align:center">10</td><td style="text-align:center">10</td><td style="text-align:center">10</td><td style="text-align:center">10</td><td style="text-align:center">10</td><td style="text-align:center">10</td></tr>
-</tbody>
-</table>
-<p><strong>teste1.mat</strong><br>
-<img src="sines/wheels%20down/teste1.svg?0.3681137434661972" alt=""></p>
-<p><strong>teste2.mat</strong><br>
-<img src="sines/wheels%20down/teste2.svg?0.9873993512728545" alt=""></p>
-<p><strong>teste3.mat</strong><br>
-<img src="sines/wheels%20down/teste3.svg?0.19890720442530663" alt=""></p>
-<p><strong>teste4.mat</strong><br>
-<img src="sines/wheels%20down/teste4.svg?0.6905938282314443" alt=""></p>
-<p><strong>teste5.mat</strong><br>
-<img src="sines/wheels%20down/teste5.svg?0.7501036850197744" alt=""></p>
-<p><strong>teste6.mat</strong><br>
-<img src="sines/wheels%20down/teste6.svg?0.8597070862729776" alt=""></p>
-<p><strong>teste7.mat</strong><br>
-<img src="sines/wheels%20down/teste7.svg?0.06119231568131411" alt=""></p>
-<p><strong>teste8.mat</strong><br>
-<img src="sines/wheels%20down/teste8.svg?0.18318951404840345" alt=""></p>
-<p><strong>teste9.mat</strong><br>
-<img src="sines/wheels%20down/teste9.svg?0.14840292993768234" alt=""></p>
-<hr>
-<h3 id="12-exterior-do-laborat&#xF3;rio">1.2 Exterior do laboratório.</h3>
-<table>
-<thead>
-<tr><th style="text-align:center">ganhos</th><th style="text-align:center">sine01.mat</th><th style="text-align:center">sine02.mat</th><th style="text-align:center">sine03.mat</th><th style="text-align:center">sine04.mat</th></tr>
-</thead>
-<tbody>
-<tr><td style="text-align:center">P</td><td style="text-align:center">50</td><td style="text-align:center">50</td><td style="text-align:center">50</td><td style="text-align:center">50</td></tr>
-<tr><td style="text-align:center">I</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td></tr>
-<tr><td style="text-align:center">D</td><td style="text-align:center">3</td><td style="text-align:center">3</td><td style="text-align:center">3</td><td style="text-align:center">3</td></tr>
-<tr><td style="text-align:center">vFeed</td><td style="text-align:center">5</td><td style="text-align:center">5</td><td style="text-align:center">5</td><td style="text-align:center">5</td></tr>
-<tr><td style="text-align:center">aFeed</td><td style="text-align:center">3</td><td style="text-align:center">3</td><td style="text-align:center">3</td><td style="text-align:center">3</td></tr>
-<tr><td style="text-align:center">Period</td><td style="text-align:center">10</td><td style="text-align:center">8</td><td style="text-align:center">20</td><td style="text-align:center">20</td></tr>
-<tr><td style="text-align:center">Turns</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1.5</td><td style="text-align:center">2</td></tr>
-</tbody>
-</table>
-<p><strong>sine01.mat</strong><br>
-<img src="sines/wheels%20down%20car%20out/sine01_position.svg?0.2919426738460609" alt="">  <br>
-<img src="sines/wheels%20down%20car%20out/sine01_error.svg?0.2386867809766562" alt="">  <br>
-<img src="sines/wheels%20down%20car%20out/sine01_vel_acc.svg?0.8810904746791646" alt=""></p>
-<p><strong>sine02.mat</strong><br>
-<img src="sines/wheels%20down%20car%20out/sine02_position.svg?0.5588007989399244" alt="">  <br>
-<img src="sines/wheels%20down%20car%20out/sine02_error.svg?0.2299911304982687" alt="">  <br>
-<img src="sines/wheels%20down%20car%20out/sine02_vel_acc.svg?0.13602926563143702" alt=""></p>
-<p><strong>sine03.mat</strong><br>
-<img src="sines/wheels%20down%20car%20out/sine03_position.svg?0.07153196411797214" alt="">  <br>
-<img src="sines/wheels%20down%20car%20out/sine03_error.svg?0.46231120481930565" alt="">  <br>
-<img src="sines/wheels%20down%20car%20out/sine03_vel_acc.svg?0.6438377809186557" alt=""></p>
-<p><strong>sine04.mat</strong><br>
-<img src="sines/wheels%20down%20car%20out/sine04_position.svg?0.10642979377674511" alt="">  <br>
-<img src="sines/wheels%20down%20car%20out/sine04_error.svg?0.7502018480610289" alt="">  <br>
-<img src="sines/wheels%20down%20car%20out/sine04_vel_acc.svg?0.588777667021416" alt=""></p>
-<hr>
-<h2 id="2-chirp-following">2. Chirp following</h2>
-<p>Série de testes usando uma função do tipo chirp para definir a posição desejada do volante.</p>
-<p>A frequência varia linearmente de acordo com a fórmula:</p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><msub><mi>f</mi><mn>0</mn></msub><mo>+</mo><mi>k</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">f(t) = f_0 + kt</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathit">t</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord mathrm mtight">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span><span class="mbin">+</span><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="mord mathit">t</span></span></span></span></span><br>
-onde <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.03148em;">k</span></span></span></span> é definido como sendo:<br>
-<span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi><mo>=</mo><mfrac><mrow><msub><mi>f</mi><mn>0</mn></msub><mo>−</mo><msub><mi>f</mi><mrow><mi>e</mi><mi>n</mi><mi>d</mi></mrow></msub></mrow><mrow><mi>T</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">k = \frac{f_0-f_{end}}{T}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.37144em;"></span><span class="strut bottom" style="height:2.05744em;vertical-align:-0.686em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="mrel">=</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="mopen sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord mathrm mtight">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span><span class="mbin">−</span><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord scriptstyle cramped mtight"><span class="mord mathit mtight">e</span><span class="mord mathit mtight">n</span><span class="mord mathit mtight">d</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span></span><br>
-Pretende-se que a frequência do chirp varie desde 0 até à frequência máxima que será atingida no final do sinal então, tomando <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>f</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">f_0=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord mathrm mtight">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span><span class="mrel">=</span><span class="mord mathrm">0</span></span></span></span> e <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>=</mo><msub><mi>t</mi><mrow><mi>e</mi><mi>n</mi><mi>d</mi></mrow></msub></mrow><annotation encoding="application/x-tex">T = t_{end}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mrel">=</span><span class="mord"><span class="mord mathit">t</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord scriptstyle cramped mtight"><span class="mord mathit mtight">e</span><span class="mord mathit mtight">n</span><span class="mord mathit mtight">d</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span> resulta em:<br>
-<span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mi>k</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">f(t) = kt</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathit">t</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="mord mathit">t</span></span></span></span></span><br>
-<span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi><mo>=</mo><mfrac><mrow><msub><mi>f</mi><mrow><mi>e</mi><mi>n</mi><mi>d</mi></mrow></msub></mrow><mrow><msub><mi>t</mi><mrow><mi>e</mi><mi>n</mi><mi>d</mi></mrow></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">k= \frac{f_{end}}{t_{end}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.37144em;"></span><span class="strut bottom" style="height:2.20744em;vertical-align:-0.8360000000000001em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="mrel">=</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="mopen sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord"><span class="mord mathit">t</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord scriptstyle cramped mtight"><span class="mord mathit mtight">e</span><span class="mord mathit mtight">n</span><span class="mord mathit mtight">d</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord scriptstyle cramped mtight"><span class="mord mathit mtight">e</span><span class="mord mathit mtight">n</span><span class="mord mathit mtight">d</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span></span></p>
-<h3 id="21-interior-do-laborat&#xF3;rio">2.1 Interior  do laboratório</h3>
-<p><strong>estão apenas representados alguns testes</strong></p>
-<table>
-<thead>
-<tr><th style="text-align:center">ganhos</th><th style="text-align:center">chrip005.mat</th><th style="text-align:center">chrip008.mat</th><th style="text-align:center">chrip014.mat</th><th style="text-align:center">chrip015.mat</th></tr>
-</thead>
-<tbody>
-<tr><td style="text-align:center">P</td><td style="text-align:center">30</td><td style="text-align:center">20</td><td style="text-align:center">50</td><td style="text-align:center">50</td></tr>
-<tr><td style="text-align:center">I</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td></tr>
-<tr><td style="text-align:center">D</td><td style="text-align:center">5</td><td style="text-align:center">3</td><td style="text-align:center">3</td><td style="text-align:center">3</td></tr>
-<tr><td style="text-align:center">vFeed</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">5</td><td style="text-align:center">5</td></tr>
-<tr><td style="text-align:center">aFeed</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">2</td><td style="text-align:center">2</td></tr>
-<tr><td style="text-align:center"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>f</mi><mrow><mi>e</mi><mi>n</mi><mi>d</mi></mrow></msub></mrow><annotation encoding="application/x-tex">f_{end}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord scriptstyle cramped mtight"><span class="mord mathit mtight">e</span><span class="mord mathit mtight">n</span><span class="mord mathit mtight">d</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></td><td style="text-align:center">0.1</td><td style="text-align:center">0.03</td><td style="text-align:center">0.03</td><td style="text-align:center">0.05</td></tr>
-<tr><td style="text-align:center">Turns</td><td style="text-align:center">1.5</td><td style="text-align:center">1.5</td><td style="text-align:center">1.5</td><td style="text-align:center">1.5</td></tr>
-</tbody>
-</table>
-<p><strong>chirp005_ground.mat</strong><br>
-Neste exemplo nota-se que a corrente ficou limitada.<br>
-<img src="chirps/wheels%20down/chirp005_ground_position.svg?0.2198683495417475" alt="">  <br>
-<img src="chirps/wheels%20down/chirp005_ground_error.svg?0.17929608177328182" alt="">  <br>
-<img src="chirps/wheels%20down/chirp005_ground_vel_acc.svg?0.8053357445101759" alt=""></p>
-<p><strong>chirp008_ground.mat</strong><br>
-<img src="chirps/wheels%20down/chirp008_ground_position.svg?0.49839508924459164" alt="">  <br>
-<img src="chirps/wheels%20down/chirp008_ground_error.svg?0.05886515055800423" alt="">  <br>
-<img src="chirps/wheels%20down/chirp008_ground_vel_acc.svg?0.18498723397537087" alt=""></p>
-<p><strong>chirp014_ground.mat</strong><br>
-<img src="chirps/wheels%20down/chirp014_ground_position.svg?0.2965170949124627" alt="">  <br>
-<img src="chirps/wheels%20down/chirp014_ground_error.svg?0.27513705707997294" alt="">  <br>
-<img src="chirps/wheels%20down/chirp014_ground_vel_acc.svg?0.8868480520000932" alt=""></p>
-<p><strong>chirp015_ground.mat</strong><br>
-<img src="chirps/wheels%20down/chirp015_ground_position.svg?0.8278080337999187" alt="">  <br>
-<img src="chirps/wheels%20down/chirp015_ground_error.svg?0.7580407346064915" alt="">  <br>
-<img src="chirps/wheels%20down/chirp015_ground_vel_acc.svg?0.8236566315088409" alt=""></p>
-<h3 id="22-exterior-do-laborat&#xF3;rio">2.2 Exterior do laboratório</h3>
-<div><iframe width="853" height="480" src="https://www.youtube.com/embed/TmFjZiST00c?rel=0" frameborder="0" allowfullscreen=""></iframe>
-</div>
-<table>
-<thead>
-<tr><th style="text-align:center">ganhos</th><th style="text-align:center">chrip01.mat</th><th style="text-align:center">chrip02.mat</th><th style="text-align:center">chrip03.mat</th><th style="text-align:center">chrip04.mat</th></tr>
-</thead>
-<tbody>
-<tr><td style="text-align:center">P</td><td style="text-align:center">50</td><td style="text-align:center">50</td><td style="text-align:center">50</td><td style="text-align:center">50</td></tr>
-<tr><td style="text-align:center">I</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td></tr>
-<tr><td style="text-align:center">D</td><td style="text-align:center">3</td><td style="text-align:center">3</td><td style="text-align:center">3</td><td style="text-align:center">3</td></tr>
-<tr><td style="text-align:center">vFeed</td><td style="text-align:center">3</td><td style="text-align:center">5</td><td style="text-align:center">5</td><td style="text-align:center">5</td></tr>
-<tr><td style="text-align:center">aFeed</td><td style="text-align:center">3</td><td style="text-align:center">5</td><td style="text-align:center">3</td><td style="text-align:center">3</td></tr>
-<tr><td style="text-align:center"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>f</mi><mrow><mi>e</mi><mi>n</mi><mi>d</mi></mrow></msub></mrow><annotation encoding="application/x-tex">f_{end}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.10764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped mtight"><span class="mord scriptstyle cramped mtight"><span class="mord mathit mtight">e</span><span class="mord mathit mtight">n</span><span class="mord mathit mtight">d</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></td><td style="text-align:center">0.05</td><td style="text-align:center">0.05</td><td style="text-align:center">0.0667</td><td style="text-align:center">0.1</td></tr>
-<tr><td style="text-align:center">Turns</td><td style="text-align:center">1.5</td><td style="text-align:center">1.5</td><td style="text-align:center">1.5</td><td style="text-align:center">1.5</td></tr>
-</tbody>
-</table>
-<p><strong>chirp01.mat</strong><br>
-<img src="chirps/wheels%20down%20car%20out/chirp01_position.svg?0.773086984112126" alt="">  <br>
-<img src="chirps/wheels%20down%20car%20out/chirp01_error.svg?0.9153542489299769" alt="">  <br>
-<img src="chirps/wheels%20down%20car%20out/chirp01_vel_acc.svg?0.11681233762104659" alt=""></p>
-<p><strong>chirp02.mat</strong><br>
-<img src="chirps/wheels%20down%20car%20out/chirp02_position.svg?0.5539211467158458" alt="">  <br>
-<img src="chirps/wheels%20down%20car%20out/chirp02_error.svg?0.27221165717471574" alt="">  <br>
-<img src="chirps/wheels%20down%20car%20out/chirp02_vel_acc.svg?0.6258461335466352" alt=""></p>
-<p><strong>chirp03.mat</strong><br>
-<img src="chirps/wheels%20down%20car%20out/chirp03_position.svg?0.10736937232025423" alt="">  <br>
-<img src="chirps/wheels%20down%20car%20out/chirp03_error.svg?0.7806686372041023" alt="">  <br>
-<img src="chirps/wheels%20down%20car%20out/chirp03_vel_acc.svg?0.6798739409252772" alt=""></p>
-<p><strong>chirp04.mat</strong><br>
-<img src="chirps/wheels%20down%20car%20out/chirp04_position.svg?0.8365631036562264" alt="">  <br>
-<img src="chirps/wheels%20down%20car%20out/chirp04_error.svg?0.198632367883824" alt="">  <br>
-<img src="chirps/wheels%20down%20car%20out/chirp04_vel_acc.svg?0.28465496501579346" alt=""></p>
-<hr>
-<h2 id="3-trajectory-follower">3. Trajectory follower</h2>
-<p>Dois exemplos usando uma trajectória gerada automaticamente para atingir o ponto<br>
-final de acordo com as seguintes restrições:</p>
-<ul>
-<li><p>velocidade máxima durante a trajectória não pode exceder <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>≈</mo><mn>2</mn><mn>1</mn><msup><mn>1</mn><mi>o</mi></msup><mi mathvariant="normal">/</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">\approx 211^o/s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mrel">≈</span><span class="mord mathrm">2</span><span class="mord mathrm">1</span><span class="mord"><span class="mord mathrm">1</span><span class="msupsub"><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped mtight"><span class="mord mathit mtight">o</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span><span class="mord mathrm">/</span><span class="mord mathit">s</span></span></span></span> (limiar de oscilação)</p></li>
-<li><p>aceleração  máxima limitada a <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>6</mn><mn>0</mn><mn>0</mn><mn>0</mn><mi>q</mi><mi>c</mi><mi mathvariant="normal">/</mi><msup><mi>s</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">6000 qc/s^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">6</span><span class="mord mathrm">0</span><span class="mord mathrm">0</span><span class="mord mathrm">0</span><span class="mord mathit" style="margin-right:0.03588em;">q</span><span class="mord mathit">c</span><span class="mord mathrm">/</span><span class="mord"><span class="mord mathit">s</span><span class="msupsub"><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped mtight"><span class="mord mathrm mtight">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span>. O valor é puramente impirico, mas tendo como referência o valor máximo de aceleração numa onda sinusoidal de periodo 1.7s (limiar da oscilação).</p></li>
-<li><p>a velocidade e aceleração nos pontos iniciais e finais devem ser zero.</p></li>
-</ul>
-<p>Objectivo: gerar uma trajectória que seja suave, sem acelerações bruscas causando<br>
-baixos arranques (low and finite jerk).</p>
-<p>As formulas utilizadas para desenho da trajectoria podem ser vistas em:<br>
-<a href="https://www.researchgate.net/publication/267794207_Motion_profile_planning_for_reduced_jerk_and_vibration_residuals">https://www.researchgate.net/publication/267794207_Motion_profile_planning_for_reduced_jerk_and_vibration_residuals</a></p>
-<p>O epos contêm um método idêntico (motion profile mode) mas apenas garante velocidade igual a zero nas extermidades da trajectória.</p>
-<p><strong>trajectory01.mat</strong><br>
-<img src="trajectory/trajectory01_position.svg?0.2547225656669938" alt="">  <br>
-<img src="trajectory/trajectory01_error.svg?0.10160877900149701" alt="">  <br>
-<img src="trajectory/trajectory01_vel_acc.svg?0.7372941271970954" alt=""></p>
-<p><strong>trajectory02.mat</strong><br>
-<img src="trajectory/trajectory02_position.svg?0.6592320719853246" alt="">  <br>
-<img src="trajectory/trajectory02_error.svg?0.31635500953125817" alt="">  <br>
-<img src="trajectory/trajectory02_vel_acc.svg?0.04549505425848488" alt=""></p>
+<p>As variações do campo em relação às várias velocidades não parecem influenciar demasiado o valor médio do campo magnético em cada eixo do sensor, pelo que se espera que os algoritmos desenvolvidos para o carro de combustão também possam ser replicados no carro eléctrico.</p>
+<p><img src="resultados.png" alt="Resultados"></p>
  </body>  </html>
