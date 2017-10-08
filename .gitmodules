@@ -4,3 +4,6 @@
 [submodule "Maxon-Epos"]
 	path = Maxon-Epos
 	url = https://github.com/brtiberio/Maxon-Epos.git
+[submodule "razorIMU_python"]
+	path = razorIMU_python
+	url = https://github.com/brtiberio/RazorIMU_interface_python
