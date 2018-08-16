@@ -1,9 +1,9 @@
 [submodule "novatel_OEM4_python"]
-	path = novatel_OEM4_python
+	path = GPS/novatel_OEM4_python
 	url = https://github.com/brtiberio/novatel_OEM4_python.git
 [submodule "Maxon-Epos"]
-	path = Maxon-Epos
+	path = Steering Wheel/Maxon/Matlab Library/Maxon-Epos
 	url = https://github.com/brtiberio/Maxon-Epos.git
 [submodule "razorIMU_python"]
-	path = razorIMU_python
+	path = INS/razorIMU_python
 	url = https://github.com/brtiberio/RazorIMU_interface_python
