@@ -7,3 +7,18 @@
 [submodule "razorIMU_python"]
 	path = INS/razorIMU_python
 	url = https://github.com/brtiberio/RazorIMU_interface_python
+[submodule "EPOS_Canopen"]
+	path = Steering Wheel/Maxon/Python/EPOS_Canopen
+	url = https://github.com/brtiberio/EPOS_Canopen.git
+[submodule "VIENA-Interface"]
+	path = Mqtt/Interface
+	url = https://github.com/brtiberio/VIENA_interface.git
+[submodule "mqtt-controller"]
+	path = Mqtt/controller
+	url = https://github.com/brtiberio/mqtt_controller.git
+[submodule "mqtt-controller-dev"]
+	path = Mqtt/controller-dev
+	url = https://github.com/brtiberio/mqtt_controller.git
+[submodule "logger-AHRS"]
+	path = Main/logger-AHRS
+	url = https://github.com/brtiberio/logger_AHRS.git
