@@ -22,3 +22,6 @@
 [submodule "logger-AHRS"]
 	path = Main/logger-AHRS
 	url = https://github.com/brtiberio/logger_AHRS.git
+[submodule "battery/VIENA_battery"]
+	path = battery/VIENA_battery
+	url = https://github.com/brtiberio/VIENA_battery.git
