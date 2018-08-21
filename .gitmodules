@@ -25,3 +25,9 @@
 [submodule "battery/VIENA_battery"]
 	path = battery/VIENA_battery
 	url = https://github.com/brtiberio/VIENA_battery.git
+[submodule "Documentation/Latex/"]
+	path = Documentation/Latex/
+	url = https://github.com/brtiberio/VIENA_Documentation_Latex.git
+[submodule "Documentation/Latex"]
+	path = Documentation/Latex
+	url = https://github.com/brtiberio/VIENA_Documentation_Latex.git
