@@ -31,3 +31,12 @@
 [submodule "Documentation/Latex"]
 	path = Documentation/Latex
 	url = https://github.com/brtiberio/VIENA_Documentation_Latex.git
+[submodule "Matlab/@CarPlotter"]
+	path = Matlab/@CarPlotter
+	url = https://github.com/brtiberio/CarPlotter.git
+[submodule "Matlab/@CreateMap"]
+	path = Matlab/@CreateMap
+	url = https://github.com/brtiberio/CreateMap.git
+[submodule "Matlab/@SteeringController"]
+	path = Matlab/@SteeringController
+	url = https://github.com/brtiberio/SteeringController.git
